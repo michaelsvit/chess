@@ -11,16 +11,19 @@ typedef enum {BLACK, WHITE} Color;
 
 typedef struct game_t{
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
-	SPArrayList whitePieces, blackPieces; /* lists representing white and black game pieces on the board */
-	Player currentPlayer;
+	SPArrayList white_pieces, black_pieces; /* lists representing white and black game pieces on the board */
+	Player current_player;
 } Game;
 
 /* struct defining a single game piece on the board */
 typedef struct game_piece{
 	PieceType type;
 	Color color;
-	int posY;
-	int posX;
+	int pos_y;
+	int pos_x;
 } GamePiece;
 
+Game *create_game();
+
+void destroy_game();
 #endif

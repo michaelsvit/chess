@@ -22,7 +22,7 @@ typedef struct game_piece{
 	int pos_x;
 } GamePiece;
 
-/* Struct defining a board game with relevant properties */
+/* Struct defining a game board with relevant properties */
 typedef struct game_t{
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
 	SPArrayList *white_pieces, *black_pieces; /* lists representing white and black game pieces on the board */
@@ -33,7 +33,7 @@ typedef struct game_t{
 } Game;
 
 /*
- * Creates a new game board.
+ * Creates a new game instance.
  * @param mode          	 one player or two player mode
  * @param difficulty    	 chosen game difficulty, between 1 and 4
  * @param player1_color 	 first player's game piece color, second player is the inverse color
@@ -42,12 +42,12 @@ typedef struct game_t{
 Game *create_game(Mode mode, int difficulty, Color player1_color);
 
 /*
- * Destroy an existing game board.
+ * Destroy an existing game instance and free all allocated memory.
  */
 void destroy_game();
 
 /*
- * Initialize game board with all of the pieces on their default places.
+ * Initialize game board with all of the pieces in their default slots.
  * @precond    	 game != NULL
  * @param game 	 existing game board
  * @return     	 message indicating success or failure

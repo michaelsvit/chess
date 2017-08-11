@@ -26,6 +26,20 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 
 void destroy_game(Game *game){
 	if(!game) return;
+
+	for(int i = 0; i < spArrayListSize(game->white_pieces); i++){
+		GamePiece *piece = spArrayListGetAt(game->white_pieces, i);
+		free(piece);
+	}
+	for(int i = 0; i < spArrayListSize(game->black_pieces); i++){
+		GamePiece *piece = spArrayListGetAt(game->black_pieces, i);
+		free(piece);
+	}
 	spArrayListDestroy(game->white_pieces);
 	spArrayListDestroy(game->black_pieces);
+	free(game);
+}
+
+EngineMessage init_game(Game *game){
+
 }

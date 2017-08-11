@@ -8,6 +8,7 @@
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
 
+typedef enum {MALLOC_FAILURE, SUCCESS} EngineMessage;
 typedef enum {PLAYER1, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;
@@ -24,7 +25,7 @@ typedef struct game_piece{
 /* Struct defining a board game with relevant properties */
 typedef struct game_t{
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
-	SPArrayList white_pieces, black_pieces; /* lists representing white and black game pieces on the board */
+	SPArrayList *white_pieces, *black_pieces; /* lists representing white and black game pieces on the board */
 	Player current_player;
 	Color player_color[2];
 	Mode mode;
@@ -44,4 +45,12 @@ Game *create_game(Mode mode, int difficulty, Color player1_color);
  * Destroy an existing game board.
  */
 void destroy_game();
+
+/*
+ * Initialize game board with all of the pieces on their default places.
+ * @precond    	 game != NULL
+ * @param game 	 existing game board
+ * @return     	 message indicating success or failure
+ */
+EngineMessage init_game(Game *game);
 #endif

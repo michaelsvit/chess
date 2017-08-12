@@ -2,6 +2,15 @@
 #define GAME_H
 /*
  * Game engine module containing state and interaction related functions
+ *
+ * Summary of interface:
+ * create_game       	 create new game instance
+ * destroy_game      	 free all allocated memory and destroy game instance
+ * init_game         	 initialize a new game instance with pieces in default slots
+ * remove_game_piece 	 remove a game piece from the board
+ * move_game_piece   	 move a game piece from current place on board to another
+ * is_move_valid     	 checks whether a given move is valid for a given game piece
+ * is_game_over      	 checks if the given game instance reached a final state
  */
 #include "SPArrayList.h"
 

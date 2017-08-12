@@ -212,6 +212,12 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src) {
     return spArrayListRemoveAt(src, src->actualSize - 1);
 }
 
+SP_ARRAY_LIST_MESSAGE spArrayListRemoveItem(SPArrayList *src, void *item){
+	if(!src || !item) return SP_ARRAY_LIST_INVALID_ARGUMENT;
+	int arrayIndex = ((char *)item - (char *)src->elements)/src->elemSize;
+	return spArrayListRemoveAt(src, arrayIndex);
+} 
+
 /**
  * Returns the element at the specified index. The function is called
  * with the assertion that all arguments are valid. If any of the arguments is

@@ -28,6 +28,7 @@
  * spArrayListRemoveFirst  - Removes an element from the beginning of the array
  *                           list, elements will be shifted as a result.
  * spArrayListRemoveLast   - Removes an element from the end of the array list
+ * spArrayListRemoveItem   - Removes a specific item from the list
  * spArrayListGetAt        - Accesses the element at the specified index.
  * spArrayListGetFirst     - Accesses the first element of the array list.
  * spArrayListGetLast      - Accesses the last element of the array list.
@@ -176,6 +177,18 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveFirst(SPArrayList* src);
  * SP_ARRAY_LIST_SUCCESS - otherwise.
  */
 SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src);
+
+/*
+ * Search and remove a specific item from the given list.
+ * @precond    	 assumes correctness of arguments
+ * @param src  	 source array list
+ * @param item 	 item to be removed
+ * return
+ * SP_ARRAY_LIST_INVALID_ARGUMENT - if src == NULL or item == NULL or item was not found
+ * SP_ARRAY_LIST_EMPTY - if the source array list is empty
+ * SP_ARRAY_LIST_SUCCESS - otherwise.
+ */
+SP_ARRAY_LIST_MESSAGE spArrayListRemoveItem(SPArrayList *src, void *item); 
 
 /**
  * Returns the element at the specified index. The function is called

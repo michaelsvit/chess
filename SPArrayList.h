@@ -38,6 +38,7 @@
  */
 typedef struct sp_array_list_t {
 	void *elements;
+	int elemSize; // in bytes
 	int actualSize;
 	int maxSize;
 } SPArrayList;
@@ -59,7 +60,7 @@ typedef enum sp_array_list_message_t {
  *  NULL, if an allocation error occurred or maxSize  <= 0.
  *  An instant of an array list otherwise.
  */
-SPArrayList* spArrayListCreate(int maxSize);
+SPArrayList* spArrayListCreate(int elemSize, int maxSize);
 
 /**
  *	Creates an exact copy of the src array list. Elements in the new copy will

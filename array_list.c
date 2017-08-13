@@ -16,16 +16,17 @@ SPArrayList* spArrayListCreate(int elemSize, int maxSize)
     if (maxSize <= 0 || elemSize <= 0) {
         return NULL;
     }
-    arr = malloc(sizeof(SPArrayList));
+    arr = calloc(1, sizeof(SPArrayList));
     if (arr == NULL) {
         return NULL;
     }
-    arr->elements = malloc(maxSize*elemSize);
+    arr->elements = calloc(maxSize, sizeof(void *));
     if (arr->elements == NULL) {
         free(arr);
         return NULL;
     }
     arr->actualSize = 0;
+	arr->elemSize = elemSize;
     arr->maxSize = maxSize;
     return arr;
 }
@@ -44,8 +45,14 @@ SPArrayList* spArrayListCopy(SPArrayList* src)
         return NULL;
     }
     SPArrayList* arr = spArrayListCreate(src->elemSize, src->maxSize);
+	if(!arr) return NULL;
     arr->actualSize = src->actualSize;
-    memcpy(arr->elements, src->elements, src->actualSize*src->elemSize);
+    memcpy(arr->elements, src->elements, (src->actualSize)*(sizeof(void *)));
+	for(int i = 0; i < src->actualSize; i++){
+		void *item = malloc(src->elemSize);
+		memcpy(item, src->elements[i], src->elemSize);
+		arr->elements[i] = item;
+	}
     return arr;
 }
 
@@ -99,11 +106,10 @@ SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, void *elem, int index) 
     if (src->actualSize == src->maxSize) {
         return SP_ARRAY_LIST_FULL;
     }
-	char *address = (char *)src->elements + index*src->elemSize;
     if (index != src->actualSize) {
-        memmove(address+1, address, (src->actualSize-index)*src->elemSize);
+        memmove(src->elements+index+1, src->elements+index, (src->actualSize-index)*sizeof(void *));
     }
-	memcpy(address, elem, src->elemSize);
+	src->elements[index] = elem;
     src->actualSize++;
     return SP_ARRAY_LIST_SUCCESS;
 }
@@ -163,8 +169,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index){
         return SP_ARRAY_LIST_EMPTY;
     }
     if (index != src->actualSize-1) {
-		char *address = (char *)src->elements + index*src->elemSize;
-        memmove(address, address+1, (src->actualSize-index-1)*src->elemSize);
+        memmove(src->elements+index, src->elements+index+1, (src->actualSize-index-1)*src->elemSize);
     }
     src->actualSize--;
     return SP_ARRAY_LIST_SUCCESS;
@@ -214,7 +219,10 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src) {
 
 SP_ARRAY_LIST_MESSAGE spArrayListRemoveItem(SPArrayList *src, void *item){
 	if(!src || !item) return SP_ARRAY_LIST_INVALID_ARGUMENT;
-	int arrayIndex = ((char *)item - (char *)src->elements)/src->elemSize;
+	int arrayIndex = 0;
+	for(int i = 0; i < src->actualSize; i++){
+		if(item == src->elements[i]) arrayIndex = i;
+	}
 	return spArrayListRemoveAt(src, arrayIndex);
 } 
 
@@ -232,8 +240,7 @@ void *spArrayListGetAt(SPArrayList* src, int index) {
     if (src == NULL || index >= src->actualSize || index < 0) {
         return NULL;
     }
-	char *address = (char *)src->elements + index*src->elemSize;
-    return address;
+    return src->elements[index];
 }
 
 /**

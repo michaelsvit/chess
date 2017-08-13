@@ -38,7 +38,7 @@
  * spArrayListIsEmpty      - Returns true if the array list contains no elements.
  */
 typedef struct sp_array_list_t {
-	void *elements;
+	void **elements;
 	int elemSize; // in bytes
 	int actualSize;
 	int maxSize;

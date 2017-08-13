@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "SPArrayList.h"
+#include "array_list.h"
 
 /**
  *  Creates an empty array list with the specified maximum capacity.

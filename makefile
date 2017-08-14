@@ -12,7 +12,7 @@ $(EXEC): $(OBJS)
 # Tests
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
-array_list_unit_test.o: array_list_unit_test.c array_list.o
+array_list_unit_test.o: array_list_unit_test.c array_list.h
 	$(CC) $(COMP_FLAG) -c $*.c
 
 # Source files

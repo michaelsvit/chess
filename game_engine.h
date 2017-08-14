@@ -61,14 +61,6 @@ Game *create_game(Mode mode, int difficulty, Color player1_color);
 void destroy_game();
 
 /*
- * Initialize game board with all of the pieces in their default slots.
- * @precond    	 game != NULL
- * @param game 	 existing game board
- * @return     	 message indicating success or failure
- */
-EngineMessage init_game(Game *game);
-
-/*
  * Move a game piece from its current place to the given coordinates.
  * @param game  	 game instance
  * @param piece 	 game piece to be moved
@@ -80,6 +72,74 @@ EngineMessage init_game(Game *game);
  * SUCCESS          	 otherwise
  */
 EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*******************************************************************************************/
+/**************** Auxiliary functions - should not be called outside this module ***********/
+/*******************************************************************************************/
+
+/*
+ * Create a single game piece of the given type and color and initialize its position
+ * to the given coordinates.
+ * @param type  	 type of the piece to be created
+ * @param color 	 color of the piece to be created
+ * @param pos_x 	 column position of the piece on the board
+ * @param pos_y 	 row position of the piece on the board
+ * @return      	 pointer to the newly created piece on success, NULL otherwise
+ */
+GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y);
+
+/*
+ * Initialize game board with all of the pieces in their default slots.
+ * @precond    	 game != NULL
+ * @param game 	 existing game board
+ * @return
+ * MALLOC_FAILURE 	 if allocating memory failed
+ * SUCCESS        	 otherwise
+ */
+EngineMessage init_game(Game *game);
+
+/*
+ * Add a single game piece of the given type and color to the given position on the board,
+ * and add it to the list of pieces of the given color.
+ * @precond     	 game != NULL
+ * @param game  	 existing game instance
+ * @param type  	 type of the piece to be added
+ * @param color 	 color of the piece to be added
+ * @param pos_x 	 column position of the piece on the board
+ * @param pos_y 	 row position of the piece on the board
+ * @return
+ * MALLOC_FAILURE 	 if allocating memory failed
+ * SUCCESS        	 otherwise
+ */
+EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y);
+
+/*
+ * Remove a game piece from the given game instance.
+ * @precond     	 game != NULL
+ * @param game  	 existing game instance
+ * @param piece 	 game piece to be removed from the board
+ */
+void remove_game_piece(Game *game, GamePiece *piece);
+
+/*
+ * Add all game pieces of a set with the given color.
+ * @precond     	 game != NULL
+ * @param game  	 existing game instance
+ * @param color 	 color of the set to be added
+ * @return
+ * MALLOC_FAILURE 	 if allocating memory failed
+ * SUCCESS        	 otherwise
+ */
+EngineMessage add_game_pieces_set(Game *game, Color color);
+
+/*
+ * Check whether a given position on the board is occupied.
+ * @param game  	 game instance
+ * @param pos_x 	 column of the position
+ * @param pos_y 	 row of the position
+ * @return      	 true iff position is occupied
+ */
+int is_occupied_position(Game *game, int pos_x, int pos_y);
 
 /*
  * Check whether a given move is a legal chess move.

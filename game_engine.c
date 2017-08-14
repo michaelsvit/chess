@@ -1,12 +1,7 @@
 #include <stdlib.h>
 #include "game_engine.h"
 
-/* Auxiliary function declarations */
-GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y);
-void remove_game_piece(Game *game, GamePiece *piece);
-EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y);
-EngineMessage add_game_pieces_set(Game *game, Color color);
-int is_occupied_position(Game *game, int pos_x, int pos_y);
+/******************************* Interface functions *********************************/
 
 Game *create_game(Mode mode, int difficulty, Color player1_color){
 	if(difficulty < 1 || difficulty > 4) return NULL;
@@ -48,15 +43,6 @@ void destroy_game(Game *game){
 	free(game);
 }
 
-EngineMessage init_game(Game *game){
-	/* Create all pieces and place them on the board */
-	EngineMessage msg;
-	msg = add_game_pieces_set(game, WHITE);
-	if(msg != SUCCESS) return msg;
-	msg = add_game_pieces_set(game, BLACK);
-	return msg;
-}
-
 EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	if(
 		!game || !piece ||
@@ -78,15 +64,6 @@ EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y
 
 /******************************** Auxiliary functions ******************************/
 
-/*
- * Create a single game piece of the given type and color and initialize its position
- * to the given coordinates.
- * @param type  	 type of the piece to be created
- * @param color 	 color of the piece to be created
- * @param pos_x 	 column position of the piece on the board
- * @param pos_y 	 row position of the piece on the board
- * @return      	 pointer to the newly created piece on success, NULL otherwise
- */
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
 	GamePiece *piece = (GamePiece *)malloc(sizeof(GamePiece));
 	if(!piece) return NULL;
@@ -97,17 +74,15 @@ GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
 	return piece;
 }
 
-/*
- * Add a single game piece of the given type and color to the given position on the board,
- * and add it to the list of pieces of the given color.
- * @precond     	 game != NULL
- * @param game  	 existing game instance
- * @param type  	 type of the piece to be added
- * @param color 	 color of the piece to be added
- * @param pos_x 	 column position of the piece on the board
- * @param pos_y 	 row position of the piece on the board
- * @return      	 message indicating success or failure
- */
+EngineMessage init_game(Game *game){
+	/* Create all pieces and place them on the board */
+	EngineMessage msg;
+	msg = add_game_pieces_set(game, WHITE);
+	if(msg != SUCCESS) return msg;
+	msg = add_game_pieces_set(game, BLACK);
+	return msg;
+}
+
 EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y){
 	GamePiece *pawn = create_game_piece(type, color, pos_x, pos_y);
 	if(!pawn) return MALLOC_FAILURE;
@@ -116,12 +91,6 @@ EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x,
 	return SUCCESS;
 }
 
-/*
- * Remove a game piece from the given game instance.
- * @precond     	 game != NULL
- * @param game  	 existing game instance
- * @param piece 	 game piece to be removed from the board
- */
 void remove_game_piece(Game *game, GamePiece *piece){
 	if(!piece) return;
 
@@ -137,13 +106,6 @@ void remove_game_piece(Game *game, GamePiece *piece){
 	free(piece);
 }
 
-/*
- * Add all game pieces of a set with the given color.
- * @precond     	 game != NULL
- * @param game  	 existing game instance
- * @param color 	 color of the set to be added
- * @return      	 message indicating success or failure
- */
 EngineMessage add_game_pieces_set(Game *game, Color color){
 	EngineMessage msg;
 	/* Add pawns */
@@ -174,13 +136,8 @@ EngineMessage add_game_pieces_set(Game *game, Color color){
 	return SUCCESS;
 }
 
-/*
- * Check whether a given position on the board is occupied.
- * @param game  	 game instance
- * @param pos_x 	 column of the position
- * @param pos_y 	 row of the position
- * @return      	 true iff position is occupied
- */
 int is_occupied_position(Game *game, int pos_x, int pos_y){
 	return game->board[pos_y][pos_x] != NULL;
 }
+
+int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y);

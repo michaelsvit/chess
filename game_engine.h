@@ -75,4 +75,28 @@ EngineMessage init_game(Game *game);
  * @param piece 	 game piece to be removed from the board
  */
 void remove_game_piece(Game *game, GamePiece *piece);
+
+/*
+ * Move a game piece from its current place to the given coordinates.
+ * @param game  	 game instance
+ * @param piece 	 game piece to be moved
+ * @param pos_x 	 column to move the piece onto
+ * @param pos_y 	 row to move the piece onto
+ * @return
+ * INVALID_ARGUMENT 	 game == NULL or piece == NULL or coordinates out of bounds
+ * ILLEGAL_MOVE     	 move is not a legal move as defined by chess rules
+ * SUCCESS          	 otherwise
+ */
+EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Check whether a given move is a legal chess move.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 game piece to be moved
+ * @param pos_x 	 column to move the piece onto
+ * @param pos_y 	 row to move the piece onto
+ * @return      	 true iff move is legal
+ */
+int is_move_valid(Game *game, GamePiece *piece, int pos_x, int pos_y);
 #endif

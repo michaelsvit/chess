@@ -3,6 +3,7 @@
 
 /* Auxiliary function declarations */
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y);
+void remove_game_piece(Game *game, GamePiece *piece);
 EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y);
 EngineMessage add_game_pieces_set(Game *game, Color color);
 int is_occupied_position(Game *game, int pos_x, int pos_y);
@@ -54,21 +55,6 @@ EngineMessage init_game(Game *game){
 	if(msg != SUCCESS) return msg;
 	msg = add_game_pieces_set(game, BLACK);
 	return msg;
-}
-
-void remove_game_piece(Game *game, GamePiece *piece){
-	if(!piece) return;
-
-	/* Remove piece from list of game pieces */
-	if(piece->color == WHITE){
-		spArrayListRemoveItem(game->white_pieces, piece);
-	} else {
-		spArrayListRemoveItem(game->black_pieces, piece);
-	}
-
-	/* Remove piece from game board */
-	game->board[piece->pos_y][piece->pos_x] = NULL;
-	free(piece);
 }
 
 EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y){
@@ -128,6 +114,27 @@ EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x,
 	spArrayListAddLast(game->white_pieces, pawn); /* cannot fail on a new board */
 	game->board[pos_x][pos_y] = pawn;
 	return SUCCESS;
+}
+
+/*
+ * Remove a game piece from the given game instance.
+ * @precond     	 game != NULL
+ * @param game  	 existing game instance
+ * @param piece 	 game piece to be removed from the board
+ */
+void remove_game_piece(Game *game, GamePiece *piece){
+	if(!piece) return;
+
+	/* Remove piece from list of game pieces */
+	if(piece->color == WHITE){
+		spArrayListRemoveItem(game->white_pieces, piece);
+	} else {
+		spArrayListRemoveItem(game->black_pieces, piece);
+	}
+
+	/* Remove piece from game board */
+	game->board[piece->pos_y][piece->pos_x] = NULL;
+	free(piece);
 }
 
 /*

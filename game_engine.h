@@ -69,14 +69,6 @@ void destroy_game();
 EngineMessage init_game(Game *game);
 
 /*
- * Remove a game piece from the given game instance.
- * @precond     	 game != NULL
- * @param game  	 existing game instance
- * @param piece 	 game piece to be removed from the board
- */
-void remove_game_piece(Game *game, GamePiece *piece);
-
-/*
  * Move a game piece from its current place to the given coordinates.
  * @param game  	 game instance
  * @param piece 	 game piece to be moved

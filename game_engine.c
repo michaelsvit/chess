@@ -10,12 +10,12 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 	if(difficulty < 1 || difficulty > 4) return NULL;
 	Game *game = malloc(sizeof(Game));
 	if(!game) return NULL;
-	game->white_pieces = spArrayListCreate(ARRAY_SIZE);
+	game->white_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
 	if(!game->white_pieces){
 		free(game);
 		return NULL;
 	}
-	game->black_pieces = spArrayListCreate(ARRAY_SIZE);
+	game->black_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
 	if(!game->black_pieces){
 		spArrayListDestroy(game->white_pieces);
 		free(game);
@@ -38,7 +38,7 @@ void destroy_game(Game *game){
 		free(piece);
 	}
 	for(int i = 0; i < spArrayListSize(game->black_pieces); i++){
-		GamePiece *piece = spArrayListGetAt(game->black_pieces, i);
+		GamePiece *piece = (GamePiece *)spArrayListGetAt(game->black_pieces, i);
 		free(piece);
 	}
 	spArrayListDestroy(game->white_pieces);
@@ -52,8 +52,23 @@ EngineMessage init_game(Game *game){
 	msg = add_game_pieces_set(game, WHITE);
 	if(msg != SUCCESS) return msg;
 	msg = add_game_pieces_set(game, BLACK);
-	if(msg != SUCCESS) return msg;
-	return SUCCESS;
+	return msg;
+}
+
+void remove_game_piece(Game *game, GamePiece *piece){
+	if(!piece) return;
+
+	/* Remove piece from list of game pieces */
+	if(piece->color == WHITE){
+		spArrayListRemoveItem(game->white_pieces, piece);
+	} else {
+		spArrayListRemoveItem(game->black_pieces, piece);
+	}
+
+	/* Remove piece from game board */
+	game->board[piece->pos_y][piece->pos_x])= NULL;
+	
+	free(piece);
 }
 
 /******************************** Auxiliary functions ******************************/

@@ -12,7 +12,7 @@
  * is_move_valid     	 checks whether a given move is valid for a given game piece
  * is_game_over      	 checks if the given game instance reached a final state
  */
-#include "SPArrayList.h"
+#include "array_list.h"
 
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
@@ -62,4 +62,12 @@ void destroy_game();
  * @return     	 message indicating success or failure
  */
 EngineMessage init_game(Game *game);
+
+/*
+ * Remove a game piece from the given game instance.
+ * @precond     	 game != NULL
+ * @param game  	 existing game instance
+ * @param piece 	 game piece to be removed from the board
+ */
+void remove_game_piece(Game *game, GamePiece *piece);
 #endif

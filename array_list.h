@@ -66,6 +66,11 @@ SPArrayList* spArrayListCreate(int elemSize, int maxSize);
 /**
  *	Creates an exact copy of the src array list. Elements in the new copy will
  *	be in the same order as they appeared in the source list.
+ *
+ *	IMPORTANT NOTE: For each pointer in the elements list a new one is created
+ *	and memory is allocated for it to copy pointed content.
+ *	This memory needs to be free'd by the user!
+ *
  *	@param src - the source array list.
  *	@return
  *	NULL if either an allocation error occurs or src == NULL.

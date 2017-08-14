@@ -9,7 +9,7 @@
  * init_game         	 initialize a new game instance with pieces in default slots
  * remove_game_piece 	 remove a game piece from the board
  * move_game_piece   	 move a game piece from current place on board to another
- * is_move_valid     	 checks whether a given move is valid for a given game piece
+ * is_legal_move     	 checks whether a given move is valid for a given game piece
  * is_game_over      	 checks if the given game instance reached a final state
  */
 #include "array_list.h"
@@ -98,5 +98,5 @@ EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y
  * @param pos_y 	 row to move the piece onto
  * @return      	 true iff move is legal
  */
-int is_move_valid(Game *game, GamePiece *piece, int pos_x, int pos_y);
+int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
 #endif

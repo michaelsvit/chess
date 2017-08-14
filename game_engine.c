@@ -5,6 +5,7 @@
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y);
 EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y);
 EngineMessage add_game_pieces_set(Game *game, Color color);
+int is_occupied_position(Game *game, int pos_x, int pos_y);
 
 Game *create_game(Mode mode, int difficulty, Color player1_color){
 	if(difficulty < 1 || difficulty > 4) return NULL;
@@ -66,9 +67,27 @@ void remove_game_piece(Game *game, GamePiece *piece){
 	}
 
 	/* Remove piece from game board */
-	game->board[piece->pos_y][piece->pos_x])= NULL;
-	
+	game->board[piece->pos_y][piece->pos_x] = NULL;
 	free(piece);
+}
+
+EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	if(
+		!game || !piece ||
+		pos_x < 0 || pos_x > BOARD_SIZE-1 ||
+		pos_y < 0 || pos_y > BOARD_SIZE-1
+	) return INVALID_ARGUMENT;
+	if(!is_legal_move(game, piece, pos_x, pos_y)) return ILLEGAL_MOVE;
+
+	if(is_occupied_position(game, pos_x, pos_x)){
+		remove_game_piece(game, game->board[pos_y][pos_x]);
+	}
+
+	/* Move piece to the given position */
+	piece->pos_y = pos_y;
+	piece->pos_x = pos_x;
+	game->board[pos_y][pos_x] = piece;
+	return SUCCESS;
 }
 
 /******************************** Auxiliary functions ******************************/
@@ -146,4 +165,15 @@ EngineMessage add_game_pieces_set(Game *game, Color color){
 	/* Add king */
 	if((msg = add_game_piece(game, KING, color, 3, row)) != SUCCESS) return msg;
 	return SUCCESS;
+}
+
+/*
+ * Check whether a given position on the board is occupied.
+ * @param game  	 game instance
+ * @param pos_x 	 column of the position
+ * @param pos_y 	 row of the position
+ * @return      	 true iff position is occupied
+ */
+int is_occupied_position(Game *game, int pos_x, int pos_y){
+	return game->board[pos_y][pos_x] != NULL;
 }

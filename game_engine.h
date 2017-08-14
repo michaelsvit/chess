@@ -17,7 +17,12 @@
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
 
-typedef enum {MALLOC_FAILURE, SUCCESS} EngineMessage;
+typedef enum {
+	MALLOC_FAILURE,
+	INVALID_ARGUMENT,
+	ILLEGAL_MOVE,
+	SUCCESS
+} EngineMessage;
 typedef enum {PLAYER1, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;

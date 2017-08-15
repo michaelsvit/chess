@@ -150,6 +150,7 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			if(!is_legal_pawn_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case ROOK:
+			if(!is_legal_rook_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case KNIGHT:
 			break;
@@ -185,6 +186,39 @@ int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		/* Position must be occupied by a piece with the other color */
 		GamePiece *target_piece = game->board[pos_y][pos_x];
 		if(!target_piece || piece->color == target_piece->color) return 0;
+	}
+	return 1;
+}
+
+int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Make sure rook is moving in a straight line */
+	if(pos_x != piece->pos_x && pos_y != piece->pos_y) return 0;
+
+	/* If target position is occupied, make sure target piece is of different color */
+	GamePiece *target_piece = game->board[pos_y][pos_x];
+	if(target_piece && target_piece->color == piece->color) return 0;
+
+	/* Make sure no other pieces are inbetween */
+	if (pos_x == piece->pos_x) {
+		if (piece->pos_y < pos_y) {
+			for(int i = piece->pos_y; i < pos_y; i++){
+				if(is_occupied_position(game, pos_x, i)) return 0;
+			}
+		} else {
+			for(int i = pos_y; i > piece->pos_y; i--){
+				if(is_occupied_position(game, pos_x, i)) return 0;
+			}
+		}
+	} else {
+		if (piece->pos_x < pos_x) {
+			for(int i = piece->pos_x; i < pos_x; i++){
+				if(is_occupied_position(game, i, pos_y)) return 0;
+			}
+		} else {
+			for(int i = pos_x; i > piece->pos_x; i--){
+				if(is_occupied_position(game, i, pos_y)) return 0;
+			}
+		}
 	}
 	return 1;
 }

@@ -116,17 +116,17 @@ EngineMessage add_game_pieces_set(Game *game, Color color){
 	}
 
 	row = color == WHITE ? 0 : BOARD_SIZE-1;
-	/* Add bishops */
-	if((msg = add_game_piece(game, BISHOP, color, 0, row)) != SUCCESS) return msg;
-	if((msg = add_game_piece(game, BISHOP, color, BOARD_SIZE-1, row)) != SUCCESS) return msg;
+	/* Add rooks */
+	if((msg = add_game_piece(game, ROOK, color, 0, row)) != SUCCESS) return msg;
+	if((msg = add_game_piece(game, ROOK, color, BOARD_SIZE-1, row)) != SUCCESS) return msg;
 
 	/* Add knights */
 	if((msg = add_game_piece(game, KNIGHT, color, 1, row)) != SUCCESS) return msg;
 	if((msg = add_game_piece(game, KNIGHT, color, BOARD_SIZE-2, row)) != SUCCESS) return msg;
 
-	/* Add rooks */
-	if((msg = add_game_piece(game, ROOK, color, 2, row)) != SUCCESS) return msg;
-	if((msg = add_game_piece(game, ROOK, color, BOARD_SIZE-3, row)) != SUCCESS) return msg;
+	/* Add bishops */
+	if((msg = add_game_piece(game, BISHOP, color, 2, row)) != SUCCESS) return msg;
+	if((msg = add_game_piece(game, BISHOP, color, BOARD_SIZE-3, row)) != SUCCESS) return msg;
 
 	/* Add queen */
 	if((msg = add_game_piece(game, QUEEN, color, 4, row)) != SUCCESS) return msg;

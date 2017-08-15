@@ -140,4 +140,51 @@ int is_occupied_position(Game *game, int pos_x, int pos_y){
 	return game->board[pos_y][pos_x] != NULL;
 }
 
-int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Make sure piece is the same color as current player */
+	if(game->player_color[game->current_player] != piece->color) return 0;
+
+	/* Handle each piece type according to game rules */
+	switch(piece->type){
+		case PAWN:
+			if(!is_legal_pawn_move(game, piece, pos_x, pos_y)) return 0;
+			break;
+		case ROOK:
+			break;
+		case KNIGHT:
+			break;
+		case BISHOP:
+			break;
+		case QUEEN:
+			break;
+		case KING:
+			break;
+	}
+
+
+	/* If last turn ended with a check then current player must resolve it */
+	return 1;
+}
+
+int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Determine which direction pawn should move */
+	int direction = (piece->color == WHITE) ? 1 : -1;
+
+	/* Make sure pawn is moving exactly 1 row in the correct direction */
+	if(pos_y != piece->pos_y + direction * 1) return 0;
+
+	/* Make sure pawn is moving no more than 1 column away from current position */
+	if(piece->pos_x == pos_x){
+		/* Pawn stays in same column, target position must be unoccupied */
+		if (is_occupied_position(game, pos_x, pos_y)) return 0;
+	} else if (abs(pos_x - piece->pos_x) > 1) {
+		/* Pawn is trying to move more than 1 column away from current position */
+		return 0;
+	} else {
+		/* Pawn is moving diagonally */
+		/* Position must be occupied by a piece with the other color */
+		GamePiece *target_piece = game->board[pos_y][pos_x];
+		if(!target_piece || piece->color == target_piece->color) return 0;
+	}
+	return 1;
+}

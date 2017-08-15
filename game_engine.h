@@ -151,4 +151,15 @@ int is_occupied_position(Game *game, int pos_x, int pos_y);
  * @return      	 true iff move is legal
  */
 int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Check if a given pawn move is legal.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 pawn to be moved
+ * @param pos_x 	 column to move the pawn onto
+ * @param pos_y 	 row to move the pawn onto
+ * @return      	 true iff move is legal
+ */
+int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
 #endif

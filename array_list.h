@@ -69,7 +69,7 @@ SPArrayList* spArrayListCreate(int elemSize, int maxSize);
  *
  *	IMPORTANT NOTE: For each pointer in the elements list a new one is created
  *	and memory is allocated for it to copy pointed content.
- *	This memory needs to be free'd by the user!
+ *	This memory needs to be deallocated!
  *
  *	@param src - the source array list.
  *	@return
@@ -81,6 +81,10 @@ SPArrayList* spArrayListCopy(SPArrayList* src);
 /**
  * Frees all memory resources associated with the source array list. If the
  * source array is NULL, then the function does nothing.
+ *
+ * IMPORTANT NOTE: This function assumes that elements in this list are allocated
+ * on the heap and are therefore freeable.
+ *
  * @param src - the source array list
  */
 void spArrayListDestroy(SPArrayList* src);
@@ -193,7 +197,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveLast(SPArrayList* src);
  * SP_ARRAY_LIST_EMPTY - if the source array list is empty
  * SP_ARRAY_LIST_SUCCESS - otherwise.
  */
-SP_ARRAY_LIST_MESSAGE spArrayListRemoveItem(SPArrayList *src, void *item); 
+SP_ARRAY_LIST_MESSAGE spArrayListRemoveItem(SPArrayList *src, void *item);
 
 /**
  * Returns the element at the specified index. The function is called

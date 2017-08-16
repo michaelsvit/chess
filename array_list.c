@@ -62,6 +62,9 @@ SPArrayList* spArrayListCopy(SPArrayList* src)
  */
 void spArrayListDestroy(SPArrayList* src) {
 	if (src != NULL) {
+		for(int i = 0; i < spArrayListSize(src); i++){
+			free(src->elements[i]);
+		}
 		free(src->elements);
 		free(src);
 	}

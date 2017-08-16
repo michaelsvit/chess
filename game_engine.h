@@ -45,6 +45,7 @@ typedef struct game_t{
 	Color player_color[PLAYER_COUNT];
 	Mode mode;
 	int difficulty;
+	int check; /* determines whether last turn ended with a check */
 } Game;
 
 /*

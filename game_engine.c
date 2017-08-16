@@ -21,6 +21,7 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 	game->current_player = PLAYER1;
 	game->mode = mode;
 	game->difficulty = difficulty;
+	game->check = 0;
 	game->player_color[PLAYER1] = player1_color;
 	game->player_color[PLAYER2] = !player1_color;
 	return game;
@@ -59,6 +60,7 @@ Game *copy_game(Game *game){
 	}
 	copy->mode = game->mode;
 	copy->difficulty = game->difficulty;
+	copy->check = game->check;
 	return copy;
 }
 

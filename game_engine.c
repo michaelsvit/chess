@@ -302,3 +302,57 @@ int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	return is_legal_rook_move(game, piece, pos_x, pos_y) ||
 		is_legal_bishop_move(game, piece, pos_x, pos_y);
 }
+
+int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Make sure king moves exactly one step in any direction */
+	int dist_x = abs(piece->pos_x - pos_x);
+	int dist_y = abs(piece->pos_y - pos_y);
+	if(dist_x > 1 || dist_y > 1 || dist_x + dist_y == 0) return 0;
+
+	/* If target position is occupied, make sure target piece is of different color */
+	GamePiece *target_piece = game->board[pos_y][pos_x];
+	if(target_piece && target_piece->color == piece->color) return 0;
+
+	/* Make sure king is not threatened in target position */
+	Game *copy = copy_game(game);
+	if(!copy) return -1;
+	SPArrayList *same_color_pieces;
+	SPArrayList *enemy_pieces;
+	if(piece->color == WHITE){
+		same_color_pieces = copy->white_pieces;
+		enemy_pieces = copy->black_pieces;
+	} else {
+		same_color_pieces = copy->black_pieces;
+		enemy_pieces = copy->white_pieces;
+	}
+	/* Find copied king piece */
+	GamePiece *king_copy = find_king_piece(same_color_pieces);
+	/* Move copied king to new position */
+	move_piece_to_position(copy, king_copy, pos_x, pos_y);
+	copy->current_player = !copy->current_player;
+	/* Iterate through all enemy pieces and check if they threaten king */
+	for(int i = 0; i < spArrayListSize(enemy_pieces); i++){
+		GamePiece *temp = (GamePiece *)spArrayListGetAt(enemy_pieces, i);
+		if(is_legal_move(copy, temp, pos_x, pos_y)){
+			destroy_game(copy);
+			return 0;
+		}
+	}
+	destroy_game(copy);
+	return 1;
+}
+
+void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	if(is_occupied_position(game, pos_x, pos_y)) free(game->board[pos_y][pos_x]);
+	piece->pos_x = pos_x;
+	piece->pos_y = pos_y;
+	game->board[pos_y][pos_x] = piece;
+}
+
+GamePiece *find_king_piece(SPArrayList *set){
+	for(int i = 0; i < spArrayListSize(set); i++){
+		GamePiece *temp = (GamePiece *)spArrayListGetAt(set, i);
+		if(temp->type == KING) return temp;
+	}
+	return NULL; /* should not be reached */
+}

@@ -215,4 +215,33 @@ int is_legal_bishop_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @return      	 true iff move is legal
  */
 int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Check if a given king move is legal.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 king to be moved
+ * @param pos_x 	 column to move the king onto
+ * @param pos_y 	 row to move the king onto
+ * @return      	 true iff move is legal
+ */
+int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Perform actual moving of game piece to new position.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 game piece to be moved
+ * @param pos_x 	 column to move the piece onto
+ * @param pos_y  	 row to move the piece onto
+ */
+void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Find king piece in given set of pieces.
+ * @precond   	 assumes arguments are valid
+ * @param set 	 set of game pieces to search in
+ * @return    	 pointer to king piece in given set
+ */
+GamePiece *find_king_piece(SPArrayList *set);
 #endif

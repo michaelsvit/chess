@@ -225,9 +225,20 @@ int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @param piece 	 king to be moved
  * @param pos_x 	 column to move the king onto
  * @param pos_y 	 row to move the king onto
- * @return      	 -1 on malloc failure, true iff move is legal otherwise
+ * @return      	 true iff move is legal
  */
 int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Check if given move creates a check state for the allied king of the given piece.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 piece to be moved
+ * @param pos_x 	 column to move the piece onto
+ * @param pos_y 	 row to move the piece onto
+ * @return      	 -1 on malloc failure, true iff move is legal otherwise
+ */
+int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int pos_y);
 
 /*
  * Perform actual moving of game piece to new position.

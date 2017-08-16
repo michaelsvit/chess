@@ -204,20 +204,19 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		case QUEEN:
 			if(!is_legal_queen_move(game, piece, pos_x, pos_y)) return 0;
 			break;
-		case KING:{
-				/* Scope brackets are here to enable declaring variable inside switch */
-				int result = is_legal_king_move(game, piece, pos_x, pos_y);
-				if(!result){
-					return 0;
-				} else if (result == -1) {
-					return -1;
-				}
-				break;
-			}
+		case KING:
+			if(!is_legal_king_move(game, piece, pos_x, pos_y)) return 0;
+			break;
 	}
 
+	/* Make sure moving the piece doesn't end with a check state for allied king */
+	int result = is_check_state_created_allied(game, piece, pos_x, pos_y);
+	if(result){
+		return 0;
+	} else if (result == -1) {
+		return -1;
+	}
 
-	/* If last turn ended with a check then current player must resolve it */
 	return 1;
 }
 
@@ -328,7 +327,10 @@ int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	GamePiece *target_piece = game->board[pos_y][pos_x];
 	if(target_piece && target_piece->color == piece->color) return 0;
 
-	/* Make sure king is not threatened in target position */
+	return 1;
+}
+
+int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	Game *copy = copy_game(game);
 	if(!copy) return -1;
 	SPArrayList *same_color_pieces;
@@ -340,15 +342,16 @@ int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		same_color_pieces = copy->black_pieces;
 		enemy_pieces = copy->white_pieces;
 	}
-	/* Find copied king piece */
-	GamePiece *king_copy = find_king_piece(same_color_pieces);
-	/* Move copied king to new position */
-	move_piece_to_position(copy, king_copy, pos_x, pos_y);
+	/* Get copied game piece */
+	GamePiece *piece_copy = copy->board[piece->pos_y][piece->pos_x];
+	/* Move copied piece to new position */
+	move_piece_to_position(copy, piece_copy, pos_x, pos_y);
 	copy->current_player = !copy->current_player;
-	/* Iterate through all enemy pieces and check if they threaten king */
+	/* Iterate through all enemy pieces and check if they threaten allied king */
+	GamePiece *king_copy = find_king_piece(same_color_pieces);
 	for(int i = 0; i < spArrayListSize(enemy_pieces); i++){
 		GamePiece *temp = (GamePiece *)spArrayListGetAt(enemy_pieces, i);
-		if(is_legal_move(copy, temp, pos_x, pos_y)){
+		if(is_legal_move(copy, temp, king_copy->pos_x, king_copy->pos_y)){
 			destroy_game(copy);
 			return 0;
 		}

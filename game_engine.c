@@ -156,6 +156,7 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			if(!is_legal_knight_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case BISHOP:
+			if(!is_legal_bishop_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case QUEEN:
 			break;
@@ -236,5 +237,25 @@ int is_legal_knight_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	GamePiece *target_piece = game->board[pos_y][pos_x];
 	if(target_piece && target_piece->color == piece->color) return 0;
 
+	return 1;
+}
+
+int is_legal_bishop_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Make sure bishop is moving diagonally */
+	if(abs(pos_x - piece->pos_x) != abs(pos_y - piece->pos_y)) return 0;
+
+	/* If target position is occupied, make sure target piece is of different color */
+	GamePiece *target_piece = game->board[pos_y][pos_x];
+	if(target_piece && target_piece->color == piece->color) return 0;
+
+	/* Make sure there are no other pieces inbetween */
+	int direction_x = (piece->pos_x < pos_x) ? 1 : -1;
+	int direction_y = (piece->pos_y < pos_y) ? 1 : -1;
+	int dist = abs(piece->pos_x - pos_x);
+	for(int i = 1; i <= dist; i++){
+		int cur_pos_x = piece->pos_x + direction_x * i;
+		int cur_pos_y = piece->pos_y + direction_y * i;
+		if(is_occupied_position(game, cur_pos_x, cur_pos_y)) return 0;
+	}
 	return 1;
 }

@@ -185,4 +185,15 @@ int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @return      	 true iff move is legal
  */
 int is_legal_knight_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+
+/*
+ * Check if a given bishop move is legal.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 bishop to be moved
+ * @param pos_x 	 column to move the bishop onto
+ * @param pos_y 	 row to move the bishop onto
+ * @return      	 true iff move is legal
+ */
+int is_legal_bishop_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
 #endif

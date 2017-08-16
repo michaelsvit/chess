@@ -44,8 +44,6 @@ static bool spArrayListCopyTest(){
 	ASSERT_TRUE(*((int *)spArrayListGetFirst(alc)) == 7);
 	ASSERT_TRUE(*((int *)spArrayListGetLast(alc)) == 5);
 
-	freeResources(al);
-	freeResources(alc);
 	spArrayListDestroy(al);
 	spArrayListDestroy(alc);
 	return true;
@@ -105,7 +103,6 @@ static bool spArrayListAddAtTest(){
 	}
 	ASSERT_TRUE(spArrayListAddAt(al, item1, 5) == SP_ARRAY_LIST_FULL);
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -124,7 +121,6 @@ static bool spArrayListAddFirstTest(){
 		ASSERT_TRUE(*((int *)spArrayListGetAt(al, SIZE-i-1)) == i);
 	}
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -143,7 +139,6 @@ static bool spArrayListAddLastTest(){
 		ASSERT_TRUE(*((int *)spArrayListGetAt(al, i)) == i);
 	}
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -187,7 +182,6 @@ static bool spArrayListRemoveAtTest(){
 		ASSERT_TRUE(*((int *)spArrayListGetAt(al, i-5)) == i);
 	}
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -212,7 +206,6 @@ static bool spArrayListRemoveFirstTest(){
 		ASSERT_TRUE(*((int *)spArrayListGetAt(al, i-5)) == i);
 	}
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -237,7 +230,6 @@ static bool spArrayListRemoveLastTest(){
 		ASSERT_TRUE(*((int *)spArrayListGetAt(al, i)) == i);
 	}
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -260,7 +252,6 @@ static bool spArrayListRemoveItemTest(){
 	ASSERT_TRUE(spArrayListRemoveItem(al, item2) == SP_ARRAY_LIST_SUCCESS);
 
 	free(item2);
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -281,7 +272,6 @@ static bool spArrayListGetAtTest(){
 		ASSERT_TRUE(*((int *)spArrayListGetAt(al, i)) == i);
 	}
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -299,7 +289,6 @@ static bool spArrayListGetFirstTest(){
 	}
 	ASSERT_TRUE(*((int *)spArrayListGetFirst(al)) == 1);
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -316,7 +305,6 @@ static bool spArrayListGetLastTest(){
 	}
 	ASSERT_TRUE(*((int *)spArrayListGetLast(al)) == SIZE-1);
 
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -339,7 +327,6 @@ static bool spArrayListSizeTest(){
 		spArrayListAddLast(al, item);
 	}
 	ASSERT_TRUE(spArrayListSize(al) == SIZE);
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -355,7 +342,6 @@ static bool spArrayListIsFullTest(){
 		spArrayListAddLast(al, item);
 	}
 	ASSERT_TRUE(spArrayListIsFull(al));
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }
@@ -371,7 +357,6 @@ static bool spArrayListIsEmptyTest(){
 		spArrayListAddLast(al, item);
 	}
 	ASSERT_FALSE(spArrayListIsEmpty(al));
-	freeResources(al);
 	spArrayListDestroy(al);
 	return true;
 }

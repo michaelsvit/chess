@@ -78,6 +78,7 @@ void destroy_game();
  * @return
  * INVALID_ARGUMENT 	 game == NULL or piece == NULL or coordinates out of bounds
  * ILLEGAL_MOVE     	 move is not a legal move as defined by chess rules
+ * MALLOC_FAILURE   	 failed to allocate memory when checking if king move is valid
  * SUCCESS          	 otherwise
  */
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y);
@@ -157,7 +158,7 @@ int is_occupied_position(Game *game, int pos_x, int pos_y);
  * @param piece 	 game piece to be moved
  * @param pos_x 	 column to move the piece onto
  * @param pos_y 	 row to move the piece onto
- * @return      	 true iff move is legal
+ * @return      	 -1 on malloc failure, true iff move is legal otherwise
  */
 int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
 
@@ -223,7 +224,7 @@ int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @param piece 	 king to be moved
  * @param pos_x 	 column to move the king onto
  * @param pos_y 	 row to move the king onto
- * @return      	 true iff move is legal
+ * @return      	 -1 on malloc failure, true iff move is legal otherwise
  */
 int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
 

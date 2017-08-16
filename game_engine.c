@@ -85,7 +85,12 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	if(!piece || dst_x < 0 || dst_x > BOARD_SIZE-1 || dst_y < 0 || dst_y > BOARD_SIZE-1){
 		return INVALID_ARGUMENT;
 	}
-	if(!is_legal_move(game, piece, dst_x, dst_y)) return ILLEGAL_MOVE;
+	int result = is_legal_move(game, piece, dst_x, dst_y);
+	if(!result){
+		return ILLEGAL_MOVE;
+	} else if (result == -1) {
+		return MALLOC_FAILURE;
+	}
 
 	if(is_occupied_position(game, dst_x, dst_x)){
 		remove_game_piece(game, game->board[dst_y][dst_x]);
@@ -197,8 +202,16 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		case QUEEN:
 			if(!is_legal_queen_move(game, piece, pos_x, pos_y)) return 0;
 			break;
-		case KING:
-			break;
+		case KING:{
+				/* Scope brackets are here to enable declaring variable inside switch */
+				int result = is_legal_king_move(game, piece, pos_x, pos_y);
+				if(!result){
+					return 0;
+				} else if (result == -1) {
+					return -1;
+				}
+				break;
+			}
 	}
 
 

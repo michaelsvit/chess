@@ -26,6 +26,42 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 	return game;
 }
 
+Game *copy_game(Game *game){
+	if(!game) return NULL;
+
+	Game *copy = malloc(sizeof(Game));
+	if(!copy) return NULL;
+
+	copy->white_pieces = spArrayListCopy(game->white_pieces);
+	if(!copy->white_pieces){
+		free(copy);
+		return NULL;
+	}
+	copy->black_pieces = spArrayListCopy(game->black_pieces);
+	if(!copy->black_pieces){
+		spArrayListDestroy(copy->white_pieces);
+		free(copy);
+		return NULL;
+	}
+
+	/* Place copied pieces on new board */
+	for(int i = 0; i < spArrayListSize(copy->white_pieces); i++){
+		GamePiece *piece = spArrayListGetAt(copy->white_pieces, i);
+		copy->board[piece->pos_y][piece->pos_x] = piece;
+	}
+	for(int i = 0; i < spArrayListSize(copy->black_pieces); i++){
+		GamePiece *piece = spArrayListGetAt(copy->black_pieces, i);
+		copy->board[piece->pos_y][piece->pos_x] = piece;
+	}
+
+	for(int i = 0; i < PLAYER_COUNT; i++){
+		copy->player_color[i] = game->player_color[i];
+	}
+	copy->mode = game->mode;
+	copy->difficulty = game->difficulty;
+	return copy;
+}
+
 void destroy_game(Game *game){
 	if(!game) return;
 

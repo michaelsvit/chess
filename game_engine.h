@@ -16,6 +16,7 @@
 
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
+#define PLAYER_COUNT 2
 
 typedef enum {
 	MALLOC_FAILURE,
@@ -41,7 +42,7 @@ typedef struct game_t{
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
 	SPArrayList *white_pieces, *black_pieces; /* lists representing white and black game pieces on the board */
 	Player current_player;
-	Color player_color[2];
+	Color player_color[PLAYER_COUNT];
 	Mode mode;
 	int difficulty;
 } Game;
@@ -54,6 +55,13 @@ typedef struct game_t{
  * @return              	 pointer to the newly created game on success, NULL otherwise
  */
 Game *create_game(Mode mode, int difficulty, Color player1_color);
+
+/*
+ * Copies an existing game instance.
+ * @param game 	 game to be copied
+ * @return     	 pointer to the generated copy on success, NULL otherwise
+ */
+Game *copy_game(Game *game);
 
 /*
  * Destroy an existing game instance and free all allocated memory.

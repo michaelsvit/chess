@@ -159,6 +159,7 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			if(!is_legal_bishop_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case QUEEN:
+			if(!is_legal_queen_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case KING:
 			break;
@@ -258,4 +259,10 @@ int is_legal_bishop_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		if(is_occupied_position(game, cur_pos_x, cur_pos_y)) return 0;
 	}
 	return 1;
+}
+
+int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Queen can move in the same way as either a rook or a bishop */
+	return is_legal_rook_move(game, piece, pos_x, pos_y) ||
+		is_legal_bishop_move(game, piece, pos_x, pos_y);
 }

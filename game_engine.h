@@ -241,6 +241,15 @@ int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
 int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int pos_y);
 
 /*
+ * Check if given piece threatens enemy king.
+ * @precond     	 assumes arguments are valid
+ * @param game  	 game instance
+ * @param piece 	 game piece that was moved in this turn
+ * @return      	 true iff given piece threatens enemy king
+ */
+int is_check_state_created_enemy(Game *game, GamePiece *piece);
+
+/*
  * Perform actual moving of game piece to new position.
  * @precond     	 assumes arguments are valid
  * @param game  	 game instance

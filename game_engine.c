@@ -94,14 +94,10 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 		return MALLOC_FAILURE;
 	}
 
-	if(is_occupied_position(game, dst_x, dst_x)){
-		remove_game_piece(game, game->board[dst_y][dst_x]);
-	}
+	move_piece_to_position(game, piece, dst_x, dst_y);
+	/* Determine if moving the piece ended with check state for enemy king */
+	game->check = is_check_state_created_enemy(game, piece);
 
-	/* Move piece to the given position */
-	piece->pos_y = dst_y;
-	piece->pos_x = dst_x;
-	game->board[dst_y][dst_x] = piece;
 	return SUCCESS;
 }
 
@@ -360,10 +356,20 @@ int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int p
 	return 1;
 }
 
+int is_check_state_created_enemy(Game *game, GamePiece *piece){
+	SPArrayList *enemy_pieces = (piece->color == WHITE) ? game->white_pieces : game->black_pieces;
+	GamePiece *enemy_king = find_king_piece(enemy_pieces);
+	return is_legal_move(game, piece, enemy_king->pos_x, enemy_king->pos_y);
+}
+
 void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y){
-	if(is_occupied_position(game, pos_x, pos_y)) free(game->board[pos_y][pos_x]);
-	piece->pos_x = pos_x;
+	if(is_occupied_position(game, pos_x, pos_x)){
+		remove_game_piece(game, game->board[pos_y][pos_x]);
+	}
+
+	/* Move piece to the given position */
 	piece->pos_y = pos_y;
+	piece->pos_x = pos_x;
 	game->board[pos_y][pos_x] = piece;
 }
 

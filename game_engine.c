@@ -153,6 +153,7 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			if(!is_legal_rook_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case KNIGHT:
+			if(!is_legal_knight_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case BISHOP:
 			break;
@@ -220,5 +221,20 @@ int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			}
 		}
 	}
+	return 1;
+}
+
+int is_legal_knight_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	/* Make sure knight is moving at least 1 step in either direction */
+	if(pos_x == piece->pos_x || pos_y == piece->pos_y) return 0;
+
+	/* Make sure sum of steps in both directions is 3 */
+	/* (so that it moves 1 step in one direction and 2 steps in the other direction) */
+	if(abs(pos_x - piece->pos_x) + abs(pos_y - piece->pos_y) != 3) return 0;
+
+	/* If target position is occupied, make sure target piece is of different color */
+	GamePiece *target_piece = game->board[pos_y][pos_x];
+	if(target_piece && target_piece->color == piece->color) return 0;
+
 	return 1;
 }

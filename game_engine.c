@@ -43,22 +43,22 @@ void destroy_game(Game *game){
 	free(game);
 }
 
-EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y){
-	if(
-		!game || !piece ||
-		pos_x < 0 || pos_x > BOARD_SIZE-1 ||
-		pos_y < 0 || pos_y > BOARD_SIZE-1
-	) return INVALID_ARGUMENT;
-	if(!is_legal_move(game, piece, pos_x, pos_y)) return ILLEGAL_MOVE;
+EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y){
+	if(!game) return INVALID_ARGUMENT;
+	GamePiece *piece = game->board[src_y][src_x];
+	if(!piece || dst_x < 0 || dst_x > BOARD_SIZE-1 || dst_y < 0 || dst_y > BOARD_SIZE-1){
+		return INVALID_ARGUMENT;
+	}
+	if(!is_legal_move(game, piece, dst_x, dst_y)) return ILLEGAL_MOVE;
 
-	if(is_occupied_position(game, pos_x, pos_x)){
-		remove_game_piece(game, game->board[pos_y][pos_x]);
+	if(is_occupied_position(game, dst_x, dst_x)){
+		remove_game_piece(game, game->board[dst_y][dst_x]);
 	}
 
 	/* Move piece to the given position */
-	piece->pos_y = pos_y;
-	piece->pos_x = pos_x;
-	game->board[pos_y][pos_x] = piece;
+	piece->pos_y = dst_y;
+	piece->pos_x = dst_x;
+	game->board[dst_y][dst_x] = piece;
 	return SUCCESS;
 }
 

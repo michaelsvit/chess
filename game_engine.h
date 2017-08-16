@@ -63,15 +63,16 @@ void destroy_game();
 /*
  * Move a game piece from its current place to the given coordinates.
  * @param game  	 game instance
- * @param piece 	 game piece to be moved
- * @param pos_x 	 column to move the piece onto
- * @param pos_y 	 row to move the piece onto
+ * @param src_x 	 column of source position
+ * @param src_y 	 row of source position
+ * @param dst_x 	 column of target position
+ * @param dst_y 	 row of target position
  * @return
  * INVALID_ARGUMENT 	 game == NULL or piece == NULL or coordinates out of bounds
  * ILLEGAL_MOVE     	 move is not a legal move as defined by chess rules
  * SUCCESS          	 otherwise
  */
-EngineMessage move_game_piece(Game *game, GamePiece *piece, int pos_x, int pos_y);
+EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y);
 
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/

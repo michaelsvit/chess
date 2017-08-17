@@ -7,17 +7,15 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 	if(difficulty < 1 || difficulty > 4) return NULL;
 	Game *game = malloc(sizeof(Game));
 	if(!game) return NULL;
+
 	game->white_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
-	if(!game->white_pieces){
-		free(game);
-		return NULL;
-	}
 	game->black_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
-	if(!game->black_pieces){
-		spArrayListDestroy(game->white_pieces);
-		free(game);
+	game->history = spArrayListCreate(sizeof(GameMove), HISTORY_SIZE);
+	if(!game->white_pieces || !game->black_pieces || !game->history){
+		destroy_game(game);
 		return NULL;
 	}
+
 	game->current_player = PLAYER1;
 	game->mode = mode;
 	game->difficulty = difficulty;
@@ -34,14 +32,10 @@ Game *copy_game(Game *game){
 	if(!copy) return NULL;
 
 	copy->white_pieces = spArrayListCopy(game->white_pieces);
-	if(!copy->white_pieces){
-		free(copy);
-		return NULL;
-	}
 	copy->black_pieces = spArrayListCopy(game->black_pieces);
-	if(!copy->black_pieces){
-		spArrayListDestroy(copy->white_pieces);
-		free(copy);
+	copy->history = spArrayListCopy(game->history);
+	if(!copy->white_pieces || !copy->black_pieces || !copy->history){
+		destroy_game(copy);
 		return NULL;
 	}
 
@@ -68,13 +62,23 @@ void destroy_game(Game *game){
 	if(!game) return;
 
 	/* Free all allocated memory */
-	for(int i = 0; i < spArrayListSize(game->white_pieces); i++){
-		GamePiece *piece = spArrayListGetAt(game->white_pieces, i);
-		free(piece);
+	if(game->white_pieces){
+		for(int i = 0; i < spArrayListSize(game->white_pieces); i++){
+			GamePiece *piece = spArrayListGetAt(game->white_pieces, i);
+			free(piece);
+		}
 	}
-	for(int i = 0; i < spArrayListSize(game->black_pieces); i++){
-		GamePiece *piece = (GamePiece *)spArrayListGetAt(game->black_pieces, i);
-		free(piece);
+	if (game->black_pieces) {
+		for(int i = 0; i < spArrayListSize(game->black_pieces); i++){
+			GamePiece *piece = (GamePiece *)spArrayListGetAt(game->black_pieces, i);
+			free(piece);
+		}
+	}
+	if (game->history) {
+		for(int i = 0; i < spArrayListSize(game->history); i++){
+			GameMove *move = (GameMove *)spArrayListGetAt(game->history, i);
+			free(move);
+		}
 	}
 	spArrayListDestroy(game->white_pieces);
 	spArrayListDestroy(game->black_pieces);
@@ -379,4 +383,8 @@ GamePiece *find_king_piece(SPArrayList *set){
 		if(temp->type == KING) return temp;
 	}
 	return NULL; /* should not be reached */
+}
+
+int is_game_over(Game *game){
+	// TODO: implement history and use most recent move to determine which piece threatens the king
 }

@@ -17,6 +17,7 @@
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
 #define PLAYER_COUNT 2
+#define HISTORY_SIZE 6
 
 typedef enum {
 	MALLOC_FAILURE,
@@ -41,12 +42,21 @@ typedef struct game_piece{
 typedef struct game_t{
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
 	SPArrayList *white_pieces, *black_pieces; /* lists representing white and black game pieces on the board */
+	SPArrayList *history; /* list to remember last 3 moves of both players */
 	Player current_player;
 	Color player_color[PLAYER_COUNT];
 	Mode mode;
 	int difficulty;
 	int check; /* determines whether last turn ended with a check */
 } Game;
+
+/* Struct defining a single game move from one position to another */
+typedef struct game_move{
+	int src_x;
+	int src_y;
+	int dst_x;
+	int dst_y;
+} GameMove;
 
 /*
  * Creates a new game instance.
@@ -266,4 +276,11 @@ void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @return    	 pointer to king piece in given set
  */
 GamePiece *find_king_piece(SPArrayList *set);
+
+/*
+ * Determine whether the game has reached a final state.
+ * @param game 	 game instance
+ * @return     	 true iff game is over
+ */
+int is_game_over(Game *game);
 #endif

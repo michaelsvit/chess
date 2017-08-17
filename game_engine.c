@@ -99,6 +99,7 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	}
 
 	move_piece_to_position(game, piece, dst_x, dst_y);
+	if(add_move_to_history(game, src_x, src_y, dst_x, dst_y) != SUCCESS) return MALLOC_FAILURE;
 	/* Determine if moving the piece ended with check state for enemy king */
 	game->check = is_check_state_created_enemy(game, piece);
 
@@ -383,6 +384,17 @@ GamePiece *find_king_piece(SPArrayList *set){
 		if(temp->type == KING) return temp;
 	}
 	return NULL; /* should not be reached */
+}
+
+EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, int dst_y){
+	GameMove *move = malloc(sizeof(GameMove));
+	if(!move) return MALLOC_FAILURE;
+	move->src_x = src_x;
+	move->src_y = src_y;
+	move->dst_x = dst_x;
+	move->dst_y = dst_y;
+	spArrayListAddFirst(game->history, move);
+	return SUCCESS;
 }
 
 int is_game_over(Game *game){

@@ -278,6 +278,19 @@ void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y);
 GamePiece *find_king_piece(SPArrayList *set);
 
 /*
+ * Add given move to history.
+ * @precond     	 assumes arguments are valid
+ * @param src_x 	 column of source position
+ * @param src_y 	 row of source position
+ * @param dst_x 	 column of source position
+ * @param dst_y 	 row of source position
+ * @return
+ * MALLOC_FAILURE 	 if failed to allocate memory for move struct
+ * SUCCESS        	 otherwise
+ */
+EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, int dst_y);
+
+/*
  * Determine whether the game has reached a final state.
  * @param game 	 game instance
  * @return     	 true iff game is over

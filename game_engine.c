@@ -381,6 +381,7 @@ EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, i
 	move->src_y = src_y;
 	move->dst_x = dst_x;
 	move->dst_y = dst_y;
+	if(spArrayListIsFull(game->history)) spArrayListRemoveLast(game->history);
 	spArrayListAddFirst(game->history, move);
 	return SUCCESS;
 }

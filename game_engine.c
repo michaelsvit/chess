@@ -188,6 +188,10 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	/* Make sure piece is the same color as current player */
 	if(game->player_color[game->current_player] != piece->color) return 0;
 
+	/* If target position is occupied, make sure target piece is of different color */
+	GamePiece *target_piece = game->board[pos_y][pos_x];
+	if(target_piece && target_piece->color == piece->color) return 0;
+
 	/* Handle each piece type according to game rules */
 	switch(piece->type){
 		case PAWN:
@@ -248,10 +252,6 @@ int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	/* Make sure rook is moving in a straight line */
 	if(pos_x != piece->pos_x && pos_y != piece->pos_y) return 0;
 
-	/* If target position is occupied, make sure target piece is of different color */
-	GamePiece *target_piece = game->board[pos_y][pos_x];
-	if(target_piece && target_piece->color == piece->color) return 0;
-
 	/* Make sure no other pieces are inbetween */
 	if (pos_x == piece->pos_x) {
 		if (piece->pos_y < pos_y) {
@@ -285,20 +285,12 @@ int is_legal_knight_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	/* (so that it moves 1 step in one direction and 2 steps in the other direction) */
 	if(abs(pos_x - piece->pos_x) + abs(pos_y - piece->pos_y) != 3) return 0;
 
-	/* If target position is occupied, make sure target piece is of different color */
-	GamePiece *target_piece = game->board[pos_y][pos_x];
-	if(target_piece && target_piece->color == piece->color) return 0;
-
 	return 1;
 }
 
 int is_legal_bishop_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	/* Make sure bishop is moving diagonally */
 	if(abs(pos_x - piece->pos_x) != abs(pos_y - piece->pos_y)) return 0;
-
-	/* If target position is occupied, make sure target piece is of different color */
-	GamePiece *target_piece = game->board[pos_y][pos_x];
-	if(target_piece && target_piece->color == piece->color) return 0;
 
 	/* Make sure there are no other pieces inbetween */
 	int direction_x = (piece->pos_x < pos_x) ? 1 : -1;
@@ -323,10 +315,6 @@ int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	int dist_x = abs(piece->pos_x - pos_x);
 	int dist_y = abs(piece->pos_y - pos_y);
 	if(dist_x > 1 || dist_y > 1 || dist_x + dist_y == 0) return 0;
-
-	/* If target position is occupied, make sure target piece is of different color */
-	GamePiece *target_piece = game->board[pos_y][pos_x];
-	if(target_piece && target_piece->color == piece->color) return 0;
 
 	return 1;
 }

@@ -219,7 +219,7 @@ int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @param pos_y 	 row to move the knight onto
  * @return      	 true iff move is legal
  */
-int is_legal_knight_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+int is_legal_knight_move(GamePiece *piece, int pos_x, int pos_y);
 
 /*
  * Check if a given bishop move is legal.
@@ -252,7 +252,7 @@ int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
  * @param pos_y 	 row to move the king onto
  * @return      	 true iff move is legal
  */
-int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y);
+int is_legal_king_move(GamePiece *piece, int pos_x, int pos_y);
 
 /*
  * Check if given move creates a check state for the allied king of the given piece.

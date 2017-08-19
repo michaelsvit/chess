@@ -230,7 +230,7 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			if(!is_legal_rook_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case KNIGHT:
-			if(!is_legal_knight_move(game, piece, pos_x, pos_y)) return 0;
+			if(!is_legal_knight_move(piece, pos_x, pos_y)) return 0;
 			break;
 		case BISHOP:
 			if(!is_legal_bishop_move(game, piece, pos_x, pos_y)) return 0;
@@ -239,7 +239,7 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 			if(!is_legal_queen_move(game, piece, pos_x, pos_y)) return 0;
 			break;
 		case KING:
-			if(!is_legal_king_move(game, piece, pos_x, pos_y)) return 0;
+			if(!is_legal_king_move(piece, pos_x, pos_y)) return 0;
 			break;
 	}
 
@@ -314,7 +314,7 @@ int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	return 1;
 }
 
-int is_legal_knight_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+int is_legal_knight_move(GamePiece *piece, int pos_x, int pos_y){
 	/* Make sure knight is moving at least 1 step in either direction */
 	if(pos_x == piece->pos_x || pos_y == piece->pos_y) return 0;
 
@@ -347,7 +347,7 @@ int is_legal_queen_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		is_legal_bishop_move(game, piece, pos_x, pos_y);
 }
 
-int is_legal_king_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+int is_legal_king_move(GamePiece *piece, int pos_x, int pos_y){
 	/* Make sure king moves exactly one step in any direction */
 	int dist_x = abs(piece->pos_x - pos_x);
 	int dist_y = abs(piece->pos_y - pos_y);
@@ -486,6 +486,7 @@ SPArrayList *get_rook_moves(Game *game, GamePiece *piece){
 	/* Add moves along column */
 	int start_index = find_range_end(game, piece->pos_x, piece->pos_y, 0, -1);
 	int end_index = find_range_end(game, piece->pos_x, piece->pos_y, 0, 1);
+	/* TODO: Optimize for un-checked state if needed */
 	for(int i = start_index; i <= end_index; i++){
 		if(i == 0) continue;
 		if(is_legal_move(game, piece, piece->pos_x, i)){

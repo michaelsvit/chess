@@ -19,6 +19,13 @@
 #define PLAYER_COUNT 2
 #define HISTORY_SIZE 6
 
+#define MAX_PAWN_MOVES 4
+#define MAX_ROOK_MOVES 14
+#define MAX_KNIGHT_MOVES 8
+#define MAX_BISHOP_MOVES 13
+#define MAX_QUEEN_MOVES 27
+#define MAX_KING_MOVES 8
+
 typedef enum {
 	MALLOC_FAILURE,
 	INVALID_ARGUMENT,
@@ -93,6 +100,14 @@ void destroy_game();
  * SUCCESS          	 otherwise
  */
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y);
+
+/*
+ * Get a list of all possible moves of a given game piece.
+ * @param game  	 game instance
+ * @param piece 	 game piece
+ * @return      	 list of possible moves for piece on success, NULL otherwise
+ */
+SPArrayList *get_possible_moves(Game *game, GamePiece *piece);
 
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/
@@ -291,9 +306,78 @@ GamePiece *find_king_piece(SPArrayList *set);
 EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, int dst_y);
 
 /*
+ * Create a new move struct with the given positions.
+ * @param src_x 	 column of source position
+ * @param src_y 	 row of source position
+ * @param dst_x 	 column of source position
+ * @param dst_y 	 row of source position
+ * @return      	 pointer to new move struct on success, NULL otherwise
+ */
+GameMove *create_move(int src_x, int src_y, int dst_x, int dst_y);
+
+/*
  * Determine whether the game has reached a final state.
  * @param game 	 game instance
  * @return     	 true iff game is over
  */
 int is_game_over(Game *game);
+
+/*
+ * Get possible moves of given pawn.
+ * @param game  	 game instance
+ * @param piece 	 pawn instance
+ * @return      	 pointer to list of possible moves on success, NULL otherwise
+ */
+SPArrayList *get_pawn_moves(Game *game, GamePiece *piece);
+
+/*
+ * Get possible moves of given rook.
+ * @param game  	 game instance
+ * @param piece 	 rook instance
+ * @return      	 pointer to list of possible moves on success, NULL otherwise
+ */
+SPArrayList *get_rook_moves(Game *game, GamePiece *piece);
+
+/*
+ * Get possible moves of given knight.
+ * @param game  	 game instance
+ * @param piece 	 knight instance
+ * @return      	 pointer to list of possible moves on success, NULL otherwise
+ */
+SPArrayList *get_knight_moves(Game *game, GamePiece *piece);
+
+/*
+ * Get possible moves of given bishop.
+ * @param game  	 game instance
+ * @param piece 	 bishop instance
+ * @return      	 pointer to list of possible moves on success, NULL otherwise
+ */
+SPArrayList *get_bishop_moves(Game *game, GamePiece *piece);
+
+/*
+ * Get possible moves of given queen.
+ * @param game  	 game instance
+ * @param piece 	 queen instance
+ * @return      	 pointer to list of possible moves on success, NULL otherwise
+ */
+SPArrayList *get_queen_moves(Game *game, GamePiece *piece);
+
+/*
+ * Get possible moves of given king.
+ * @param game  	 game instance
+ * @param piece 	 king instance
+ * @return      	 pointer to list of possible moves on success, NULL otherwise
+ */
+SPArrayList *get_king_moves(Game *game, GamePiece *piece);
+
+/*
+ * Find an edge of the range of possible moves for a rook/bishop/queen.
+ * @param game  	 game instance
+ * @param src_x 	 column of source position
+ * @param src_y 	 row of source position
+ * @param inc_X 	 column direction of search
+ * @param inc_y 	 row direction of search
+ * @return      	 offset from given position
+ */
+int find_range_end(Game *game, int src_x, int src_y, int inc_x, int inc_y);
 #endif

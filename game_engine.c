@@ -106,6 +106,35 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	return SUCCESS;
 }
 
+SPArrayList *get_possible_moves(Game *game, GamePiece *piece){
+	if(!game || !piece) return NULL;
+
+	SPArrayList *moves = NULL;
+
+	switch(piece->type){
+		case PAWN:
+			moves = get_pawn_moves(game, piece);
+			break;
+		case ROOK:
+			moves = get_rook_moves(game, piece);
+			break;
+		case KNIGHT:
+			moves = get_knight_moves(game, piece);
+			break;
+		case BISHOP:
+			moves = get_bishop_moves(game, piece);
+			break;
+		case QUEEN:
+			moves = get_queen_moves(game, piece);
+			break;
+		case KING:
+			moves = get_king_moves(game, piece);
+			break;
+	}
+
+	return moves;
+}
+
 /******************************** Auxiliary functions ******************************/
 
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
@@ -229,21 +258,29 @@ int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	/* Determine which direction pawn should move */
 	int direction = (piece->color == WHITE) ? 1 : -1;
 
-	/* Make sure pawn is moving exactly 1 row in the correct direction */
-	if(pos_y != piece->pos_y + direction * 1) return 0;
+	/* Make sure pawn is moving exactly 1 or 2 rows in the correct direction */
+	if(pos_y != piece->pos_y + direction*1 && pos_y != piece->pos_y + direction*2) return 0;
 
-	/* Make sure pawn is moving no more than 1 column away from current position */
-	if(piece->pos_x == pos_x){
+	if(pos_y == piece->pos_y + direction*1){
+		/* Make sure pawn is moving no more than 1 column away from current position */
+		if(piece->pos_x == pos_x){
+			/* Pawn stays in same column, target position must be unoccupied */
+			if (is_occupied_position(game, pos_x, pos_y)) return 0;
+		} else if (abs(pos_x - piece->pos_x) > 1) {
+			/* Pawn is trying to move more than 1 column away from current position */
+			return 0;
+		} else {
+			/* Pawn is moving diagonally */
+			/* Position must be occupied by a piece with the other color */
+			GamePiece *target_piece = game->board[pos_y][pos_x];
+			if(!target_piece || piece->color == target_piece->color) return 0;
+		}
+	} else {
+		/* Pawn is moving 2 rows, position must be initial position */
+		int init_position = (piece->color == WHITE) ? 1 : BOARD_SIZE - 2;
+		if(pos_y != init_position) return 0;
 		/* Pawn stays in same column, target position must be unoccupied */
 		if (is_occupied_position(game, pos_x, pos_y)) return 0;
-	} else if (abs(pos_x - piece->pos_x) > 1) {
-		/* Pawn is trying to move more than 1 column away from current position */
-		return 0;
-	} else {
-		/* Pawn is moving diagonally */
-		/* Position must be occupied by a piece with the other color */
-		GamePiece *target_piece = game->board[pos_y][pos_x];
-		if(!target_piece || piece->color == target_piece->color) return 0;
 	}
 	return 1;
 }
@@ -375,17 +412,250 @@ GamePiece *find_king_piece(SPArrayList *set){
 }
 
 EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, int dst_y){
-	GameMove *move = malloc(sizeof(GameMove));
-	if(!move) return MALLOC_FAILURE;
-	move->src_x = src_x;
-	move->src_y = src_y;
-	move->dst_x = dst_x;
-	move->dst_y = dst_y;
 	if(spArrayListIsFull(game->history)) spArrayListRemoveLast(game->history);
+	GameMove *move = create_move(src_x, src_y, dst_x, dst_y);
+	if(!move) return MALLOC_FAILURE;
 	spArrayListAddFirst(game->history, move);
 	return SUCCESS;
 }
 
+GameMove *create_move(int src_x, int src_y, int dst_x, int dst_y){
+	GameMove *move = malloc(sizeof(GameMove));
+	if(!move) return NULL;
+	move->src_x = src_x;
+	move->src_y = src_y;
+	move->dst_x = dst_x;
+	move->dst_y = dst_y;
+	return move;
+}
+
 int is_game_over(Game *game){
-	// TODO: implement history and use most recent move to determine which piece threatens the king
+	/* Check if current player has any possible move */
+	/* Seperate handling if in check state to improve performance */
+	if(game->check){
+		/* Need to be able to resolve check */
+		/* TODO */
+	}
+}
+
+SPArrayList *get_pawn_moves(Game *game, GamePiece *piece){
+	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_PAWN_MOVES);
+	if(!moves) return NULL;
+
+	for(int i = -1; i <= 1; i++){
+		if(is_legal_move(game, piece, piece->pos_x+i, piece->pos_y+1)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x+i,
+					piece->pos_y+1);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+		}
+	}
+	if(is_legal_move(game, piece, piece->pos_x, piece->pos_y+2)){
+		GameMove *move = create_move(
+				piece->pos_x,
+				piece->pos_y,
+				piece->pos_x,
+				piece->pos_y+2);
+		if(!move){
+			spArrayListDestroy(moves);
+			return NULL;
+		}
+		spArrayListAddLast(moves, move);
+	}
+	return moves;
+}
+
+SPArrayList *get_rook_moves(Game *game, GamePiece *piece){
+	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_ROOK_MOVES);
+	if(!moves) return NULL;
+
+	/* Add moves along column */
+	int start_index = find_range_end(game, piece->pos_x, piece->pos_y, 0, -1);
+	int end_index = find_range_end(game, piece->pos_x, piece->pos_y, 0, 1);
+	for(int i = start_index; i <= end_index; i++){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, piece->pos_x, i)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x,
+					piece->pos_y+i);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+		}
+	}
+
+	/* Add moves along row */
+	start_index = find_range_end(game, piece->pos_x, piece->pos_y, -1, 0);
+	end_index = find_range_end(game, piece->pos_x, piece->pos_y, 1, 0);
+	for(int i = start_index; i <= end_index; i++){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, i, piece->pos_y)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x+i,
+					piece->pos_y);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+		}
+	}
+	return moves;
+}
+
+SPArrayList *get_knight_moves(Game *game, GamePiece *piece){
+	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_KNIGHT_MOVES);
+	if(!moves) return NULL;
+
+	for(int i = -2; i <= 2; i++){
+		if(i == 0) continue;
+		int j = (abs(i) == 1) ? 2 : 1;
+		if(is_legal_move(game, piece, piece->pos_x - j, piece->pos_y + i)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x - j,
+					piece->pos_y + i);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+		}
+		if(is_legal_move(game, piece, piece->pos_x + j, piece->pos_y + i)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x + j,
+					piece->pos_y + i);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+
+		}
+	}
+	return moves;
+}
+
+SPArrayList *get_bishop_moves(Game *game, GamePiece *piece){
+	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_BISHOP_MOVES);
+	if(!moves) return NULL;
+
+	/* Add moves along upward diagonal */
+	int start_index = find_range_end(game, piece->pos_x, piece->pos_y, -1, -1);
+	int end_index = find_range_end(game, piece->pos_x, piece->pos_y, 1, 1);
+	for(int i = start_index; i <= end_index; i++){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x+i,
+					piece->pos_y+i);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+		}
+	}
+
+	/* Add moves along downward diagonal */
+	start_index = find_range_end(game, piece->pos_x, piece->pos_y, -1, 1);
+	end_index = find_range_end(game, piece->pos_x, piece->pos_y, 1, -1);
+	for(int i = start_index; i <= end_index; i++){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
+			GameMove *move = create_move(
+					piece->pos_x,
+					piece->pos_y,
+					piece->pos_x+i,
+					piece->pos_y+i);
+			if(!move){
+				spArrayListDestroy(moves);
+				return NULL;
+			}
+			spArrayListAddLast(moves, move);
+		}
+	}
+	return moves;
+}
+
+SPArrayList *get_queen_moves(Game *game, GamePiece *piece){
+	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_QUEEN_MOVES);
+	if(!moves) return NULL;
+
+	SPArrayList *rook_moves = get_rook_moves(game, piece);
+	if(!rook_moves){
+		spArrayListDestroy(moves);
+		return NULL;
+	}
+	SPArrayList *bishop_moves = get_bishop_moves(game, piece);
+	if(!bishop_moves){
+		spArrayListDestroy(rook_moves);
+		spArrayListDestroy(moves);
+		return NULL;
+	}
+
+	for(int i = 0; i < spArrayListSize(rook_moves); i++){
+		spArrayListAddLast(moves, spArrayListGetAt(rook_moves, i));
+	}
+	for(int i = 0; i < spArrayListSize(bishop_moves); i++){
+		spArrayListAddLast(moves, spArrayListGetAt(bishop_moves, i));
+	}
+	return moves;
+}
+
+SPArrayList *get_king_moves(Game *game, GamePiece *piece){
+	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_KING_MOVES);
+	if(!moves) return NULL;
+
+	for(int i = -1; i <= 1; i++){
+		for(int j = -1; j <= 1; j++){
+			if(i == 0 && j == 0) continue;
+			if(is_legal_move(game, piece, piece->pos_x+i, piece->pos_y+j)){
+				GameMove *move = create_move(
+						piece->pos_x,
+						piece->pos_y,
+						piece->pos_x+i,
+						piece->pos_y+j);
+				if(!move){
+					spArrayListDestroy(moves);
+					return NULL;
+				}
+				spArrayListAddLast(moves, move);
+			}
+		}
+	}
+	return moves;
+}
+
+int find_range_end(Game *game, int src_x, int src_y, int inc_x, int inc_y){
+	int i = 0, j = 0;
+	/* Increment counters as long as board edge has not been reached or we found a game piece,
+	whichever comes first */
+	while(src_y+j >= 0 && src_y+j < BOARD_SIZE && src_x+i >= 0 && src_x+i < BOARD_SIZE
+			&& game->board[src_y+i][src_x+j] == NULL){
+		i += inc_x;
+		j += inc_y;
+	}
+	if (inc_x == 0 || inc_y < 0) {
+		return j;
+	} else {
+		return i;
+	}
 }

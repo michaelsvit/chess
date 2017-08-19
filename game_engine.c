@@ -431,11 +431,19 @@ GameMove *create_move(int src_x, int src_y, int dst_x, int dst_y){
 
 int is_game_over(Game *game){
 	/* Check if current player has any possible move */
-	/* Seperate handling if in check state to improve performance */
-	if(game->check){
-		/* Need to be able to resolve check */
-		/* TODO */
+	SPArrayList *pieces =
+		(game->player_color[game->current_player] == WHITE) ?
+		game->white_pieces : game->black_pieces;
+	for (int i = 0; i < spArrayListSize(pieces); ++i) {
+		SPArrayList *moves = get_possible_moves(game, spArrayListGetAt(pieces, i));
+		if(!moves) return -1;
+		if(spArrayListSize(moves) > 0){
+			spArrayListDestroy(moves);
+			return 0;
+		}
+		spArrayListDestroy(moves);
 	}
+	return 1;
 }
 
 SPArrayList *get_pawn_moves(Game *game, GamePiece *piece){

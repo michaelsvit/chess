@@ -10,8 +10,12 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 
 	game->white_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
 	game->black_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
-	game->history = spArrayListCreate(sizeof(GameMove), HISTORY_SIZE);
-	if(!game->white_pieces || !game->black_pieces || !game->history){
+	game->move_history = spArrayListCreate(sizeof(GameMove), HISTORY_SIZE);
+	game->removed_pieces = spArrayListCreate(sizeof(GamePiece), HISTORY_SIZE);
+	if(!game->white_pieces ||
+			!game->black_pieces ||
+			!game->move_history ||
+			!game->removed_pieces){
 		destroy_game(game);
 		return NULL;
 	}
@@ -33,8 +37,12 @@ Game *copy_game(Game *game){
 
 	copy->white_pieces = spArrayListCopy(game->white_pieces);
 	copy->black_pieces = spArrayListCopy(game->black_pieces);
-	copy->history = spArrayListCopy(game->history);
-	if(!copy->white_pieces || !copy->black_pieces || !copy->history){
+	copy->move_history = spArrayListCopy(game->move_history);
+	copy->removed_pieces = spArrayListCopy(game->removed_pieces);
+	if(!copy->white_pieces ||
+			!copy->black_pieces ||
+			!copy->move_history ||
+			!copy->removed_pieces){
 		destroy_game(copy);
 		return NULL;
 	}
@@ -62,26 +70,10 @@ void destroy_game(Game *game){
 	if(!game) return;
 
 	/* Free all allocated memory */
-	if(game->white_pieces){
-		for(int i = 0; i < spArrayListSize(game->white_pieces); i++){
-			GamePiece *piece = spArrayListGetAt(game->white_pieces, i);
-			free(piece);
-		}
-	}
-	if (game->black_pieces) {
-		for(int i = 0; i < spArrayListSize(game->black_pieces); i++){
-			GamePiece *piece = (GamePiece *)spArrayListGetAt(game->black_pieces, i);
-			free(piece);
-		}
-	}
-	if (game->history) {
-		for(int i = 0; i < spArrayListSize(game->history); i++){
-			GameMove *move = (GameMove *)spArrayListGetAt(game->history, i);
-			free(move);
-		}
-	}
 	spArrayListDestroy(game->white_pieces);
 	spArrayListDestroy(game->black_pieces);
+	spArrayListDestroy(game->move_history);
+	spArrayListDestroy(game->removed_pieces);
 	free(game);
 }
 
@@ -98,12 +90,16 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 		return MALLOC_FAILURE;
 	}
 
-	move_piece_to_position(game, piece, dst_x, dst_y);
 	if(add_move_to_history(game, src_x, src_y, dst_x, dst_y) != SUCCESS) return MALLOC_FAILURE;
+	move_piece_to_position(game, piece, dst_x, dst_y);
 	/* Determine if moving the piece ended with check state for enemy king */
 	game->check = is_check_state_created_enemy(game, piece);
 
 	return SUCCESS;
+}
+
+EngineMessage undo_move(Game *game){
+
 }
 
 SPArrayList *get_possible_moves(Game *game, GamePiece *piece){
@@ -191,9 +187,10 @@ void remove_game_piece(Game *game, GamePiece *piece){
 		spArrayListRemoveItem(game->black_pieces, piece);
 	}
 
+	/* Add piece to list of removed pieces */
+	spArrayListAddFirst(game->removed_pieces, piece);
 	/* Remove piece from game board */
 	game->board[piece->pos_y][piece->pos_x] = NULL;
-	free(piece);
 }
 
 EngineMessage add_game_pieces_set(Game *game, Color color){
@@ -429,10 +426,14 @@ GamePiece *find_king_piece(SPArrayList *set){
 }
 
 EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, int dst_y){
-	if(spArrayListIsFull(game->history)) spArrayListRemoveLast(game->history);
+	if(spArrayListIsFull(game->move_history)){
+		spArrayListRemoveLast(game->move_history);
+		GamePiece *piece = spArrayListGetLast(game->removed_pieces);
+		free(piece);
+	}
 	GameMove *move = create_move(src_x, src_y, dst_x, dst_y);
 	if(!move) return MALLOC_FAILURE;
-	spArrayListAddFirst(game->history, move);
+	spArrayListAddFirst(game->move_history, move);
 	return SUCCESS;
 }
 

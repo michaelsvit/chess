@@ -48,7 +48,8 @@ typedef struct game_piece{
 typedef struct game_t{
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
 	SPArrayList *white_pieces, *black_pieces; /* lists representing white and black game pieces on the board */
-	SPArrayList *history; /* list to remember last 3 moves of both players */
+	SPArrayList *move_history; /* list to remember last 3 moves of each player */
+	SPArrayList *removed_pieces; /* list to remember last 3 removed pieces of each player */
 	Player current_player;
 	Color player_color[PLAYER_COUNT];
 	Mode mode;

@@ -83,6 +83,9 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	if(!piece || dst_x < 0 || dst_x > BOARD_SIZE-1 || dst_y < 0 || dst_y > BOARD_SIZE-1){
 		return INVALID_ARGUMENT;
 	}
+	/* Make sure piece is the same color as current player */
+	if(game->player_color[game->current_player] != piece->color) return ILLEGAL_MOVE;
+
 	int result = is_legal_move(game, piece, dst_x, dst_y);
 	if(!result){
 		return ILLEGAL_MOVE;
@@ -99,7 +102,27 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 }
 
 EngineMessage undo_move(Game *game){
+	if(!game) return INVALID_ARGUMENT;
 
+	if(spArrayListIsEmpty(game->removed_pieces)) return EMPTY_HISTORY;
+
+	GameMove *move = spArrayListGetFirst(game->move_history);
+	spArrayListRemoveFirst(game->move_history);
+	GamePiece *removed_piece = spArrayListGetFirst(game->removed_pieces);
+	spArrayListRemoveFirst(game->removed_pieces);
+
+	/* Restore previous state */
+	move_piece_to_position(game,
+			game->board[move->dst_y][move->dst_x],
+			move->src_x,
+			move->src_y);
+	game->board[move->dst_y][move->dst_x] = removed_piece;
+	game->check = is_in_check_state(game);
+	game->current_player = !game->current_player;
+
+	free(move);
+	free(removed_piece);
+	return SUCCESS;
 }
 
 SPArrayList *get_possible_moves(Game *game, GamePiece *piece){
@@ -228,9 +251,6 @@ int is_occupied_position(Game *game, int pos_x, int pos_y){
 }
 
 int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
-	/* Make sure piece is the same color as current player */
-	if(game->player_color[game->current_player] != piece->color) return 0;
-
 	/* If target position is occupied, make sure target piece is of different color */
 	GamePiece *target_piece = game->board[pos_y][pos_x];
 	if(target_piece && target_piece->color == piece->color) return 0;
@@ -368,6 +388,25 @@ int is_legal_king_move(GamePiece *piece, int pos_x, int pos_y){
 	if(dist_x > 1 || dist_y > 1 || dist_x + dist_y == 0) return 0;
 
 	return 1;
+}
+
+int is_in_check_state(Game *game){
+	SPArrayList *same_color_pieces;
+	SPArrayList *enemy_pieces;
+	if(game->player_color[game->current_player] == WHITE){
+		same_color_pieces = game->white_pieces;
+		enemy_pieces = game->black_pieces;
+	} else {
+		same_color_pieces = game->black_pieces;
+		enemy_pieces = game->white_pieces;
+	}
+
+	GamePiece *allied_king = find_king_piece(same_color_pieces);
+	for (int i = 0; i < spArrayListSize(enemy_pieces); ++i) {
+		GamePiece *temp = (GamePiece *)spArrayListGetAt(enemy_pieces, i);
+		if(is_legal_move(game, temp, allied_king->pos_x, allied_king->pos_y)) return 1;
+	}
+	return 0;
 }
 
 int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int pos_y){

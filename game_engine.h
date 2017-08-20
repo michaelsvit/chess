@@ -29,6 +29,7 @@ typedef enum {
 	MALLOC_FAILURE,
 	INVALID_ARGUMENT,
 	ILLEGAL_MOVE,
+	EMPTY_HISTORY,
 	SUCCESS
 } EngineMessage;
 typedef enum {PLAYER1, PLAYER2} Player;
@@ -100,6 +101,16 @@ void destroy_game();
  * SUCCESS          	 otherwise
  */
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y);
+
+/*
+ * Undo most recent move in the game.
+ * @param game 	 game instance
+ * @return
+ * INVALID_ARGUMENT 	 game == NULL
+ * EMPTY_HISTORY    	 move history is empty
+ * SUCCESS          	 otherwise
+ */
+EngineMessage undo_move(Game *game);
 
 /*
  * Get a list of all possible moves of a given game piece.
@@ -280,6 +291,13 @@ int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int p
  * @return      	 true iff given piece threatens enemy king
  */
 int is_check_state_created_enemy(Game *game, GamePiece *piece);
+
+/*
+ * Determine if game is in check state for current player.
+ * @param game 	 game instance
+ * @return     	 true iff game is in check state
+ */
+int is_in_check_state(Game *game);
 
 /*
  * Perform actual moving of game piece to new position.

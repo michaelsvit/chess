@@ -36,6 +36,7 @@ typedef enum {PLAYER1, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;
 typedef enum {ONE_PLAYER, TWO_PLAYER} Mode;
+typedef enum {RUNNING, WIN, TIE} GameState;
 
 /* Struct defining a single game piece on the board */
 typedef struct game_piece{
@@ -108,6 +109,14 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
  * @return      	 list of possible moves for piece on success, NULL otherwise
  */
 SPArrayList *get_possible_moves(Game *game, GamePiece *piece);
+
+/*
+ * Get current state of the given game.
+ * @precond    	 assumes game instance is valid
+ * @param game 	 game instance
+ * @return     	 state of given game
+ */
+GameState get_game_state(Game *game);
 
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/

@@ -135,6 +135,19 @@ SPArrayList *get_possible_moves(Game *game, GamePiece *piece){
 	return moves;
 }
 
+GameState get_game_state(Game *game){
+	int game_over = is_game_over(game);
+	if(!game_over){
+		return RUNNING;
+	} else {
+		if(game->check){
+			return WIN;
+		} else {
+			return TIE;
+		}
+	}
+}
+
 /******************************** Auxiliary functions ******************************/
 
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){

@@ -135,6 +135,23 @@ SPArrayList *get_possible_moves(Game *game, GamePiece *piece){
 	return moves;
 }
 
+int is_game_over(Game *game){
+	/* Check if current player has any possible move */
+	SPArrayList *pieces =
+		(game->player_color[game->current_player] == WHITE) ?
+		game->white_pieces : game->black_pieces;
+	for (int i = 0; i < spArrayListSize(pieces); ++i) {
+		SPArrayList *moves = get_possible_moves(game, spArrayListGetAt(pieces, i));
+		if(!moves) return -1;
+		if(spArrayListSize(moves) > 0){
+			spArrayListDestroy(moves);
+			return 0;
+		}
+		spArrayListDestroy(moves);
+	}
+	return 1;
+}
+
 /******************************** Auxiliary functions ******************************/
 
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
@@ -427,23 +444,6 @@ GameMove *create_move(int src_x, int src_y, int dst_x, int dst_y){
 	move->dst_x = dst_x;
 	move->dst_y = dst_y;
 	return move;
-}
-
-int is_game_over(Game *game){
-	/* Check if current player has any possible move */
-	SPArrayList *pieces =
-		(game->player_color[game->current_player] == WHITE) ?
-		game->white_pieces : game->black_pieces;
-	for (int i = 0; i < spArrayListSize(pieces); ++i) {
-		SPArrayList *moves = get_possible_moves(game, spArrayListGetAt(pieces, i));
-		if(!moves) return -1;
-		if(spArrayListSize(moves) > 0){
-			spArrayListDestroy(moves);
-			return 0;
-		}
-		spArrayListDestroy(moves);
-	}
-	return 1;
 }
 
 SPArrayList *get_pawn_moves(Game *game, GamePiece *piece){

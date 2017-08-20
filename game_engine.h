@@ -4,13 +4,12 @@
  * Game engine module containing state and interaction related functions
  *
  * Summary of interface:
- * create_game       	 create new game instance
- * destroy_game      	 free all allocated memory and destroy game instance
- * init_game         	 initialize a new game instance with pieces in default slots
- * remove_game_piece 	 remove a game piece from the board
- * move_game_piece   	 move a game piece from current place on board to another
- * is_legal_move     	 checks whether a given move is valid for a given game piece
- * is_game_over      	 checks if the given game instance reached a final state
+ * create_game        	 create new game instance
+ * copy_game          	 copy an existing game instance
+ * destroy_game       	 free all allocated memory and destroy game instance
+ * move_game_piece    	 move a game piece from current place on board to another
+ * get_possible_moves 	 get all possible moves for a given game piece
+ * is_game_over       	 checks if the given game instance reached a final state
  */
 #include "array_list.h"
 

@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_ENGINE_H
+#define GAME_ENGINE_H
 /*
  * Game engine module containing state and interaction related functions
  *
@@ -36,7 +36,6 @@ typedef enum {PLAYER1, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;
 typedef enum {ONE_PLAYER, TWO_PLAYER} Mode;
-typedef enum {RUNNING, WIN, TIE} GameState;
 
 /* Struct defining a single game piece on the board */
 typedef struct game_piece{
@@ -111,12 +110,11 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 SPArrayList *get_possible_moves(Game *game, GamePiece *piece);
 
 /*
- * Get current state of the given game.
- * @precond    	 assumes game instance is valid
+ * Determine whether the game has reached a final state.
  * @param game 	 game instance
- * @return     	 state of given game
+ * @return     	 true iff game is over, -1 on memory failure
  */
-GameState get_game_state(Game *game);
+int is_game_over(Game *game);
 
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/
@@ -323,13 +321,6 @@ EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, i
  * @return      	 pointer to new move struct on success, NULL otherwise
  */
 GameMove *create_move(int src_x, int src_y, int dst_x, int dst_y);
-
-/*
- * Determine whether the game has reached a final state.
- * @param game 	 game instance
- * @return     	 true iff game is over
- */
-int is_game_over(Game *game);
 
 /*
  * Get possible moves of given pawn.

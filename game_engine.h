@@ -8,6 +8,7 @@
  * copy_game          	 copy an existing game instance
  * destroy_game       	 free all allocated memory and destroy game instance
  * move_game_piece    	 move a game piece from current place on board to another
+ * undo_move          	 undo most recent move
  * get_possible_moves 	 get all possible moves for a given game piece
  * is_game_over       	 checks if the given game instance reached a final state
  */

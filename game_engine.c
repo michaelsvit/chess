@@ -490,13 +490,14 @@ SPArrayList *get_pawn_moves(Game *game, GamePiece *piece){
 	SPArrayList *moves = spArrayListCreate(sizeof(GameMove), MAX_PAWN_MOVES);
 	if(!moves) return NULL;
 
+	int direction = (piece->color == WHITE) ? 1 : -1;
 	for(int i = -1; i <= 1; i++){
-		if(is_legal_move(game, piece, piece->pos_x+i, piece->pos_y+1)){
+		if(is_legal_move(game, piece, piece->pos_x+i, piece->pos_y + direction*1)){
 			GameMove *move = create_move(
 					piece->pos_x,
 					piece->pos_y,
 					piece->pos_x+i,
-					piece->pos_y+1);
+					piece->pos_y + direction*1);
 			if(!move){
 				spArrayListDestroy(moves);
 				return NULL;
@@ -504,12 +505,12 @@ SPArrayList *get_pawn_moves(Game *game, GamePiece *piece){
 			spArrayListAddLast(moves, move);
 		}
 	}
-	if(is_legal_move(game, piece, piece->pos_x, piece->pos_y+2)){
+	if(is_legal_move(game, piece, piece->pos_x, piece->pos_y + direction*2)){
 		GameMove *move = create_move(
 				piece->pos_x,
 				piece->pos_y,
 				piece->pos_x,
-				piece->pos_y+2);
+				piece->pos_y + direction*2);
 		if(!move){
 			spArrayListDestroy(moves);
 			return NULL;

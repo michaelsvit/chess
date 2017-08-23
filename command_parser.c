@@ -144,7 +144,8 @@ int *parse_move_args(){
 	int *src = parse_position();
 	if(!src) return NULL;
 	/* Consume "to" word from command */
-	strtok(NULL, DELIMITER);
+	char *word = strtok(NULL, DELIMITER);
+	if(strcmp(word, "to") != 0) return NULL;
 	int *dst = parse_position();
 	if(!dst){
 		free(src);

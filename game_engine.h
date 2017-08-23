@@ -32,6 +32,8 @@ typedef enum {
 	INVALID_ARGUMENT,
 	ILLEGAL_MOVE,
 	EMPTY_HISTORY,
+	RESTART,
+	QUIT,
 	SUCCESS
 } EngineMessage;
 typedef enum {PLAYER1, PLAYER2} Player;

@@ -32,6 +32,7 @@ typedef enum {
 	INVALID_ARGUMENT,
 	ILLEGAL_MOVE,
 	EMPTY_HISTORY,
+	START,
 	RESTART,
 	QUIT,
 	SUCCESS
@@ -42,7 +43,7 @@ typedef enum {BLACK, WHITE} Color;
 typedef enum {ONE_PLAYER, TWO_PLAYER} Mode;
 
 /* Struct defining a single game piece on the board */
-typedef struct game_piece{
+typedef struct {
 	PieceType type;
 	Color color;
 	int pos_y;
@@ -50,7 +51,7 @@ typedef struct game_piece{
 } GamePiece;
 
 /* Struct defining a game board with relevant properties */
-typedef struct game_t{
+typedef struct {
 	GamePiece *board[BOARD_SIZE][BOARD_SIZE]; /* current game board */
 	SPArrayList *white_pieces, *black_pieces; /* lists representing white and black game pieces on the board */
 	SPArrayList *move_history; /* list to remember last 3 moves of each player */
@@ -63,7 +64,7 @@ typedef struct game_t{
 } Game;
 
 /* Struct defining a single game move from one position to another */
-typedef struct game_move{
+typedef struct {
 	int src_x;
 	int src_y;
 	int dst_x;

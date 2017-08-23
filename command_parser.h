@@ -11,7 +11,7 @@
 
 #define DELIMITER  " \t\r\n"
 
-typedef enum setting_command_type{
+typedef enum {
 	INVALID_SETTING_COMMAND,
 	GAME_MODE,
 	DIFFICULTY,
@@ -23,12 +23,12 @@ typedef enum setting_command_type{
 	START
 } SettingCommandType;
 
-typedef struct setting_command{
+typedef struct {
 	SettingCommandType type;
 	void *arg;
 } SettingCommand;
 
-typedef enum game_command_type{
+typedef enum {
 	INVALID_GAME_COMMAND,
 	MOVE,
 	GET_MOVES,
@@ -38,7 +38,7 @@ typedef enum game_command_type{
 	GAME_QUIT
 } GameCommandType;
 
-typedef struct game_command{
+typedef struct {
 	GameCommandType type;
 	void *arg;
 } GameCommand;

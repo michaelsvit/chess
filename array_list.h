@@ -47,7 +47,7 @@ typedef struct sp_array_list_t {
 /**
  * A type used for errors
  */
-typedef enum sp_array_list_message_t {
+typedef enum {
 	SP_ARRAY_LIST_SUCCESS,
 	SP_ARRAY_LIST_INVALID_ARGUMENT,
 	SP_ARRAY_LIST_FULL,

@@ -18,12 +18,13 @@ int main(/* int argc, char *argv[] */){
 	int quit = 0;
 	State state = SETTINGS;
 	do {
-		if(scanf("%s", user_input) != 1){
-			/* TODO: Print error */
-			break;
-		}
 		EngineMessage msg;
 		if(state == GAME){
+			print_board(game);
+			if(scanf("%s", user_input) != 1){
+				/* TODO: Print error */
+				break;
+			}
 			GameCommand *cmd = parse_game_command(user_input);
 			if(!cmd){
 				/* TODO: Print error */
@@ -32,6 +33,10 @@ int main(/* int argc, char *argv[] */){
 			msg = execute_game_command(&game, cmd);
 			free(cmd);
 		} else {
+			if(scanf("%s", user_input) != 1){
+				/* TODO: Print error */
+				break;
+			}
 			SettingCommand *cmd = parse_setting_command(user_input);
 			if(!cmd){
 				/* TODO: Print error */
@@ -40,14 +45,7 @@ int main(/* int argc, char *argv[] */){
 			msg = execute_setting_command(&game, cmd);
 			free(cmd);
 		}
-		if(msg != SUCCESS){
-			if(msg != MALLOC_FAILURE){
-				/* print_error(msg); */
-			} else {
-				/* TODO: Print error */
-				break;
-			}
-		}
+		if(msg != SUCCESS) handle_message(msg, &state, &quit);
 	} while (!quit);
 
 	free(user_input);

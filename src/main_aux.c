@@ -9,13 +9,13 @@ EngineMessage execute_game_command(Game **game, GameCommand *cmd){
 			/* SPArrayList *moves = get_possible_moves(*game, (*game)->board[args[1]][args[0]]); */
 			/* TODO: Handle error */
 			/* TODO: Print moves */
-			return SUCCESS;
+			break;
 		}
 		case UNDO:
 			return undo_move(*game);
 		case SAVE:
 			/* TODO: Implement */
-			return SUCCESS;
+			break;
 		case RESET:
 			destroy_game(*game);
 			*game = create_game(DEFAULT_MODE, DEFAULT_DIFFICULTY, DEFAULT_PLAYER1_COLOR);
@@ -26,6 +26,7 @@ EngineMessage execute_game_command(Game **game, GameCommand *cmd){
 		case INVALID_GAME_COMMAND:
 			return INVALID_COMMAND;
 	}
+	return SUCCESS;
 }
 
 void handle_message(EngineMessage msg, State *state, int *quit){

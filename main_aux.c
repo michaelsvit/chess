@@ -27,3 +27,35 @@ EngineMessage execute_game_command(Game **game, GameCommand *cmd){
 			return INVALID_COMMAND;
 	}
 }
+
+void handle_message(EngineMessage msg, State *state, int *quit){
+	switch(msg){
+		case SUCCESS:
+			return;
+		case MALLOC_FAILURE:
+
+			return;
+		case INVALID_COMMAND:
+
+			return;
+		case INVALID_ARGUMENT:
+
+			return;
+		case ILLEGAL_MOVE:
+
+			return;
+		case EMPTY_HISTORY:
+
+			return;
+		case START_GAME:
+			*state = GAME;
+			return;
+		case RESTART:
+			*state = SETTINGS;
+			return;
+		case QUIT:
+			/* Print quit message */
+			*quit = 1;
+			return;
+	}
+}

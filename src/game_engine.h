@@ -40,7 +40,13 @@ typedef enum {
 typedef enum {PLAYER1, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;
-typedef enum {ONE_PLAYER, TWO_PLAYER} Mode;
+typedef enum {ONE_PLAYER=1, TWO_PLAYER} Mode;
+
+typedef struct {
+	Mode mode;
+	int difficulty;
+	Color player1_color;
+} GameSettings;
 
 /* Struct defining a single game piece on the board */
 typedef struct {
@@ -78,7 +84,7 @@ typedef struct {
  * @param player1_color 	 first player's game piece color, second player is the inverse color
  * @return              	 pointer to the newly created game on success, NULL otherwise
  */
-Game *create_game(Mode mode, int difficulty, Color player1_color);
+Game *create_game(GameSettings *settings);
 
 /*
  * Copies an existing game instance.

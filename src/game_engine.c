@@ -3,8 +3,8 @@
 
 /******************************* Interface functions *********************************/
 
-Game *create_game(Mode mode, int difficulty, Color player1_color){
-	if(difficulty < 1 || difficulty > 4) return NULL;
+Game *create_game(GameSettings *settings){
+	if(settings->difficulty < 1 || settings->difficulty > 4) return NULL;
 	Game *game = malloc(sizeof(Game));
 	if(!game) return NULL;
 
@@ -21,11 +21,11 @@ Game *create_game(Mode mode, int difficulty, Color player1_color){
 	}
 
 	game->current_player = PLAYER1;
-	game->mode = mode;
-	game->difficulty = difficulty;
+	game->mode = settings->mode;
+	game->difficulty = settings->difficulty;
 	game->check = 0;
-	game->player_color[PLAYER1] = player1_color;
-	game->player_color[PLAYER2] = !player1_color;
+	game->player_color[PLAYER1] = settings->player1_color;
+	game->player_color[PLAYER2] = !settings->player1_color;
 	return game;
 }
 

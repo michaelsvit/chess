@@ -36,22 +36,36 @@ EngineMessage execute_game_command(Game **game, GameCommand *cmd);
 
 /*
  * Execute given setting command.
- * @param game 	 game instance
- * @param cmd  	 command given by user in settings state
+ * @param game     	 game instance
+ * @param settings 	 current set of settings to be used by game
+ * @param cmd      	 command given by user in settings state
  * @return
  * MALLOC_FAILURE   	 memory failure occurred
  * INVALID_COMMAND  	 command given by user is invalid
  * INVALID_ARGUMENT 	 required argument given to command is invalid
  * SUCCESS          	 otherwise
  */
-EngineMessage execute_setting_command(Game **game, SettingCommand *cmd);
+EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cmd);
 
 /*
  * Handle game engine messages.
- * @param msg	message to be handled
- * @param state	pointer to variable holding game state
- * @param quit	pointer to game quit flag
+ * @param msg      	 message to be handled
+ * @param settings 	 pointer to main function's settings struct
+ * @param state    	 pointer to variable holding game state
+ * @param quit     	 pointer to game quit flag
  */
-void handle_message(EngineMessage msg, State *state, int *quit);
+void handle_message(EngineMessage msg, GameSettings **settings, State *state, int *quit);
+
+/*
+ * Create default game settings.
+ * @return 	 pointer to created struct on success, NULL otherwise
+ */
+GameSettings *create_settings();
+
+/*
+ * Reset given settings struct to default settings.
+ * @param 	 pointer to an existing settings struct
+ */
+void set_default_settings(GameSettings *settings);
 
 #endif /* ifndef MAIN_AUX_H */

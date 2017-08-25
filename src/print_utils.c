@@ -22,19 +22,20 @@ void print_board(Game *game){
 
 char get_piece_repr(GamePiece *piece){
 	if(!piece) return '_';
-	char base = (piece->color == WHITE) ? 'a' : 'A';
+	char repr = (piece->color == WHITE) ? 'a' : 'A';
 	switch(piece->type){
 		case PAWN:
-			return base + 'p'-'a';
+			repr += 'p'-'a';
 		case ROOK:
-			return base + 'r'-'a';
+			repr += 'r'-'a';
 		case KNIGHT:
-			return base + 'n'-'a';
+			repr += 'n'-'a';
 		case BISHOP:
-			return base + 'b'-'a';
+			repr += 'b'-'a';
 		case QUEEN:
-			return base + 'q'-'a';
+			repr += 'q'-'a';
 		case KING:
-			return base + 'k'-'a';
+			repr += 'k'-'a';
 	}
+	return repr;
 }

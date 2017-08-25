@@ -1,5 +1,5 @@
 #ifndef COMMAND_PARSER_H
-#define COMMAND_PARSER_H value
+#define COMMAND_PARSER_H
 
 /*
  * Module for parsing user commands in either settings or game state.

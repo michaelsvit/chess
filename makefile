@@ -1,7 +1,7 @@
 CC = gcc
 EXEC = chessprog
 SOURCES = $(wildcard src/*.c)
-OBJS = $(SOURCES:.c=.o)
+OBJS = $(SOURCES:src/%.c=obj/%.o)
 ARRAY_LIST_TEST_OBJS = obj/array_list_unit_test.o obj/array_list.o
 # TODO: Remove debug flag
 COMP_FLAG = -g -std=c99 -Wall -Wextra -Werror -pedantic-errors

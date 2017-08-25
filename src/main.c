@@ -3,20 +3,11 @@
 #include "main_aux.h"
 
 int main(/* int argc, char *argv[] */){
-	Game *game = create_game(DEFAULT_MODE, DEFAULT_DIFFICULTY, DEFAULT_PLAYER1_COLOR);
-	if(!game){
-		/* TODO: Print error */
-		return 0;
-	}
-
 	char *user_input = (char *)malloc(INPUT_SIZE);
-	if(!user_input){
-		destroy_game(game);
-		/* TODO: Print error */
-		return 0;
-	}
 	int quit = 0;
 	State state = SETTINGS;
+	Game *game;
+	GameSettings *settings = create_settings();
 	do {
 		EngineMessage msg;
 		if(state == GAME){
@@ -42,10 +33,10 @@ int main(/* int argc, char *argv[] */){
 				/* TODO: Print error */
 				break;
 			}
-			msg = execute_setting_command(&game, cmd);
+			msg = execute_setting_command(settings, cmd);
 			free(cmd);
 		}
-		if(msg != SUCCESS) handle_message(msg, &state, &quit);
+		if(msg != SUCCESS) handle_message(msg, &settings, &state, &quit);
 	} while (!quit);
 
 	free(user_input);

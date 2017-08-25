@@ -17,17 +17,17 @@ obj/array_list_unit_test.o: tests/array_list_unit_test.c src/array_list.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
 # Source files
-obj/game_engine.o: src/game_engine.c src/game_engine.h src/array_list.h
+obj/game_engine.o: src/game_engine.c src/array_list.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
-obj/print_utils.o: src/print_utils.c src/print_utils.h src/game_engine.h
+obj/print_utils.o: src/print_utils.c src/game_engine.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
-obj/main_aux.o: src/main_aux.c src/main_aux.h src/command_parser.h src/game_engine.h src/print_utils.h
+obj/main_aux.o: src/main_aux.c src/command_parser.h src/game_engine.h src/print_utils.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 obj/main.o: src/main.c src/main_aux.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
 # General rule to create object files
-obj/%.o: src/%.c src/%.h
+obj/%.o: src/%.c
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
 clean:

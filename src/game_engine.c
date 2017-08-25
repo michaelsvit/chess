@@ -26,7 +26,12 @@ Game *create_game(GameSettings *settings){
 	game->check = 0;
 	game->player_color[PLAYER1] = settings->player1_color;
 	game->player_color[PLAYER2] = !settings->player1_color;
-	return game;
+	if(init_game(game) != SUCCESS){
+		destroy_game(game);
+		return NULL;
+	} else {
+		return game;
+	}
 }
 
 Game *copy_game(Game *game){

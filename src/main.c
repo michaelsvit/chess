@@ -36,10 +36,9 @@ int main(/* int argc, char *argv[] */){
 			msg = execute_setting_command(settings, cmd);
 			free(cmd);
 		}
-		if(msg != SUCCESS) handle_message(msg, &settings, &state, &quit);
+		if(msg != SUCCESS) handle_message(msg, &game, &settings, &state, &quit);
 	} while (!quit);
 
 	free(user_input);
-	destroy_game(game);
 	return 0;
 }

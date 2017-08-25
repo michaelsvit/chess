@@ -54,7 +54,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
  * @param state    	 pointer to variable holding game state
  * @param quit     	 pointer to game quit flag
  */
-void handle_message(EngineMessage msg, GameSettings **settings, State *state, int *quit);
+void handle_message(EngineMessage msg, Game **game, GameSettings **settings, State *state, int *quit);
 
 /*
  * Create default game settings.

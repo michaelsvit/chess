@@ -61,7 +61,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 	return SUCCESS;
 }
 
-void handle_message(EngineMessage msg, GameSettings **settings, State *state, int *quit){
+void handle_message(EngineMessage msg, Game **game, GameSettings **settings, State *state, int *quit){
 	switch(msg){
 		case SUCCESS:
 			return;
@@ -81,20 +81,19 @@ void handle_message(EngineMessage msg, GameSettings **settings, State *state, in
 
 			return;
 		case START_GAME:
-			free(*settings);
 			*state = GAME;
+			*game = create_game(*settings);
+			free(*settings);
+			if(!*game) *quit = 1;
 			return;
 		case RESTART:
 			*settings = create_settings();
-			if(!*settings){
-				*quit = 1;
-				return;
-			}
+			if(!*settings) *quit = 1;
 			*state = SETTINGS;
 			return;
 		case QUIT:
 			/* Print quit message */
-			if(*state == SETTINGS) free(*settings);
+			(*state == GAME) ? destroy_game(*game) : free(*settings);
 			*quit = 1;
 			return;
 	}

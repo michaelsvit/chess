@@ -490,9 +490,10 @@ GamePiece *find_king_piece(SPArrayList *set){
 
 EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, int dst_y){
 	if(spArrayListIsFull(game->move_history)){
+		free(spArrayListGetLast(game->move_history));
 		spArrayListRemoveLast(game->move_history);
-		GamePiece *piece = spArrayListGetLast(game->removed_pieces);
-		free(piece);
+		free(spArrayListGetLast(game->removed_pieces));
+		spArrayListRemoveLast(game->removed_pieces);
 	}
 	GameMove *move = create_move(src_x, src_y, dst_x, dst_y);
 	if(!move) return MALLOC_FAILURE;

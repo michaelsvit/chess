@@ -21,6 +21,14 @@ typedef enum {
 } State;
 
 /*
+ * Get command input from user.
+ * @param prompt 	 prompt to display to user
+ * @param buf    	 buffer to hold read content
+ * @param len    	 maximum input length
+ */
+void get_user_input(const char* prompt, char* buf, int len);
+
+/*
  * Execute given game command.
  * @param game 	 game instance
  * @param cmd  	 command given by user in game state

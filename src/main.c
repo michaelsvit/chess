@@ -12,10 +12,7 @@ int main(/* int argc, char *argv[] */){
 		EngineMessage msg;
 		if(state == GAME){
 			print_board(game);
-			if(scanf("%s", user_input) != 1){
-				/* TODO: Print error */
-				break;
-			}
+			get_user_input("Enter game command: ", user_input, INPUT_SIZE);
 			GameCommand *cmd = parse_game_command(user_input);
 			if(!cmd){
 				/* TODO: Print error */
@@ -24,10 +21,7 @@ int main(/* int argc, char *argv[] */){
 			msg = execute_game_command(&game, cmd);
 			free(cmd);
 		} else {
-			if(scanf("%s", user_input) != 1){
-				/* TODO: Print error */
-				break;
-			}
+			get_user_input("Enter settings command: ", user_input, INPUT_SIZE);
 			SettingCommand *cmd = parse_setting_command(user_input);
 			if(!cmd){
 				/* TODO: Print error */

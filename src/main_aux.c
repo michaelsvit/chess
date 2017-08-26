@@ -1,10 +1,21 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "main_aux.h"
+
+void get_user_input(const char* prompt, char* buf, int len) {
+    printf("%s", prompt);
+    fgets(buf, len, stdin);
+    if (buf[strlen(buf) - 1] == '\n') {
+        buf[strlen(buf) - 1] = '\0';
+    }
+}
 
 EngineMessage execute_game_command(Game **game, GameCommand *cmd){
 	int *args = (int *)cmd->arg;
 	switch (cmd->type) {
 		case MOVE:
+			if(!args) return INVALID_ARGUMENT;
 			return move_game_piece(*game, args[0], args[1], args[2], args[3]);
 		case GET_MOVES:{
 			/* SPArrayList *moves = get_possible_moves(*game, (*game)->board[args[1]][args[0]]); */

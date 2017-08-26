@@ -168,12 +168,12 @@ int *parse_position(){
 	if(!arg) return NULL;
 
 	if(strlen(arg) != 5 || arg[0] != '<' || arg[2] != ',' || arg[4] != '>') return NULL;
-	if(!isdigit(arg[1]) || !isdigit(arg[3])) return NULL;
+	if(!(arg[1] >= '1' && arg[1] <= '8') || !(arg[3] >= 'A' && arg[3] <= 'H')) return NULL;
 
 	int *pos = (int *)malloc(sizeof(int) * 2);
 	if(!pos) return NULL;
 
 	pos[0] = arg[1] - '0';
-	pos[1] = arg[3] - '0';
+	pos[1] = arg[3] - 'A';
 	return pos;
 }

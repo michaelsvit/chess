@@ -389,7 +389,7 @@ int is_legal_bishop_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	int direction_x = (piece->pos_x < pos_x) ? 1 : -1;
 	int direction_y = (piece->pos_y < pos_y) ? 1 : -1;
 	int dist = abs(piece->pos_x - pos_x);
-	for(int i = 1; i <= dist; i++){
+	for(int i = 1; i < dist; i++){
 		int cur_pos_x = piece->pos_x + direction_x * i;
 		int cur_pos_y = piece->pos_y + direction_y * i;
 		if(is_occupied_position(game, cur_pos_x, cur_pos_y)) return 0;

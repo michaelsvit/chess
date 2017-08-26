@@ -14,7 +14,7 @@ $(EXEC): $(OBJS)
 array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
 	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
 obj/array_list_unit_test.o: tests/array_list_unit_test.c src/array_list.h
-	$(CC) $(COMP_FLAG) -c $< -o $@
+	$(CC) -Isrc $(COMP_FLAG) -c $< -o $@
 
 # Source files
 obj/game_engine.o: src/game_engine.c src/array_list.h

@@ -8,6 +8,7 @@
 SettingCommand *parse_setting_command(const char *command_str){
 	/* Create copy of given string to prevent segfault when running tests on string literal */
 	char *str_copy = (char *)malloc(strlen(command_str)+1);
+	if(!str_copy) return NULL;
 	strcpy(str_copy, command_str);
 
 	char *cmd_name, *cmd_arg;
@@ -63,30 +64,43 @@ SettingCommand *get_settings_command(char *cmd_name, char *cmd_arg){
 	cmd->arg = NULL;
 
 	if (strcmp(cmd_name, "game_mode") == 0) {
-		cmd->type = GAME_MODE;
 		if(is_valid_int(cmd_arg)){
+			cmd->type = GAME_MODE;
 			int *arg = (int *)malloc(sizeof(int));
+			if(!arg) return NULL;
 			*arg = atoi(cmd_arg);
 			cmd->arg = arg;
+		} else {
+			cmd->type = INVALID_SETTING_COMMAND;
 		}
 	} else if (strcmp(cmd_name, "difficulty") == 0) {
-		cmd->type = DIFFICULTY;
 		if(is_valid_int(cmd_arg)){
+			cmd->type = DIFFICULTY;
 			int *arg = (int *)malloc(sizeof(int));
+			if(!arg) return NULL;
 			*arg = atoi(cmd_arg);
 			cmd->arg = arg;
+		} else {
+			cmd->type = INVALID_SETTING_COMMAND;
 		}
 	} else if (strcmp(cmd_name, "user_color") == 0) {
-		cmd->type = USER_COLOR;
 		if(is_valid_int(cmd_arg)){
+			cmd->type = USER_COLOR;
 			int *arg = (int *)malloc(sizeof(int));
+			if(!arg) return NULL;
 			*arg = atoi(cmd_arg);
 			cmd->arg = arg;
+		} else {
+			cmd->type = INVALID_SETTING_COMMAND;
 		}
 	} else if (strcmp(cmd_name, "load") == 0) {
-		cmd->type = LOAD;
-		cmd->arg = malloc(strlen(cmd_arg)+1);
-		strcpy((char *)cmd->arg, cmd_arg);
+		if(cmd_arg){
+			cmd->type = LOAD;
+			cmd->arg = malloc(strlen(cmd_arg)+1);
+			strcpy((char *)cmd->arg, cmd_arg);
+		} else {
+			cmd->type = INVALID_SETTING_COMMAND;
+		}
 	} else if (strcmp(cmd_name, "default") == 0) {
 		cmd->type = DEFAULT;
 	} else if (strcmp(cmd_name, "print_setting") == 0) {
@@ -117,8 +131,16 @@ GameCommand *get_game_command(char *cmd_name){
 	} else if (strcmp(cmd_name, "save") == 0) {
 		cmd->type = SAVE;
 		char *arg = strtok(NULL, DELIMITER);
-		cmd->arg = malloc(strlen(arg)+1);
-		strcpy((char *)cmd->arg, arg);
+		if(!arg){
+			cmd->type = INVALID_GAME_COMMAND;
+		} else {
+			cmd->arg = malloc(strlen(arg)+1);
+			if(!cmd->arg){
+				free(cmd);
+				return NULL;
+			}
+			strcpy((char *)cmd->arg, arg);
+		}
 	} else if (strcmp(cmd_name, "undo") == 0) {
 		cmd->type = UNDO;
 	} else if (strcmp(cmd_name, "reset") == 0) {

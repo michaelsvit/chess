@@ -201,7 +201,7 @@ EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x,
 	GamePiece *pawn = create_game_piece(type, color, pos_x, pos_y);
 	if(!pawn) return MALLOC_FAILURE;
 	spArrayListAddLast(game->white_pieces, pawn); /* cannot fail on a new board */
-	game->board[pos_x][pos_y] = pawn;
+	game->board[pos_y][pos_x] = pawn;
 	return SUCCESS;
 }
 

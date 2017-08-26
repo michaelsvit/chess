@@ -108,6 +108,7 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	move_piece_to_position(game, piece, dst_x, dst_y);
 	/* Determine if moving the piece ended with check state for enemy king */
 	game->check = is_check_state_created_enemy(game, piece);
+	game->current_player = !game->current_player;
 
 	return SUCCESS;
 }

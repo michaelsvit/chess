@@ -20,6 +20,12 @@ Game *create_game(GameSettings *settings){
 		return NULL;
 	}
 
+	/* Initialize board to be empty */
+	for(int i = 0; i < BOARD_SIZE; i++){
+		for(int j = 0; j < BOARD_SIZE; j++){
+			game->board[i][j] = NULL;
+		}
+	}
 	game->current_player = PLAYER1;
 	game->mode = settings->mode;
 	game->difficulty = settings->difficulty;
@@ -200,7 +206,8 @@ EngineMessage init_game(Game *game){
 EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y){
 	GamePiece *pawn = create_game_piece(type, color, pos_x, pos_y);
 	if(!pawn) return MALLOC_FAILURE;
-	spArrayListAddLast(game->white_pieces, pawn); /* cannot fail on a new board */
+	SPArrayList *piece_set = (color == WHITE) ? game->white_pieces : game->black_pieces;
+	spArrayListAddLast(piece_set, pawn); /* cannot fail on a new board */
 	game->board[pos_y][pos_x] = pawn;
 	return SUCCESS;
 }

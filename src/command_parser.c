@@ -109,9 +109,11 @@ GameCommand *get_game_command(char *cmd_name){
 	if(strcmp(cmd_name, "move") == 0){
 		cmd->type = MOVE;
 		cmd->arg = parse_move_args();
+		if(!cmd->arg) cmd->type = INVALID_GAME_COMMAND;
 	} else if (strcmp(cmd_name, "get_moves") == 0) {
 		cmd->type = GET_MOVES;
 		cmd->arg = parse_position();
+		if(!cmd->arg) cmd->type = INVALID_GAME_COMMAND;
 	} else if (strcmp(cmd_name, "save") == 0) {
 		cmd->type = SAVE;
 		char *arg = strtok(NULL, DELIMITER);
@@ -145,7 +147,10 @@ int *parse_move_args(){
 	if(!src) return NULL;
 	/* Consume "to" word from command */
 	char *word = strtok(NULL, DELIMITER);
-	if(strcmp(word, "to") != 0) return NULL;
+	if(strcmp(word, "to") != 0){
+		free(src);
+		return NULL;
+	}
 	int *dst = parse_position();
 	if(!dst){
 		free(src);

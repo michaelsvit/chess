@@ -11,12 +11,12 @@ void get_user_input(const char* prompt, char* buf, int len) {
     }
 }
 
-EngineMessage execute_game_command(Game **game, GameCommand *cmd){
+EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 	int *args = (int *)cmd->arg;
 	switch (cmd->type) {
 		case MOVE:
 			if(!args) return INVALID_ARGUMENT;
-			return move_game_piece(*game, args[0], args[1], args[2], args[3]);
+			return move_game_piece(game, args[0], args[1], args[2], args[3]);
 		case GET_MOVES:{
 			/* SPArrayList *moves = get_possible_moves(*game, (*game)->board[args[1]][args[0]]); */
 			/* TODO: Handle error */
@@ -24,15 +24,13 @@ EngineMessage execute_game_command(Game **game, GameCommand *cmd){
 			break;
 		}
 		case UNDO:
-			return undo_move(*game);
+			return undo_move(game);
 		case SAVE:
 			/* TODO: Implement */
 			break;
 		case RESET:
-			destroy_game(*game);
 			return RESTART;
 		case GAME_QUIT:
-			destroy_game(*game);
 			return QUIT;
 		case INVALID_GAME_COMMAND:
 			return INVALID_COMMAND;

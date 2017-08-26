@@ -18,7 +18,7 @@ int main(/* int argc, char *argv[] */){
 				/* TODO: Print error */
 				break;
 			}
-			msg = execute_game_command(&game, cmd);
+			msg = execute_game_command(game, cmd);
 			free(cmd);
 		} else {
 			get_user_input("Enter settings command: ", user_input, INPUT_SIZE);

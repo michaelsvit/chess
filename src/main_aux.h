@@ -40,7 +40,7 @@ void get_user_input(const char* prompt, char* buf, int len);
  * EMPTY_HISTORY    	 user issued undo command when move history is empty
  * SUCCESS          	 otherwise
  */
-EngineMessage execute_game_command(Game **game, GameCommand *cmd);
+EngineMessage execute_game_command(Game *game, GameCommand *cmd);
 
 /*
  * Execute given setting command.

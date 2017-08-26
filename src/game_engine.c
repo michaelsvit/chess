@@ -338,21 +338,21 @@ int is_legal_rook_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	/* Make sure no other pieces are inbetween */
 	if (pos_x == piece->pos_x) {
 		if (piece->pos_y < pos_y) {
-			for(int i = piece->pos_y; i < pos_y; i++){
+			for(int i = piece->pos_y + 1; i < pos_y; i++){
 				if(is_occupied_position(game, pos_x, i)) return 0;
 			}
 		} else {
-			for(int i = pos_y; i > piece->pos_y; i--){
+			for(int i = pos_y + 1; i < piece->pos_y; i++){
 				if(is_occupied_position(game, pos_x, i)) return 0;
 			}
 		}
 	} else {
 		if (piece->pos_x < pos_x) {
-			for(int i = piece->pos_x; i < pos_x; i++){
+			for(int i = piece->pos_x + 1; i < pos_x; i++){
 				if(is_occupied_position(game, i, pos_y)) return 0;
 			}
 		} else {
-			for(int i = pos_x; i > piece->pos_x; i--){
+			for(int i = pos_x + 1; i < piece->pos_x; i++){
 				if(is_occupied_position(game, i, pos_y)) return 0;
 			}
 		}

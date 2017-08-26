@@ -324,7 +324,7 @@ int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	} else {
 		/* Pawn is moving 2 rows, position must be initial position */
 		int init_position = (piece->color == WHITE) ? 1 : BOARD_SIZE - 2;
-		if(pos_y != init_position) return 0;
+		if(piece->pos_y != init_position) return 0;
 		/* Pawn stays in same column, target position must be unoccupied */
 		if (is_occupied_position(game, pos_x, pos_y)) return 0;
 	}

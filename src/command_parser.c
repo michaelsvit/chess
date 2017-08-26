@@ -173,7 +173,7 @@ int *parse_position(){
 	int *pos = (int *)malloc(sizeof(int) * 2);
 	if(!pos) return NULL;
 
-	pos[0] = arg[1] - '0';
+	pos[0] = arg[1] - '0' - 1;
 	pos[1] = arg[3] - 'A';
 	return pos;
 }

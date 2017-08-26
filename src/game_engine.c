@@ -462,6 +462,8 @@ void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		remove_game_piece(game, game->board[pos_y][pos_x]);
 	}
 
+	/* Remove piece from previous location */
+	game->board[piece->pos_y][piece->pos_x] = NULL;
 	/* Move piece to the given position */
 	piece->pos_y = pos_y;
 	piece->pos_x = pos_x;

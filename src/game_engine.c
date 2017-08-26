@@ -444,11 +444,11 @@ int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int p
 		GamePiece *temp = (GamePiece *)spArrayListGetAt(enemy_pieces, i);
 		if(is_legal_move(copy, temp, king_copy->pos_x, king_copy->pos_y)){
 			destroy_game(copy);
-			return 0;
+			return 1;
 		}
 	}
 	destroy_game(copy);
-	return 1;
+	return 0;
 }
 
 int is_check_state_created_enemy(Game *game, GamePiece *piece){

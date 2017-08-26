@@ -92,7 +92,7 @@ SP_ARRAY_LIST_MESSAGE spArrayListRemoveAt(SPArrayList* src, int index){
 		return SP_ARRAY_LIST_EMPTY;
 	}
 	if (index != src->actualSize-1) {
-		memmove(src->elements+index, src->elements+index+1, (src->actualSize-index-1)*src->elemSize);
+		memmove(src->elements+index, src->elements+index+1, (src->actualSize-index-1)*sizeof(void *));
 	}
 	src->actualSize--;
 	return SP_ARRAY_LIST_SUCCESS;

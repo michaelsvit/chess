@@ -19,6 +19,7 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_game_command(game, cmd);
+			free(cmd->arg);
 			free(cmd);
 		} else {
 			get_user_input("Enter settings command: ", user_input, INPUT_SIZE);
@@ -28,6 +29,7 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_setting_command(settings, cmd);
+			free(cmd->arg);
 			free(cmd);
 		}
 		if(msg != SUCCESS) handle_message(msg, &game, &settings, &state, &quit);

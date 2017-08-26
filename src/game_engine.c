@@ -58,6 +58,12 @@ Game *copy_game(Game *game){
 		return NULL;
 	}
 
+	/* Initialize board to be empty */
+	for(int i = 0; i < BOARD_SIZE; i++){
+		for(int j = 0; j < BOARD_SIZE; j++){
+			copy->board[i][j] = NULL;
+		}
+	}
 	/* Place copied pieces on new board */
 	for(int i = 0; i < spArrayListSize(copy->white_pieces); i++){
 		GamePiece *piece = spArrayListGetAt(copy->white_pieces, i);
@@ -124,6 +130,8 @@ EngineMessage undo_move(Game *game){
 	spArrayListRemoveFirst(game->removed_pieces);
 
 	/* Restore previous state */
+	SPArrayList *pieces_set = (removed_piece->color == WHITE) ? game->white_pieces : game->black_pieces;
+	spArrayListAddLast(pieces_set, removed_piece);
 	move_piece_to_position(game,
 			game->board[move->dst_y][move->dst_x],
 			move->src_x,
@@ -133,7 +141,6 @@ EngineMessage undo_move(Game *game){
 	game->current_player = !game->current_player;
 
 	free(move);
-	free(removed_piece);
 	return SUCCESS;
 }
 

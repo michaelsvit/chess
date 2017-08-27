@@ -7,6 +7,8 @@ ARRAY_LIST_TEST_OBJS = obj/array_list_unit_test.o obj/array_list.o
 COMP_FLAG = -g -std=c99 -Wall -Wextra -Werror -pedantic-errors
 UNIT_TESTS = array_list_unit_test
 
+.PHONY: all
+all: $(EXEC)
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@
 

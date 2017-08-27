@@ -79,10 +79,8 @@ typedef struct {
 
 /*
  * Creates a new game instance.
- * @param mode          	 one player or two player mode
- * @param difficulty    	 chosen game difficulty, between 1 and 4
- * @param player1_color 	 first player's game piece color, second player is the inverse color
- * @return              	 pointer to the newly created game on success, NULL otherwise
+ * @param settings 	 struct containing settings set by the user for the created game
+ * @return         	 pointer to the newly created game on success, NULL otherwise
  */
 Game *create_game(GameSettings *settings);
 

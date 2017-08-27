@@ -4,6 +4,7 @@
 /******************************* Interface functions *********************************/
 
 Game *create_game(GameSettings *settings){
+	if(!settings) return NULL;
 	if(settings->difficulty < 1 || settings->difficulty > 4) return NULL;
 	Game *game = malloc(sizeof(Game));
 	if(!game) return NULL;

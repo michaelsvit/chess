@@ -4,7 +4,7 @@
 #include "main_aux.h"
 
 void get_user_input(const char* prompt, char* buf, int len) {
-    printf("%s", prompt);
+	if(prompt) printf("%s", prompt);
     fgets(buf, len, stdin);
     if (buf[strlen(buf) - 1] == '\n') {
         buf[strlen(buf) - 1] = '\0';

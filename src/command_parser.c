@@ -14,11 +14,6 @@ SettingCommand *parse_setting_command(const char *command_str){
 	char *cmd_name, *cmd_arg;
 
 	cmd_name = strtok(str_copy, DELIMITER);
-	if(!cmd_name){
-		free(str_copy);
-		return NULL;
-	}
-
 	cmd_arg = strtok(NULL, DELIMITER);
 	SettingCommand *cmd = get_settings_command(cmd_name, cmd_arg);
 
@@ -40,11 +35,6 @@ GameCommand *parse_game_command(const char *command_str){
 	char *cmd_name;
 
 	cmd_name = strtok(str_copy, DELIMITER);
-	if(!cmd_name){
-		free(str_copy);
-		return NULL;
-	}
-
 	GameCommand *cmd = get_game_command(cmd_name);
 
 	/* check no extra arguments are given */
@@ -62,6 +52,10 @@ SettingCommand *get_settings_command(char *cmd_name, char *cmd_arg){
 	SettingCommand *cmd = (SettingCommand *)malloc(sizeof(SettingCommand));
 	if(!cmd) return NULL;
 	cmd->arg = NULL;
+	if(!cmd_name){
+		cmd->type = INVALID_SETTING_COMMAND;
+		return cmd;
+	}
 
 	if (strcmp(cmd_name, "game_mode") == 0) {
 		if(is_valid_int(cmd_arg)){
@@ -119,6 +113,10 @@ GameCommand *get_game_command(char *cmd_name){
 	GameCommand *cmd = (GameCommand *)malloc(sizeof(GameCommand));
 	if(!cmd) return NULL;
 	cmd->arg = NULL;
+	if(!cmd_name){
+		cmd->type = INVALID_GAME_COMMAND;
+		return cmd;
+	}
 
 	if(strcmp(cmd_name, "move") == 0){
 		cmd->type = MOVE;

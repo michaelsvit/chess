@@ -21,4 +21,10 @@ void print_board(Game *game);
  */
 char get_piece_repr(GamePiece *piece);
 
+/*
+ * Print given settings.
+ * @param settings 	 settings of current game to be printed
+ */
+void print_settings(GameSettings *settings);
+
 #endif /* ifndef PRINT_UTILS_H */

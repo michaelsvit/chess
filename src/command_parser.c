@@ -58,35 +58,11 @@ SettingCommand *get_settings_command(char *cmd_name, char *cmd_arg){
 	}
 
 	if (strcmp(cmd_name, "game_mode") == 0) {
-		if(is_valid_int(cmd_arg)){
-			cmd->type = GAME_MODE;
-			int *arg = (int *)malloc(sizeof(int));
-			if(!arg) return NULL;
-			*arg = atoi(cmd_arg);
-			cmd->arg = arg;
-		} else {
-			cmd->type = INVALID_SETTING_COMMAND;
-		}
+		if(!get_arg_command(cmd, cmd_arg, GAME_MODE)) return NULL;
 	} else if (strcmp(cmd_name, "difficulty") == 0) {
-		if(is_valid_int(cmd_arg)){
-			cmd->type = DIFFICULTY;
-			int *arg = (int *)malloc(sizeof(int));
-			if(!arg) return NULL;
-			*arg = atoi(cmd_arg);
-			cmd->arg = arg;
-		} else {
-			cmd->type = INVALID_SETTING_COMMAND;
-		}
+		if(!get_arg_command(cmd, cmd_arg, DIFFICULTY)) return NULL;
 	} else if (strcmp(cmd_name, "user_color") == 0) {
-		if(is_valid_int(cmd_arg)){
-			cmd->type = USER_COLOR;
-			int *arg = (int *)malloc(sizeof(int));
-			if(!arg) return NULL;
-			*arg = atoi(cmd_arg);
-			cmd->arg = arg;
-		} else {
-			cmd->type = INVALID_SETTING_COMMAND;
-		}
+		if(!get_arg_command(cmd, cmd_arg, USER_COLOR)) return NULL;
 	} else if (strcmp(cmd_name, "load") == 0) {
 		if(cmd_arg){
 			cmd->type = LOAD;
@@ -107,6 +83,22 @@ SettingCommand *get_settings_command(char *cmd_name, char *cmd_arg){
 		cmd->type = INVALID_SETTING_COMMAND;
 	}
 	return cmd;
+}
+
+int get_arg_command(SettingCommand *cmd, char *cmd_arg, SettingCommandType type){
+	if(is_valid_int(cmd_arg)){
+		cmd->type = type;
+		int *arg = (int *)malloc(sizeof(int));
+		if(!arg){
+			free(cmd);
+			return 0;
+		}
+		*arg = atoi(cmd_arg);
+		cmd->arg = arg;
+	} else {
+		cmd->type = INVALID_SETTING_COMMAND;
+	}
+	return 1;
 }
 
 GameCommand *get_game_command(char *cmd_name){

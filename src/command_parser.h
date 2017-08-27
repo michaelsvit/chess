@@ -51,6 +51,15 @@ typedef struct {
 SettingCommand *parse_setting_command(const char *command_str);
 
 /*
+ * Initialize a command that requires a single integer argument.
+ * @param cmd     	 command to be initialized
+ * @param cmd_arg 	 argument to command
+ * @param type    	 type of the command
+ * @return        	 true on success, false on memory failure
+ */
+int get_arg_command(SettingCommand *cmd, char *cmd_arg, SettingCommandType type);
+
+/*
  * Parse command given by user in game state.
  * @param command_str 	 string of user input
  * @return            	 pointer to parsed command on success, NULL otherwise

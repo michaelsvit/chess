@@ -42,15 +42,32 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 	int *args = (int *)cmd->arg;
 	switch (cmd->type){
 		case GAME_MODE:
-			settings->mode = *args;
-			break;
+			if(*args == ONE_PLAYER || *args == TWO_PLAYER){
+				settings->mode = *args;
+				break;
+			} else {
+				return INVALID_ARGUMENT;
+			}
 		case DIFFICULTY:
-			/* TODO: If in 2 players mode then this is an error */
-			settings->difficulty = *args;
+			if(settings->mode == ONE_PLAYER){
+				if(*args >= 1 && *args <= 4){
+					settings->difficulty = *args;
+					break;
+				} else {
+					return INVALID_ARGUMENT;
+				}
+			}
 			break;
 		case USER_COLOR:
-			/* TODO: If in 2 players mode then this is an error */
-			settings->player1_color = *args;
+			if(settings->mode == ONE_PLAYER){
+				if(*args == 1 || *args == 0){
+					settings->player1_color = *args;
+					break;
+				} else {
+					return INVALID_ARGUMENT;
+				}
+			}
+			break;
 		case LOAD:
 			/* TODO: Implement */
 			break;
@@ -58,7 +75,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 			set_default_settings(settings);
 			break;
 		case PRINT_SETTING:
-			/* TODO: Implement */
+			print_settings(settings);
 			break;
 		case SETTING_QUIT:
 			return QUIT;

@@ -17,13 +17,6 @@
 void print_board(Game *game);
 
 /*
- * Get character representing given game piece.
- * @param piece 	 game piece to represent
- * @return      	 character representing given piece
- */
-char get_piece_repr(GamePiece *piece);
-
-/*
  * Print given settings.
  * @param settings 	 settings of current game to be printed
  */
@@ -41,6 +34,13 @@ int print_possible_moves(Game *game, SPArrayList *moves);
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/
 /*******************************************************************************************/
+
+/*
+ * Get character representing given game piece.
+ * @param piece 	 game piece to represent
+ * @return      	 character representing given piece
+ */
+char get_piece_repr(GamePiece *piece);
 
 /*
  * Get string representing given move's destination with special characters (if needed).

@@ -7,11 +7,20 @@
 
 #include "game_engine.h"
 
+#define GAME_PROMPT "player - enter your move:\n"
+#define SETTINGS_PROMPT "Specify game setting or type 'start' to begin a game with the current setting:\n"
+
 #define POS_REPR_MAX_LENGTH 5
 
 typedef enum {
 	MEMORY
 } ErrorType;
+
+/*
+ * Print color of current player.
+ * @param game 	 game instance
+ */
+void print_player_color(Game *game);
 
 /*
  * Print generic error messages.

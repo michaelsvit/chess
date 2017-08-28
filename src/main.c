@@ -4,28 +4,38 @@
 
 int main(/* int argc, char *argv[] */){
 	char *user_input = (char *)malloc(INPUT_SIZE);
+	GameSettings *settings = create_settings();
+	if(!settings || !user_input){
+		free(settings);
+		free(user_input);
+		print_error(MEMORY);
+		return 0;
+	}
 	int quit = 0;
+	int settings_prompt_printed = 0;
 	State state = SETTINGS;
 	Game *game;
-	GameSettings *settings = create_settings();
 	do {
 		EngineMessage msg;
 		if(state == GAME){
 			print_board(game);
-			get_user_input("Enter game command: ", user_input, INPUT_SIZE);
+			print_player_color(game);
+			get_user_input(GAME_PROMPT, user_input, INPUT_SIZE);
 			GameCommand *cmd = parse_game_command(user_input);
 			if(!cmd){
-				/* TODO: Print error */
+				print_error(MEMORY);
 				break;
 			}
 			msg = execute_game_command(game, cmd);
 			free(cmd->arg);
 			free(cmd);
 		} else {
-			get_user_input("Enter settings command: ", user_input, INPUT_SIZE);
+			char *prompt = settings_prompt_printed ? SETTINGS_PROMPT : NULL;
+			get_user_input(prompt, user_input, INPUT_SIZE);
 			SettingCommand *cmd = parse_setting_command(user_input);
 			if(!cmd){
-				/* TODO: Print error */
+				free(settings);
+				print_error(MEMORY);
 				break;
 			}
 			msg = execute_setting_command(settings, cmd);

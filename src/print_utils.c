@@ -3,6 +3,10 @@
 #include <string.h>
 #include "print_utils.h"
 
+void print_player_color(Game *game){
+	printf("%s ", (game->player_color[game->current_player] == WHITE) ? "white" : "black");
+}
+
 void print_error(ErrorType error){
 	switch(error){
 		case MEMORY:

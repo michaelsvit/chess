@@ -5,24 +5,27 @@
 
 void get_user_input(const char* prompt, char* buf, int len) {
 	if(prompt) printf("%s", prompt);
-    fgets(buf, len, stdin);
-    if (buf[strlen(buf) - 1] == '\n') {
-        buf[strlen(buf) - 1] = '\0';
-    }
+	fgets(buf, len, stdin);
+	if (buf[strlen(buf) - 1] == '\n') {
+		buf[strlen(buf) - 1] = '\0';
+	}
 }
 
 EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 	int *args = (int *)cmd->arg;
 	switch (cmd->type) {
 		case MOVE:
-			if(!args) return INVALID_ARGUMENT;
 			return move_game_piece(game, args[0], args[1], args[2], args[3]);
-		case GET_MOVES:{
-			/* SPArrayList *moves = get_possible_moves(*game, (*game)->board[args[1]][args[0]]); */
-			/* TODO: Handle error */
-			/* TODO: Print moves */
-			break;
-		}
+		case GET_MOVES:
+			{
+				SPArrayList *moves;
+				EngineMessage msg = get_possible_moves(
+						&moves, game,
+						game->board[args[1]][args[0]]);
+				if(msg == SUCCESS) print_possible_moves(game, moves);
+				spArrayListDestroy(moves);
+				return msg;
+			}
 		case UNDO:
 			return undo_move(game);
 		case SAVE:

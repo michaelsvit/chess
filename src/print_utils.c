@@ -3,6 +3,14 @@
 #include <string.h>
 #include "print_utils.h"
 
+void print_error(ErrorType error){
+	switch(error){
+		case MEMORY:
+			printf("ERROR: Memory allocation failure\n");
+			break;
+	}
+}
+
 void print_board(Game *game){
 	for (int i = BOARD_SIZE-1; i >= 0; i--) {
 		/* Print row */

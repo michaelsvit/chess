@@ -9,6 +9,16 @@
 
 #define POS_REPR_MAX_LENGTH 5
 
+typedef enum {
+	MEMORY
+} ErrorType;
+
+/*
+ * Print generic error messages.
+ * @param error 	 type of error
+ */
+void print_error(ErrorType error);
+
 /*
  * Print game board in console mode.
  * @precond    	 assumes game != NULL

@@ -43,6 +43,17 @@ void get_user_input(const char* prompt, char* buf, int len);
 EngineMessage execute_game_command(Game *game, GameCommand *cmd);
 
 /*
+ * Handler for engine messages returned in game state.
+ * @param game     	 game instance
+ * @param msg      	 returned message
+ * @param cmd      	 command that was issued by user
+ * @param settings 	 pointer to main function's settings variable in case of restart
+ * @param state    	 game state
+ * @param quit     	 flag indicating to quit the game
+ */
+void handle_game_message(Game **game, EngineMessage msg, GameCommand *cmd, GameSettings **settings, State *state, int *quit);
+
+/*
  * Execute given setting command.
  * @param game     	 game instance
  * @param settings 	 current set of settings to be used by game

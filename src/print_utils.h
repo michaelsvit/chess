@@ -32,6 +32,12 @@ void print_player_color(Game *game);
 void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd);
 
 /*
+ * Print message to user according to given engine message.
+ * @param msg 	 message to be printed
+ */
+void print_generic_message(EngineMessage msg);
+
+/*
  * Print invalid argument error for given settings command.
  * @param cmd 	 command issued by user
  */

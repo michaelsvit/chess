@@ -54,6 +54,21 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 	return SUCCESS;
 }
 
+void handle_game_message(
+		Game **game,
+		EngineMessage msg,
+		GameCommand *cmd,
+		GameSettings **settings,
+		State *state,
+		int *quit){
+	if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE || msg == EMPTY_HISTORY){
+		print_game_invalid_arg(*game, msg, cmd);
+	} else {
+		print_generic_message(msg);
+		handle_message(msg, game, settings, state, quit);
+	}
+}
+
 EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cmd){
 	int *args = (int *)cmd->arg;
 	switch (cmd->type){

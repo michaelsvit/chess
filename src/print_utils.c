@@ -50,6 +50,24 @@ void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd){
 	}
 }
 
+void print_generic_message(EngineMessage msg){
+	switch(msg){
+		case MALLOC_FAILURE:
+			printf("Memory allocation failure\n");
+			break;
+		case INVALID_COMMAND:
+			printf("Invalid command\n");
+			break;
+		case RESTART:
+			printf("Restarting...\n");
+			break;
+		case QUIT:
+			printf("Exiting...\n");
+		default:
+			break;
+	}
+}
+
 void print_error(ErrorType error){
 	switch(error){
 		case MEMORY:

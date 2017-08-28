@@ -27,8 +27,7 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_game_command(game, cmd);
-			if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE || msg == EMPTY_HISTORY)
-				print_game_invalid_arg(game, msg, cmd);
+			if(msg != SUCCESS) handle_game_message(&game, msg, cmd, &settings, &state, &quit);
 			free(cmd->arg);
 			free(cmd);
 		} else {

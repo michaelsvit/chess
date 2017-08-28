@@ -145,33 +145,68 @@ EngineMessage undo_move(Game *game){
 	return SUCCESS;
 }
 
-SPArrayList *get_possible_moves(Game *game, GamePiece *piece){
-	if(!game || !piece) return NULL;
-
-	SPArrayList *moves = NULL;
+EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *piece){
+	*moves = NULL;
+	if(!(game->mode == ONE_PLAYER)
+			|| (game->difficulty != 1 && game->difficulty != 2)) return INVALID_COMMAND;
+	if(!game || !piece) return INVALID_ARGUMENT;
+	if(piece->color != game->player_color[game->current_player]) return INVALID_ARGUMENT;
 
 	switch(piece->type){
 		case PAWN:
-			moves = get_pawn_moves(game, piece);
+			*moves = get_pawn_moves(game, piece);
 			break;
 		case ROOK:
-			moves = get_rook_moves(game, piece);
+			*moves = get_rook_moves(game, piece);
 			break;
 		case KNIGHT:
-			moves = get_knight_moves(game, piece);
+			*moves = get_knight_moves(game, piece);
 			break;
 		case BISHOP:
-			moves = get_bishop_moves(game, piece);
+			*moves = get_bishop_moves(game, piece);
 			break;
 		case QUEEN:
-			moves = get_queen_moves(game, piece);
+			*moves = get_queen_moves(game, piece);
 			break;
 		case KING:
-			moves = get_king_moves(game, piece);
+			*moves = get_king_moves(game, piece);
 			break;
 	}
 
-	return moves;
+	return (*moves) ? SUCCESS : MALLOC_FAILURE;
+}
+
+int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move){
+	Game *copy = copy_game(game);
+	if(!copy) return -1;
+	SPArrayList *same_color_pieces;
+	SPArrayList *enemy_pieces;
+	if(piece->color == WHITE){
+		same_color_pieces = copy->white_pieces;
+		enemy_pieces = copy->black_pieces;
+	} else {
+		same_color_pieces = copy->black_pieces;
+		enemy_pieces = copy->white_pieces;
+	}
+	/* Get copy of piece at given position */
+	GamePiece *piece_copy = copy->board[piece->pos_y][piece->pos_x];
+	/* Get copy of piece to be moved */
+	GamePiece *src_piece_copy = copy->board[move->src_y][move->src_x];
+
+	/* Move copied source piece to move destination */
+	move_piece_to_position(copy, src_piece_copy, move->dst_x, move->dst_y);
+	copy->current_player = !copy->current_player;
+
+	/* Iterate through all enemy pieces and check if they threaten given piece */
+	for(int i = 0; i < spArrayListSize(enemy_pieces); i++){
+		GamePiece *temp = (GamePiece *)spArrayListGetAt(enemy_pieces, i);
+		if(is_legal_move(copy, temp, piece_copy->pos_x, piece_copy->pos_y)){
+			destroy_game(copy);
+			return 1;
+		}
+	}
+	destroy_game(copy);
+	return 0;
 }
 
 int is_game_over(Game *game){
@@ -180,8 +215,10 @@ int is_game_over(Game *game){
 		(game->player_color[game->current_player] == WHITE) ?
 		game->white_pieces : game->black_pieces;
 	for (int i = 0; i < spArrayListSize(pieces); ++i) {
-		SPArrayList *moves = get_possible_moves(game, spArrayListGetAt(pieces, i));
-		if(!moves) return -1;
+		SPArrayList *moves;
+		EngineMessage msg = get_possible_moves(&moves, game, spArrayListGetAt(pieces, i));
+		/* Invalid argument message is not possible here */
+		if(msg == MALLOC_FAILURE) return -1;
 		if(spArrayListSize(moves) > 0){
 			spArrayListDestroy(moves);
 			return 0;
@@ -433,33 +470,21 @@ int is_in_check_state(Game *game){
 }
 
 int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int pos_y){
-	Game *copy = copy_game(game);
-	if(!copy) return -1;
 	SPArrayList *same_color_pieces;
 	SPArrayList *enemy_pieces;
 	if(piece->color == WHITE){
-		same_color_pieces = copy->white_pieces;
-		enemy_pieces = copy->black_pieces;
+		same_color_pieces = game->white_pieces;
+		enemy_pieces = game->black_pieces;
 	} else {
-		same_color_pieces = copy->black_pieces;
-		enemy_pieces = copy->white_pieces;
+		same_color_pieces = game->black_pieces;
+		enemy_pieces = game->white_pieces;
 	}
-	/* Get copied game piece */
-	GamePiece *piece_copy = copy->board[piece->pos_y][piece->pos_x];
-	/* Move copied piece to new position */
-	move_piece_to_position(copy, piece_copy, pos_x, pos_y);
-	copy->current_player = !copy->current_player;
-	/* Iterate through all enemy pieces and check if they threaten allied king */
-	GamePiece *king_copy = find_king_piece(same_color_pieces);
-	for(int i = 0; i < spArrayListSize(enemy_pieces); i++){
-		GamePiece *temp = (GamePiece *)spArrayListGetAt(enemy_pieces, i);
-		if(is_legal_move(copy, temp, king_copy->pos_x, king_copy->pos_y)){
-			destroy_game(copy);
-			return 1;
-		}
-	}
-	destroy_game(copy);
-	return 0;
+	GamePiece *king = find_king_piece(same_color_pieces);
+	GameMove *move = create_move(piece->pos_x, piece->pos_y, pos_x, pos_y);
+	if(!move) return -1;
+	int result = is_piece_threatened_after_move(game, king, move);
+	free(move);
+	return result;
 }
 
 int is_check_state_created_enemy(Game *game, GamePiece *piece){

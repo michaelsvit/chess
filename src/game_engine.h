@@ -123,11 +123,21 @@ EngineMessage undo_move(Game *game);
 
 /*
  * Get a list of all possible moves of a given game piece.
+ * @param moves 	 array to be filled with possible moves
  * @param game  	 game instance
  * @param piece 	 game piece
  * @return      	 list of possible moves for piece on success, NULL otherwise
  */
-SPArrayList *get_possible_moves(Game *game, GamePiece *piece);
+EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *piece);
+
+/*
+ * Check if given game piece is threatened by enemy after performing given move.
+ * @param game  	 game instance
+ * @param piece 	 game piece
+ * @param move  	 game move (possibly of a game piece different than given piece)
+ * @return      	 -1 on memory failure, true if piece is threatened after move, false otherwise
+ */
+int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move);
 
 /*
  * Determine whether the game has reached a final state.

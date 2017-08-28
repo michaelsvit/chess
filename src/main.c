@@ -27,6 +27,8 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_game_command(game, cmd);
+			if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE)
+				print_game_invalid_arg(game, msg, cmd);
 			free(cmd->arg);
 			free(cmd);
 		} else {
@@ -39,10 +41,12 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_setting_command(settings, cmd);
+			if(msg == INVALID_ARGUMENT) print_settings_invalid_arg(cmd);
 			free(cmd->arg);
 			free(cmd);
 		}
-		if(msg != SUCCESS) handle_message(msg, &game, &settings, &state, &quit);
+		if(msg != SUCCESS && msg != INVALID_ARGUMENT)
+			handle_message(msg, &game, &settings, &state, &quit);
 	} while (!quit);
 
 	free(user_input);

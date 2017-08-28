@@ -7,12 +7,67 @@ void print_player_color(Game *game){
 	printf("%s ", (game->player_color[game->current_player] == WHITE) ? "white" : "black");
 }
 
+void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd){
+	switch(cmd->type){
+		case MOVE:
+			if(msg == INVALID_ARGUMENT){
+				printf("Invalid position on the board\n");
+			} else if (msg == ILLEGAL_MOVE) {
+				char *str;
+				int *arg = (int *)cmd->arg;
+				/* Get game piece at source position */
+				GamePiece *piece = game->board[arg[1]][arg[0]];
+				if(!piece || piece->color != game->player_color[game->current_player]){
+					str = "The specified position does not contain your piece\n";
+				} else {
+					str = "Illegal move\n";
+				}
+				printf("%s", str);
+			}
+			break;
+		case GET_MOVES:
+			if(msg == ILLEGAL_MOVE){
+				char *str = (game->player_color[game->current_player] == WHITE) ?
+					"white" : "black";
+				printf("The specified position does not contain %s player piece\n", str);
+			} else if (msg == INVALID_ARGUMENT) {
+				printf("Invalid position on the board\n");
+			}
+			break;
+		case SAVE:
+			break;
+		case UNDO:
+			break;
+		case RESET:
+		case INVALID_GAME_COMMAND:
+		case GAME_QUIT:
+			break;
+	}
+}
+
 void print_error(ErrorType error){
 	switch(error){
 		case MEMORY:
 			printf("ERROR: Memory allocation failure\n");
 			break;
 	}
+}
+
+void print_undo_two_moves(Game *game, GameMove *moves[]){
+	GameMove *move = moves[0];
+	Color color = game->player_color[game->current_player];
+	printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
+			(color == WHITE) ? "white" : "black",
+			move->src_y+1, move->src_x+'A',
+			move->dst_y+1, move->dst_x+'A');
+	move = moves[1];
+	color = !color;
+	printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
+			(color == WHITE) ? "white" : "black",
+			move->src_y+1, move->src_x+'A',
+			move->dst_y+1, move->dst_x+'A');
+	free(moves[0]);
+	free(moves[1]);
 }
 
 void print_board(Game *game){

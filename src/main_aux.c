@@ -18,6 +18,8 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 			return move_game_piece(game, args[0], args[1], args[2], args[3]);
 		case GET_MOVES:
 			{
+				if(args[0] < 0 || args[0]>= BOARD_SIZE || args[1] < 0 || args[1] >= BOARD_SIZE)
+					return INVALID_ARGUMENT;
 				SPArrayList *moves;
 				EngineMessage msg = get_possible_moves(
 						&moves, game,
@@ -27,7 +29,18 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 				return msg;
 			}
 		case UNDO:
-			return undo_move(game);
+			{
+				GameMove *moves[2];
+				EngineMessage msg = undo_move(game, &moves[0]);
+				if(msg != SUCCESS) return msg;
+				msg = undo_move(game, &moves[1]);
+				if(msg != SUCCESS){
+					free(moves[0]);
+					return msg;
+				}
+				print_undo_two_moves(game, moves);
+				return SUCCESS;
+			}
 		case SAVE:
 			/* TODO: Implement */
 			break;

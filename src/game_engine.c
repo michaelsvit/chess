@@ -120,7 +120,7 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	return SUCCESS;
 }
 
-EngineMessage undo_move(Game *game){
+EngineMessage undo_move(Game *game, GameMove **removed_move){
 	if(!game) return INVALID_ARGUMENT;
 
 	if(spArrayListIsEmpty(game->removed_pieces)) return EMPTY_HISTORY;
@@ -141,7 +141,7 @@ EngineMessage undo_move(Game *game){
 	game->check = is_in_check_state(game);
 	game->current_player = !game->current_player;
 
-	free(move);
+	*removed_move = move;
 	return SUCCESS;
 }
 
@@ -149,8 +149,9 @@ EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *pie
 	*moves = NULL;
 	if(!(game->mode == ONE_PLAYER)
 			|| (game->difficulty != 1 && game->difficulty != 2)) return INVALID_COMMAND;
-	if(!game || !piece) return INVALID_ARGUMENT;
-	if(piece->color != game->player_color[game->current_player]) return INVALID_ARGUMENT;
+	if(!game) return INVALID_ARGUMENT;
+	if(!piece || piece->color != game->player_color[game->current_player])
+		return ILLEGAL_MOVE;
 
 	switch(piece->type){
 		case PAWN:

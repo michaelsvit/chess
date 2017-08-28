@@ -113,13 +113,14 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 
 /*
  * Undo most recent move in the game.
- * @param game 	 game instance
+ * @param game         	 game instance
+ * @param removed_move 	 variable to store removed move for printing later
  * @return
  * INVALID_ARGUMENT 	 game == NULL
  * EMPTY_HISTORY    	 move history is empty
  * SUCCESS          	 otherwise
  */
-EngineMessage undo_move(Game *game);
+EngineMessage undo_move(Game *game, GameMove **removed_move);
 
 /*
  * Get a list of all possible moves of a given game piece.

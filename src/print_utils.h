@@ -6,6 +6,7 @@
  */
 
 #include "game_engine.h"
+#include "command_parser.h"
 
 #define GAME_PROMPT "player - enter your move:\n"
 #define SETTINGS_PROMPT "Specify game setting or type 'start' to begin a game with the current setting:\n"
@@ -23,10 +24,31 @@ typedef enum {
 void print_player_color(Game *game);
 
 /*
+ * Print invalid argument error for given game command.
+ * @param game 	 game instance
+ * @param msg  	 returned engine message
+ * @param cmd  	 command issued by user
+ */
+void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd);
+
+/*
+ * Print invalid argument error for given settings command.
+ * @param cmd 	 command issued by user
+ */
+void print_settings_invalid_arg(SettingCommand *cmd);
+
+/*
  * Print generic error messages.
  * @param error 	 type of error
  */
 void print_error(ErrorType error);
+
+/*
+ * Print two moves that were undone by user.
+ * @param game  	 game instance
+ * @param moves 	 moves that were undone
+ */
+void print_undo_two_moves(Game *game, GameMove *moves[]);
 
 /*
  * Print game board in console mode.

@@ -1,4 +1,6 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "print_utils.h"
 
 void print_board(Game *game){
@@ -54,5 +56,84 @@ void print_settings(GameSettings *settings){
 		printf("USER_CLR: %s", (settings->player1_color == WHITE) ? "WHITE" : "BLACK");
 	} else {
 		printf("GAME_MODE: 2\n");
+	}
+}
+
+int print_possible_moves(Game *game, SPArrayList *moves){
+	/* Create new list and use insertion sort */
+	int count = spArrayListSize(moves);
+	SPArrayList *list = spArrayListCreate(sizeof(GameMove), count);
+	if(!list) return 0;
+	/* Use insertion sort */
+	for (int i = 0; i < count; ++i) {
+		GameMove *move = spArrayListGetAt(moves, i);
+		int i;
+		for (i = 0; i < spArrayListSize(list); ++i) {
+			GameMove *temp = (GameMove *)spArrayListGetAt(list, i);
+			if(compare_positions(move->dst_x, move->dst_y, temp->dst_x, temp->dst_y) > 0){
+				spArrayListAddAt(list, move, i);
+				break;
+			}
+		}
+		if(i == spArrayListSize(list)) spArrayListAddLast(list, move);
+	}
+
+	/* Create list of string representations of move destinations */
+	SPArrayList *strings = spArrayListCreate(POS_REPR_MAX_LENGTH + 1, count);
+	if(!strings){
+		spArrayListDestroy(list);
+		return 0;
+	}
+	for (int i = 0; i < count; ++i) {
+		char *repr = get_destination_repr(game, spArrayListGetAt(list, i));
+		if(!repr){
+			spArrayListDestroy(list);
+			spArrayListDestroy(strings);
+			return 0;
+		}
+		spArrayListAddAt(strings, repr, i);
+	}
+	/* Print generated representations */
+	for (int i = 0; i < count; ++i) {
+		printf("%s\n", spArrayListGetAt(strings, i));
+	}
+	spArrayListDestroy(list);
+	spArrayListDestroy(strings);
+	return 1;
+}
+
+char *get_destination_repr(Game *game, GameMove *move){
+	GamePiece *dst_piece = game->board[move->dst_y][move->dst_x];
+	int capture = dst_piece && (dst_piece->color == game->player_color[!game->current_player]);
+	GamePiece *src_piece = game->board[move->src_y][move->src_x];
+	int dst_threat = is_piece_threatened_after_move(game, src_piece, move);
+	int row = move->dst_y+1;
+	char col = move->dst_x+'A';
+	char *str = (char *)malloc(POS_REPR_MAX_LENGTH+1);
+	sprintf(str, "<%d,%c>", row, col);
+	if(dst_threat){
+		int len = strlen(str);
+		str[len] = '*';
+		str[len+1] = '\0';
+	}
+	if(capture){
+		int len = strlen(str);
+		str[len] = '^';
+		str[len+1] = '\0';
+	}
+	return str;
+}
+
+int compare_positions(int a_x, int a_y, int b_x, int b_y){
+	if(a_y > b_y) return 1;
+	if(a_y == b_y){
+		if(a_x > b_x) return 1;
+		if(a_x == b_x){
+			return 0;
+		} else {
+			return -1;
+		}
+	} else {
+		return -1;
 	}
 }

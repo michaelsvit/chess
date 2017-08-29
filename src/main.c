@@ -40,12 +40,11 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_setting_command(settings, cmd);
-			if(msg == INVALID_ARGUMENT) print_settings_invalid_arg(cmd);
+			if(msg != SUCCESS)
+				handle_settings_message(&game, msg, cmd, &settings, &state, &quit);
 			free(cmd->arg);
 			free(cmd);
 		}
-		if(msg != SUCCESS && msg != INVALID_ARGUMENT)
-			handle_message(msg, &game, &settings, &state, &quit);
 	} while (!quit);
 
 	free(user_input);

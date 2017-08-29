@@ -57,6 +57,12 @@ void print_error(ErrorType error);
 void print_undo_two_moves(Game *game, GameMove *moves[]);
 
 /*
+ * Print which mode the game has been set to.
+ * @param mode 	 current game mode
+ */
+void print_game_mode(int mode);
+
+/*
  * Print game board in console mode.
  * @precond    	 assumes game != NULL
  * @param game 	 game instance

@@ -93,6 +93,10 @@ void print_undo_two_moves(Game *game, GameMove *moves[]){
 	free(moves[1]);
 }
 
+void print_game_mode(int mode){
+	printf("Game mode is set to %s\n", (mode == ONE_PLAYER) ? "1 player" : "2 players");
+}
+
 void print_board(Game *game){
 	for (int i = BOARD_SIZE-1; i >= 0; i--) {
 		/* Print row */

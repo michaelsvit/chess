@@ -75,6 +75,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 		case GAME_MODE:
 			if(*args == ONE_PLAYER || *args == TWO_PLAYER){
 				settings->mode = *args;
+				print_game_mode(*args);
 				break;
 			} else {
 				return INVALID_ARGUMENT;
@@ -116,6 +117,16 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 			return INVALID_COMMAND;
 	}
 	return SUCCESS;
+}
+
+void handle_settings_message(
+		Game **game,
+		EngineMessage msg,
+		SettingCommand *cmd,
+		GameSettings **settings,
+		State *state,
+		int *quit){
+
 }
 
 void handle_message(EngineMessage msg, Game **game, GameSettings **settings, State *state, int *quit){

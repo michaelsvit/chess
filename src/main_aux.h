@@ -67,6 +67,17 @@ void handle_game_message(Game **game, EngineMessage msg, GameCommand *cmd, GameS
 EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cmd);
 
 /*
+ * Handler for engine messages returned in settings state.
+ * @param game     	 game instance
+ * @param msg      	 returned message
+ * @param cmd      	 command that was issued by user
+ * @param settings 	 pointer to main function's settings variable in case of restart
+ * @param state    	 game state
+ * @param quit     	 flag indicating to quit the game
+ */
+void handle_settings_message(Game **game, EngineMessage msg, SettingCommand *cmd, GameSettings **settings, State *state, int *quit);
+
+/*
  * Handle game engine messages.
  * @param msg      	 message to be handled
  * @param settings 	 pointer to main function's settings struct

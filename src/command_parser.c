@@ -19,7 +19,7 @@ SettingCommand *parse_setting_command(const char *command_str){
 
 	/* check no extra arguments are given */
 	cmd_arg = strtok(NULL, DELIMITER);
-	if (cmd && cmd_arg != NULL) {
+	if (cmd && cmd->valid_arg && cmd_arg != NULL) {
 		cmd->type = INVALID_SETTING_COMMAND;
 	}
 
@@ -38,7 +38,7 @@ GameCommand *parse_game_command(const char *command_str){
 	GameCommand *cmd = get_game_command(cmd_name);
 
 	/* check no extra arguments are given */
-	if (cmd && strtok(NULL, DELIMITER)) {
+	if (cmd && cmd->valid_arg && strtok(NULL, DELIMITER)) {
 		cmd->type = INVALID_GAME_COMMAND;
 	}
 

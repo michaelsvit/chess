@@ -93,8 +93,8 @@ int get_arg_command(SettingCommand *cmd, char *cmd_arg, SettingCommandType type)
 		cmd->type = INVALID_SETTING_COMMAND;
 		return 1;
 	}
+	cmd->type = type;
 	if(is_valid_int(cmd_arg)){
-		cmd->type = type;
 		int *arg = (int *)malloc(sizeof(int));
 		if(!arg){
 			free(cmd);

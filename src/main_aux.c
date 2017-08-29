@@ -107,8 +107,8 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 				return INVALID_ARGUMENT;
 			}
 		case DIFFICULTY:
-			if(cmd->valid_arg && settings->mode == ONE_PLAYER){
-				if(*args >= 1 && *args <= 4){
+			if(settings->mode == ONE_PLAYER){
+				if(cmd->valid_arg && *args >= 1 && *args <= 4){
 					settings->difficulty = *args;
 					break;
 				} else {
@@ -117,8 +117,8 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 			}
 			return INVALID_COMMAND;
 		case USER_COLOR:
-			if(cmd->valid_arg && settings->mode == ONE_PLAYER){
-				if(*args == 1 || *args == 0){
+			if(settings->mode == ONE_PLAYER){
+				if(cmd->valid_arg && (*args == 1 || *args == 0)){
 					settings->player1_color = *args;
 					break;
 				} else {

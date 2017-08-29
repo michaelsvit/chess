@@ -159,8 +159,8 @@ void print_settings(GameSettings *settings){
 	printf("SETTINGS:\n");
 	if(settings->mode == ONE_PLAYER){
 		printf("GAME_MODE: 1\n");
-		printf("DIFFICULTY_LVL: %d", settings->difficulty);
-		printf("USER_CLR: %s", (settings->player1_color == WHITE) ? "WHITE" : "BLACK");
+		printf("DIFFICULTY_LVL: %d\n", settings->difficulty);
+		printf("USER_CLR: %s\n", (settings->player1_color == WHITE) ? "WHITE" : "BLACK");
 	} else {
 		printf("GAME_MODE: 2\n");
 	}

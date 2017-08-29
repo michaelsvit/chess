@@ -253,7 +253,7 @@ int *parse_position(int *valid_arg){
 	char *arg = strtok(NULL, DELIMITER);
 	if(!arg) return pos;
 
-	if(arg[0] != '<' || !strchr(arg, ',') || arg[strlen(arg)] != '>') return pos;
+	if(arg[0] != '<' || !strchr(arg, ',') || arg[strlen(arg)-1] != '>') return pos;
 	*valid_arg = 1;
 	if(strlen(arg) != 5
 			|| !(arg[1] >= '1' && arg[1] <= '8')

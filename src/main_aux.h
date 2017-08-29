@@ -20,6 +20,27 @@ typedef enum {
 	GAME
 } State;
 
+typedef struct {
+	int quit;
+	int print_settings_prompt;
+	int print_game_prompt;
+	State state;
+} Indicators;
+
+/*
+ * Initialize indicators required for game management.
+ * @param user_input 	 buffer for user input
+ * @param settings   	 settings struct to initialize
+ * @param indicators 	 indicators struct to initialize
+ */
+int init_game_variables(char **user_input, GameSettings **settings, Indicators **indicators);
+
+/*
+ * Create and initialize an indicators struct for main function management.
+ * @return	pointer to indicators struct on success, NULL otherwise
+ */
+Indicators *create_indicators();
+
 /*
  * Get command input from user.
  * @param prompt 	 prompt to display to user
@@ -51,7 +72,7 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd);
  * @param state    	 game state
  * @param quit     	 flag indicating to quit the game
  */
-void handle_game_message(Game **game, EngineMessage msg, GameCommand *cmd, GameSettings **settings, State *state, int *quit);
+void handle_game_message(Game **game, EngineMessage msg, GameCommand *cmd, GameSettings **settings, Indicators *indicators);
 
 /*
  * Execute given setting command.
@@ -75,7 +96,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
  * @param state    	 game state
  * @param quit     	 flag indicating to quit the game
  */
-void handle_settings_message(Game **game, EngineMessage msg, SettingCommand *cmd, GameSettings **settings, State *state, int *quit);
+void handle_settings_message(Game **game, EngineMessage msg, SettingCommand *cmd, GameSettings **settings, Indicators *indicators);
 
 /*
  * Handle game engine messages.
@@ -84,7 +105,7 @@ void handle_settings_message(Game **game, EngineMessage msg, SettingCommand *cmd
  * @param state    	 pointer to variable holding game state
  * @param quit     	 pointer to game quit flag
  */
-void handle_message(EngineMessage msg, Game **game, GameSettings **settings, State *state, int *quit);
+void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Indicators *indicators);
 
 /*
  * Create default game settings.

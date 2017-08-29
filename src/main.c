@@ -3,23 +3,19 @@
 #include "main_aux.h"
 
 int main(/* int argc, char *argv[] */){
-	char *user_input = (char *)malloc(INPUT_SIZE);
-	GameSettings *settings = create_settings();
-	if(!settings || !user_input){
-		free(settings);
-		free(user_input);
+	char *user_input;
+	GameSettings *settings;
+	Indicators *indicators;
+	if(!init_game_variables(&user_input, &settings, &indicators)){
 		print_error(MEMORY);
+		print_generic_message(QUIT);
 		return 0;
 	}
-	int quit = 0;
-	int settings_prompt_printed = 0;
-	int print_game_user_prompt = 1; /* Used to determine if last command was invalid */
-	State state = SETTINGS;
 	Game *game;
 	do {
 		EngineMessage msg;
-		if(state == GAME){
-			if(print_game_user_prompt) print_board(game);
+		if(indicators->state == GAME){
+			if(indicators->print_game_prompt) print_board(game);
 			print_player_color(game);
 			get_user_input(GAME_PROMPT, user_input, INPUT_SIZE);
 			GameCommand *cmd = parse_game_command(user_input);
@@ -29,18 +25,18 @@ int main(/* int argc, char *argv[] */){
 			}
 			msg = execute_game_command(game, cmd);
 			if(msg != SUCCESS){
-				print_game_user_prompt = 0;
-				handle_game_message(&game, msg, cmd, &settings, &state, &quit);
+				indicators->print_game_prompt = 0;
+				handle_game_message(&game, msg, cmd, &settings, indicators);
 			} else {
-				print_game_user_prompt = 1;
+				indicators->print_game_prompt = 1;
 			}
 			free(cmd->arg);
 			free(cmd);
 		} else {
 			char *prompt = NULL;
-			if(print_settings_prompt){
+			if(indicators->print_settings_prompt){
 				prompt = SETTINGS_PROMPT;
-				print_settings_prompt = 0;
+				indicators->print_settings_prompt = 0;
 			}
 			get_user_input(prompt, user_input, INPUT_SIZE);
 			SettingCommand *cmd = parse_setting_command(user_input);
@@ -51,11 +47,11 @@ int main(/* int argc, char *argv[] */){
 			}
 			msg = execute_setting_command(settings, cmd);
 			if(msg != SUCCESS)
-				handle_settings_message(&game, msg, cmd, &settings, &state, &quit);
+				handle_settings_message(&game, msg, cmd, &settings, indicators);
 			free(cmd->arg);
 			free(cmd);
 		}
-	} while (!quit);
+	} while (!indicators->quit);
 
 	free(user_input);
 	return 0;

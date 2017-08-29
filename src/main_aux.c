@@ -3,6 +3,29 @@
 #include <string.h>
 #include "main_aux.h"
 
+int init_game_variables(char **user_input, GameSettings **settings, Indicators **indicators){
+	*user_input = (char *)malloc(INPUT_SIZE);
+	*settings = create_settings();
+	*indicators = create_indicators();
+	if(!*user_input || !*settings || !*indicators){
+		free(user_input);
+		free(settings);
+		free(indicators);
+		return 0;
+	}
+	return 1;
+}
+
+Indicators *create_indicators(){
+	Indicators *indicators = (Indicators *)malloc(sizeof(Indicators));
+	if(!indicators) return NULL;
+	indicators->quit = 0;
+	indicators->print_game_prompt = 1;
+	indicators->print_settings_prompt = 1;
+	indicators->state = SETTINGS;
+	return indicators;
+}
+
 void get_user_input(const char* prompt, char* buf, int len) {
 	if(prompt) printf("%s", prompt);
 	fgets(buf, len, stdin);
@@ -59,13 +82,12 @@ void handle_game_message(
 		EngineMessage msg,
 		GameCommand *cmd,
 		GameSettings **settings,
-		State *state,
-		int *quit){
+		Indicators *indicators){
 	if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE || msg == EMPTY_HISTORY){
 		print_game_invalid_arg(*game, msg, cmd);
 	} else {
 		print_generic_message(msg);
-		handle_message(msg, game, settings, state, quit);
+		handle_message(msg, game, settings, indicators);
 	}
 }
 
@@ -124,17 +146,16 @@ void handle_settings_message(
 		EngineMessage msg,
 		SettingCommand *cmd,
 		GameSettings **settings,
-		State *state,
-		int *quit){
+		Indicators *indicators){
 	if(msg == INVALID_ARGUMENT){
 		print_settings_invalid_arg(cmd);
 	} else {
 		print_generic_message(msg);
-		handle_message(msg, game, settings, state, quit);
+		handle_message(msg, game, settings, indicators);
 	}
 }
 
-void handle_message(EngineMessage msg, Game **game, GameSettings **settings, State *state, int *quit){
+void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Indicators *indicators){
 	switch(msg){
 		case SUCCESS:
 			return;
@@ -154,20 +175,26 @@ void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Sta
 
 			return;
 		case START_GAME:
-			*state = GAME;
+			indicators->state = GAME;
 			*game = create_game(*settings);
 			free(*settings);
-			if(!*game) *quit = 1;
+			if(!*game){
+				print_error(MEMORY);
+				indicators->quit = 1;
+			}
 			return;
 		case RESTART:
 			*settings = create_settings();
-			if(!*settings) *quit = 1;
-			*state = SETTINGS;
+			if(!*settings){
+				print_error(MEMORY);
+				indicators->quit = 1;
+			}
+			indicators->state = SETTINGS;
 			return;
 		case QUIT:
 			/* Print quit message */
-			(*state == GAME) ? destroy_game(*game) : free(*settings);
-			*quit = 1;
+			(indicators->state == GAME) ? destroy_game(*game) : free(*settings);
+			indicators->quit = 1;
 			return;
 	}
 }

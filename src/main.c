@@ -31,7 +31,7 @@ int main(/* int argc, char *argv[] */){
 			free(cmd->arg);
 			free(cmd);
 		} else {
-			char *prompt = settings_prompt_printed ? SETTINGS_PROMPT : NULL;
+			char *prompt = !settings_prompt_printed ? SETTINGS_PROMPT : NULL;
 			get_user_input(prompt, user_input, INPUT_SIZE);
 			SettingCommand *cmd = parse_setting_command(user_input);
 			if(!cmd){

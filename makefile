@@ -29,7 +29,7 @@ obj/main.o: src/main.c src/main_aux.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
 # General rule to create object files
-obj/%.o: src/%.c
+obj/%.o: src/%.c src/%.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
 clean:

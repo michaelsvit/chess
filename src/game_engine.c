@@ -180,15 +180,8 @@ EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *pie
 int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move){
 	Game *copy = copy_game(game);
 	if(!copy) return -1;
-	SPArrayList *same_color_pieces;
-	SPArrayList *enemy_pieces;
-	if(piece->color == WHITE){
-		same_color_pieces = copy->white_pieces;
-		enemy_pieces = copy->black_pieces;
-	} else {
-		same_color_pieces = copy->black_pieces;
-		enemy_pieces = copy->white_pieces;
-	}
+	SPArrayList *enemy_pieces = (piece->color == WHITE) ? copy->black_pieces : copy->white_pieces;
+
 	/* Get copy of piece at given position */
 	GamePiece *piece_copy = copy->board[piece->pos_y][piece->pos_x];
 	/* Get copy of piece to be moved */
@@ -471,15 +464,9 @@ int is_in_check_state(Game *game){
 }
 
 int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int pos_y){
-	SPArrayList *same_color_pieces;
-	SPArrayList *enemy_pieces;
-	if(piece->color == WHITE){
-		same_color_pieces = game->white_pieces;
-		enemy_pieces = game->black_pieces;
-	} else {
-		same_color_pieces = game->black_pieces;
-		enemy_pieces = game->white_pieces;
-	}
+	SPArrayList *same_color_pieces = (piece->color == WHITE) ?
+		game->white_pieces : game->black_pieces;
+
 	GamePiece *king = find_king_piece(same_color_pieces);
 	GameMove *move = create_move(piece->pos_x, piece->pos_y, pos_x, pos_y);
 	if(!move) return -1;

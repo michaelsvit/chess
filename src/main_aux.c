@@ -38,10 +38,14 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 	int *args = (int *)cmd->arg;
 	switch (cmd->type) {
 		case MOVE:
-			return move_game_piece(game, args[0], args[1], args[2], args[3]);
+			if(cmd->valid_arg){
+				return move_game_piece(game, args[0], args[1], args[2], args[3]);
+			} else {
+				return INVALID_ARGUMENT;
+			}
 		case GET_MOVES:
 			{
-				if(args[0] < 0 || args[0]>= BOARD_SIZE || args[1] < 0 || args[1] >= BOARD_SIZE)
+				if(!cmd->valid_arg)
 					return INVALID_ARGUMENT;
 				SPArrayList *moves;
 				EngineMessage msg = get_possible_moves(

@@ -54,10 +54,13 @@ void print_settings_invalid_arg(SettingCommand *cmd){
 	switch(cmd->type){
 		case GAME_MODE:
 			printf("Wrong game mode\n");
+			break;
 		case DIFFICULTY:
 			printf("Expert level not supported, please choose a value between 1 to 4:\n");
+			break;
 		case LOAD:
 			printf("Error: File doesn’t exist or cannot be opened\n");
+			break;
 		default:
 			break;
 	}

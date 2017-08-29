@@ -13,12 +13,13 @@ int main(/* int argc, char *argv[] */){
 	}
 	int quit = 0;
 	int settings_prompt_printed = 0;
+	int print_game_user_prompt = 1; /* Used to determine if last command was invalid */
 	State state = SETTINGS;
 	Game *game;
 	do {
 		EngineMessage msg;
 		if(state == GAME){
-			print_board(game);
+			if(print_game_user_prompt) print_board(game);
 			print_player_color(game);
 			get_user_input(GAME_PROMPT, user_input, INPUT_SIZE);
 			GameCommand *cmd = parse_game_command(user_input);
@@ -27,7 +28,12 @@ int main(/* int argc, char *argv[] */){
 				break;
 			}
 			msg = execute_game_command(game, cmd);
-			if(msg != SUCCESS) handle_game_message(&game, msg, cmd, &settings, &state, &quit);
+			if(msg != SUCCESS){
+				print_game_user_prompt = 0;
+				handle_game_message(&game, msg, cmd, &settings, &state, &quit);
+			} else {
+				print_game_user_prompt = 1;
+			}
 			free(cmd->arg);
 			free(cmd);
 		} else {

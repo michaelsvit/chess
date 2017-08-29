@@ -202,7 +202,7 @@ int print_possible_moves(Game *game, SPArrayList *moves){
 	}
 	/* Print generated representations */
 	for (int i = 0; i < count; ++i) {
-		printf("%s\n", spArrayListGetAt(strings, i));
+		printf("%s\n", (char *)spArrayListGetAt(strings, i));
 	}
 	spArrayListDestroy(list);
 	spArrayListDestroy(strings);

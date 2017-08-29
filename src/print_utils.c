@@ -50,6 +50,19 @@ void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd){
 	}
 }
 
+void print_settings_invalid_arg(SettingCommand *cmd){
+	switch(cmd->type){
+		case GAME_MODE:
+			printf("Wrong game mode\n");
+		case DIFFICULTY:
+			printf("Expert level not supported, please choose a value between 1 to 4:\n");
+		case LOAD:
+			printf("Error: File doesn’t exist or cannot be opened\n");
+		default:
+			break;
+	}
+}
+
 void print_generic_message(EngineMessage msg){
 	switch(msg){
 		case MALLOC_FAILURE:

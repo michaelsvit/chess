@@ -89,7 +89,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 					return INVALID_ARGUMENT;
 				}
 			}
-			break;
+			return INVALID_COMMAND;
 		case USER_COLOR:
 			if(settings->mode == ONE_PLAYER){
 				if(*args == 1 || *args == 0){
@@ -99,7 +99,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 					return INVALID_ARGUMENT;
 				}
 			}
-			break;
+			return INVALID_COMMAND;
 		case LOAD:
 			/* TODO: Implement */
 			break;
@@ -126,7 +126,12 @@ void handle_settings_message(
 		GameSettings **settings,
 		State *state,
 		int *quit){
-
+	if(msg == INVALID_ARGUMENT){
+		print_settings_invalid_arg(cmd);
+	} else {
+		print_generic_message(msg);
+		handle_message(msg, game, settings, state, quit);
+	}
 }
 
 void handle_message(EngineMessage msg, Game **game, GameSettings **settings, State *state, int *quit){

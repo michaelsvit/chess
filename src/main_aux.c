@@ -190,6 +190,7 @@ void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Ind
 				indicators->quit = 1;
 			}
 			indicators->state = SETTINGS;
+			indicators->print_settings_prompt = 1;
 			return;
 		case QUIT:
 			/* Print quit message */

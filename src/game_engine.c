@@ -745,9 +745,10 @@ int find_range_end(Game *game, int src_x, int src_y, int inc_x, int inc_y){
 		i += inc_x;
 		j += inc_y;
 	}
+	/* Subtract inc value when returning to offset initial distance from piece position */
 	if (inc_x == 0 || inc_y < 0) {
-		return j;
+		return j+inc_y;
 	} else {
-		return i;
+		return i+inc_x;
 	}
 }

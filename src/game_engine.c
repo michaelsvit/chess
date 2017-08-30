@@ -512,6 +512,8 @@ EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, i
 	GameMove *move = create_move(src_x, src_y, dst_x, dst_y);
 	if(!move) return MALLOC_FAILURE;
 	spArrayListAddFirst(game->move_history, move);
+	GamePiece *piece = game->board[dst_y][dst_x];
+	spArrayListAddLast(game->removed_pieces, piece);
 	return SUCCESS;
 }
 

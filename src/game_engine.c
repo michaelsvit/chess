@@ -571,11 +571,10 @@ SPArrayList *get_rook_moves(Game *game, GamePiece *piece){
 	if(!moves) return NULL;
 
 	/* Add moves along column */
-	int start_index = find_range_end(game, piece->pos_x, piece->pos_y, 0, -1);
-	int end_index = find_range_end(game, piece->pos_x, piece->pos_y, 0, 1);
+	int start_index = find_range_end(game, piece->pos_x, piece->pos_y-1, 0, -1);
+	int end_index = find_range_end(game, piece->pos_x, piece->pos_y+1, 0, 1);
 	/* TODO: Optimize for un-checked state if needed */
 	for(int i = start_index; i <= end_index; i++){
-		if(i == 0) continue;
 		if(is_legal_move(game, piece, piece->pos_x, i)){
 			GameMove *move = create_move(
 					piece->pos_x,
@@ -591,10 +590,9 @@ SPArrayList *get_rook_moves(Game *game, GamePiece *piece){
 	}
 
 	/* Add moves along row */
-	start_index = find_range_end(game, piece->pos_x, piece->pos_y, -1, 0);
-	end_index = find_range_end(game, piece->pos_x, piece->pos_y, 1, 0);
+	start_index = find_range_end(game, piece->pos_x-1, piece->pos_y, -1, 0);
+	end_index = find_range_end(game, piece->pos_x+1, piece->pos_y, 1, 0);
 	for(int i = start_index; i <= end_index; i++){
-		if(i == 0) continue;
 		if(is_legal_move(game, piece, i, piece->pos_y)){
 			GameMove *move = create_move(
 					piece->pos_x,
@@ -652,10 +650,9 @@ SPArrayList *get_bishop_moves(Game *game, GamePiece *piece){
 	if(!moves) return NULL;
 
 	/* Add moves along upward diagonal */
-	int start_index = find_range_end(game, piece->pos_x, piece->pos_y, -1, -1);
-	int end_index = find_range_end(game, piece->pos_x, piece->pos_y, 1, 1);
+	int start_index = find_range_end(game, piece->pos_x-1, piece->pos_y-1, -1, -1);
+	int end_index = find_range_end(game, piece->pos_x+1, piece->pos_y+1, 1, 1);
 	for(int i = start_index; i <= end_index; i++){
-		if(i == 0) continue;
 		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
 			GameMove *move = create_move(
 					piece->pos_x,
@@ -671,10 +668,9 @@ SPArrayList *get_bishop_moves(Game *game, GamePiece *piece){
 	}
 
 	/* Add moves along downward diagonal */
-	start_index = find_range_end(game, piece->pos_x, piece->pos_y, -1, 1);
-	end_index = find_range_end(game, piece->pos_x, piece->pos_y, 1, -1);
+	start_index = find_range_end(game, piece->pos_x-1, piece->pos_y+1, -1, 1);
+	end_index = find_range_end(game, piece->pos_x+1, piece->pos_y-1, 1, -1);
 	for(int i = start_index; i <= end_index; i++){
-		if(i == 0) continue;
 		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
 			GameMove *move = create_move(
 					piece->pos_x,

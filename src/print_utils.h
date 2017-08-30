@@ -11,7 +11,7 @@
 #define GAME_PROMPT "player - enter your move:\n"
 #define SETTINGS_PROMPT "Specify game setting or type 'start' to begin a game with the current setting:\n"
 
-#define POS_REPR_MAX_LENGTH 5
+#define POS_REPR_MAX_LENGTH 7
 
 typedef enum {
 	MEMORY

@@ -137,7 +137,7 @@ char get_piece_repr(GamePiece *piece){
 	char repr = (piece->color == WHITE) ? 'a' : 'A';
 	switch(piece->type){
 		case PAWN:
-			repr += 'p'-'a';
+			repr += 'm'-'a';
 			break;
 		case ROOK:
 			repr += 'r'-'a';

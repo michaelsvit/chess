@@ -302,7 +302,12 @@ int is_occupied_position(Game *game, int pos_x, int pos_y){
 	return game->board[pos_y][pos_x] != NULL;
 }
 
+int is_valid_position(int pos_x, int pos_y){
+	return pos_x >= 0 && pos_x < BOARD_SIZE && pos_y >= 0 && pos_y < BOARD_SIZE;
+}
+
 int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
+	if(!is_valid_position(pos_x, pos_y)) return 0;
 	/* If target position is occupied, make sure target piece is of different color */
 	GamePiece *target_piece = game->board[pos_y][pos_x];
 	if(target_piece && target_piece->color == piece->color) return 0;

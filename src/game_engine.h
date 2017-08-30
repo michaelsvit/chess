@@ -216,6 +216,12 @@ EngineMessage add_game_pieces_set(Game *game, Color color);
 int is_occupied_position(Game *game, int pos_x, int pos_y);
 
 /*
+ * Check if given position is a valid board position.
+ * @return 	 true iff position is valid
+ */
+int is_valid_position(int pos_x, int pos_y);
+
+/*
  * Check whether a given move is a legal chess move.
  * @precond     	 assumes arguments are valid
  * @param game  	 game instance

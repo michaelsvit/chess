@@ -191,13 +191,11 @@ int print_possible_moves(Game *game, SPArrayList *moves){
 	/* Create list of string representations of move destinations */
 	SPArrayList *strings = spArrayListCreate(POS_REPR_MAX_LENGTH + 1, count);
 	if(!strings){
-		spArrayListDestroy(list);
 		return 0;
 	}
 	for (int i = 0; i < count; ++i) {
 		char *repr = get_destination_repr(game, spArrayListGetAt(list, i));
 		if(!repr){
-			spArrayListDestroy(list);
 			spArrayListDestroy(strings);
 			return 0;
 		}
@@ -207,7 +205,6 @@ int print_possible_moves(Game *game, SPArrayList *moves){
 	for (int i = 0; i < count; ++i) {
 		printf("%s\n", (char *)spArrayListGetAt(strings, i));
 	}
-	spArrayListDestroy(list);
 	spArrayListDestroy(strings);
 	return 1;
 }

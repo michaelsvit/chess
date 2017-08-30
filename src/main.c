@@ -54,5 +54,6 @@ int main(/* int argc, char *argv[] */){
 	} while (!indicators->quit);
 
 	free(user_input);
+	free(indicators);
 	return 0;
 }

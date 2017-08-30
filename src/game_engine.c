@@ -262,8 +262,6 @@ void remove_game_piece(Game *game, GamePiece *piece){
 		spArrayListRemoveItem(game->black_pieces, piece);
 	}
 
-	/* Add piece to list of removed pieces */
-	spArrayListAddFirst(game->removed_pieces, piece);
 	/* Remove piece from game board */
 	game->board[piece->pos_y][piece->pos_x] = NULL;
 }
@@ -668,7 +666,7 @@ SPArrayList *get_bishop_moves(Game *game, GamePiece *piece){
 	}
 
 	/* Add moves along downward diagonal */
-	start_index = find_range_end(game, piece->pos_x-1, piece->pos_y+1, -1, 1);
+	start_index = find_range_end(game, piece->pos_x+1, piece->pos_y+1, 1, 1);
 	end_index = find_range_end(game, piece->pos_x+1, piece->pos_y-1, 1, -1);
 	for(int i = start_index; i <= end_index; i++){
 		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
@@ -709,6 +707,8 @@ SPArrayList *get_queen_moves(Game *game, GamePiece *piece){
 	for(int i = 0; i < spArrayListSize(bishop_moves); i++){
 		spArrayListAddLast(moves, spArrayListGetAt(bishop_moves, i));
 	}
+	spArrayListDestroy(rook_moves);
+	spArrayListDestroy(bishop_moves);
 	return moves;
 }
 

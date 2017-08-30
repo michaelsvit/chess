@@ -569,11 +569,12 @@ SPArrayList *get_rook_moves(Game *game, GamePiece *piece){
 	if(!moves) return NULL;
 
 	/* Add moves along column */
-	int start_index = find_range_end(game, piece->pos_x, piece->pos_y-1, 0, -1);
-	int end_index = find_range_end(game, piece->pos_x, piece->pos_y+1, 0, 1);
+	int start_index = find_range_end(game, ROOK, piece->pos_x, piece->pos_y, 0, -1);
+	int end_index = find_range_end(game, ROOK, piece->pos_x, piece->pos_y, 0, 1);
 	/* TODO: Optimize for un-checked state if needed */
 	for(int i = start_index; i <= end_index; i++){
-		if(is_legal_move(game, piece, piece->pos_x, i)){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, piece->pos_x, piece->pos_y+i)){
 			GameMove *move = create_move(
 					piece->pos_x,
 					piece->pos_y,
@@ -588,10 +589,11 @@ SPArrayList *get_rook_moves(Game *game, GamePiece *piece){
 	}
 
 	/* Add moves along row */
-	start_index = find_range_end(game, piece->pos_x-1, piece->pos_y, -1, 0);
-	end_index = find_range_end(game, piece->pos_x+1, piece->pos_y, 1, 0);
+	start_index = find_range_end(game, ROOK, piece->pos_x, piece->pos_y, -1, 0);
+	end_index = find_range_end(game, ROOK, piece->pos_x, piece->pos_y, 1, 0);
 	for(int i = start_index; i <= end_index; i++){
-		if(is_legal_move(game, piece, i, piece->pos_y)){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, piece->pos_x+i, piece->pos_y)){
 			GameMove *move = create_move(
 					piece->pos_x,
 					piece->pos_y,
@@ -648,9 +650,10 @@ SPArrayList *get_bishop_moves(Game *game, GamePiece *piece){
 	if(!moves) return NULL;
 
 	/* Add moves along upward diagonal */
-	int start_index = find_range_end(game, piece->pos_x-1, piece->pos_y-1, -1, -1);
-	int end_index = find_range_end(game, piece->pos_x+1, piece->pos_y+1, 1, 1);
+	int start_index = find_range_end(game, BISHOP, piece->pos_x, piece->pos_y, -1, -1);
+	int end_index = find_range_end(game, BISHOP, piece->pos_x, piece->pos_y, 1, 1);
 	for(int i = start_index; i <= end_index; i++){
+		if(i == 0) continue;
 		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
 			GameMove *move = create_move(
 					piece->pos_x,
@@ -666,15 +669,16 @@ SPArrayList *get_bishop_moves(Game *game, GamePiece *piece){
 	}
 
 	/* Add moves along downward diagonal */
-	start_index = find_range_end(game, piece->pos_x+1, piece->pos_y+1, 1, 1);
-	end_index = find_range_end(game, piece->pos_x+1, piece->pos_y-1, 1, -1);
+	start_index = find_range_end(game, BISHOP, piece->pos_x, piece->pos_y, -1, 1);
+	end_index = find_range_end(game, BISHOP, piece->pos_x, piece->pos_y, 1, -1);
 	for(int i = start_index; i <= end_index; i++){
-		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y + i)){
+		if(i == 0) continue;
+		if(is_legal_move(game, piece, piece->pos_x + i, piece->pos_y - i)){
 			GameMove *move = create_move(
 					piece->pos_x,
 					piece->pos_y,
 					piece->pos_x+i,
-					piece->pos_y+i);
+					piece->pos_y-i);
 			if(!move){
 				spArrayListDestroy(moves);
 				return NULL;
@@ -707,7 +711,9 @@ SPArrayList *get_queen_moves(Game *game, GamePiece *piece){
 	for(int i = 0; i < spArrayListSize(bishop_moves); i++){
 		spArrayListAddLast(moves, spArrayListGetAt(bishop_moves, i));
 	}
+	spArrayListClear(rook_moves);
 	spArrayListDestroy(rook_moves);
+	spArrayListClear(bishop_moves);
 	spArrayListDestroy(bishop_moves);
 	return moves;
 }
@@ -736,19 +742,25 @@ SPArrayList *get_king_moves(Game *game, GamePiece *piece){
 	return moves;
 }
 
-int find_range_end(Game *game, int src_x, int src_y, int inc_x, int inc_y){
-	int i = 0, j = 0;
-	/* Increment counters as long as board edge has not been reached or we found a game piece,
-	whichever comes first */
-	while(src_y+j >= 0 && src_y+j < BOARD_SIZE && src_x+i >= 0 && src_x+i < BOARD_SIZE
-			&& game->board[src_y+i][src_x+j] == NULL){
-		i += inc_x;
-		j += inc_y;
-	}
-	/* Subtract inc value when returning to offset initial distance from piece position */
-	if (inc_x == 0 || inc_y < 0) {
-		return j+inc_y;
+int find_range_end(Game *game, PieceType type, int src_x, int src_y, int inc_x, int inc_y){
+	int i = inc_x, j = inc_y;
+	if(is_valid_position(src_x+i, src_y+j)){
+		/* Increment counters until board edge has been reached or we found a game piece,
+		whichever comes first */
+		while(is_valid_position(src_x+i, src_y+j)
+				&& !is_occupied_position(game, src_x+i, src_y+j)){
+			i += inc_x;
+			j += inc_y;
+		}
 	} else {
-		return i+inc_x;
+		/* There are no possible moves in this direction */
+		i = -i;
+		j = -j;
+	}
+	/* Return index relevant to game piece type */
+	if(type == ROOK){
+		return (inc_x == 0) ? j : i;
+	} else {
+		return i;
 	}
 }

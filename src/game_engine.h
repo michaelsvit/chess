@@ -423,5 +423,5 @@ SPArrayList *get_king_moves(Game *game, GamePiece *piece);
  * @param inc_y 	 row direction of search
  * @return      	 offset from given position
  */
-int find_range_end(Game *game, int src_x, int src_y, int inc_x, int inc_y);
+int find_range_end(Game *game, PieceType type, int src_x, int src_y, int inc_x, int inc_y);
 #endif

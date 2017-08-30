@@ -342,7 +342,13 @@ int is_legal_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 	}
 
 	/* Make sure moving the piece doesn't end with a check state for allied king */
-	int result = is_check_state_created_allied(game, piece, pos_x, pos_y);
+	int result;
+	if(target_piece && target_piece->type == KING){
+		/* Prevent loop, allied check is impossible in this state */
+		result = 0;
+	} else {
+		result = is_check_state_created_allied(game, piece, pos_x, pos_y);
+	}
 	if(result){
 		return 0;
 	} else if (result == -1) {

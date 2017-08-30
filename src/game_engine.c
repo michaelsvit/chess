@@ -131,8 +131,11 @@ EngineMessage undo_move(Game *game, GameMove **removed_move){
 	spArrayListRemoveFirst(game->removed_pieces);
 
 	/* Restore previous state */
-	SPArrayList *pieces_set = (removed_piece->color == WHITE) ? game->white_pieces : game->black_pieces;
-	spArrayListAddLast(pieces_set, removed_piece);
+	if(removed_piece){
+		SPArrayList *pieces_set = (removed_piece->color == WHITE) ?
+			game->white_pieces : game->black_pieces;
+		spArrayListAddLast(pieces_set, removed_piece);
+	}
 	move_piece_to_position(game,
 			game->board[move->dst_y][move->dst_x],
 			move->src_x,
@@ -180,7 +183,8 @@ EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *pie
 int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move){
 	Game *copy = copy_game(game);
 	if(!copy) return -1;
-	SPArrayList *enemy_pieces = (piece->color == WHITE) ? copy->black_pieces : copy->white_pieces;
+	SPArrayList *enemy_pieces = (piece->color == WHITE) ?
+		copy->black_pieces : copy->white_pieces;
 
 	/* Get copy of piece at given position */
 	GamePiece *piece_copy = copy->board[piece->pos_y][piece->pos_x];
@@ -188,6 +192,11 @@ int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move)
 	GamePiece *src_piece_copy = copy->board[move->src_y][move->src_x];
 
 	/* Move copied source piece to move destination */
+	if(is_occupied_position(copy, move->dst_x, move->dst_y)){
+		GamePiece *dst_piece = copy->board[move->dst_y][move->dst_x];
+		remove_game_piece(copy, dst_piece);
+		free(dst_piece);
+	}
 	move_piece_to_position(copy, src_piece_copy, move->dst_x, move->dst_y);
 	copy->current_player = !copy->current_player;
 
@@ -485,7 +494,7 @@ int is_check_state_created_enemy(Game *game, GamePiece *piece){
 }
 
 void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y){
-	if(is_occupied_position(game, pos_x, pos_x)){
+	if(is_occupied_position(game, pos_x, pos_y)){
 		remove_game_piece(game, game->board[pos_y][pos_x]);
 	}
 
@@ -516,7 +525,7 @@ EngineMessage add_move_to_history(Game *game, int src_x, int src_y, int dst_x, i
 	if(!move) return MALLOC_FAILURE;
 	spArrayListAddFirst(game->move_history, move);
 	GamePiece *piece = game->board[dst_y][dst_x];
-	if(piece) spArrayListAddLast(game->removed_pieces, piece);
+	spArrayListAddFirst(game->removed_pieces, piece);
 	return SUCCESS;
 }
 

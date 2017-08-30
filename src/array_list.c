@@ -33,6 +33,10 @@ SPArrayList* spArrayListCopy(SPArrayList* src)
 	if(!arr) return NULL;
 	arr->actualSize = src->actualSize;
 	for(int i = 0; i < src->actualSize; i++){
+		if(!src->elements[i]){
+			arr->elements[i] = NULL;
+			continue;
+		}
 		void *item = malloc(src->elemSize);
 		memcpy(item, src->elements[i], src->elemSize);
 		arr->elements[i] = item;

@@ -38,7 +38,7 @@ void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd){
 			break;
 		case UNDO:
 			if(msg == INVALID_ARGUMENT){
-				printf("Undo command not avaialbe in 2 players mode\n");
+				printf("Undo command not available in 2 players mode\n");
 			} else if (msg == EMPTY_HISTORY) {
 				printf("Empty history, move cannot be undone\n");
 			}

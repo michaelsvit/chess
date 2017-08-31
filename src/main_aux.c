@@ -11,6 +11,8 @@ ProgramState *create_program_state(){
 }
 
 void destroy_program_state(ProgramState *state){
+	(state->indicators->run_state == GAME) ?
+		destroy_game(state->game) : free(state->settings);
 	free(state->indicators);
 	free(state->user_input);
 	free(state);
@@ -139,7 +141,6 @@ void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cm
 	if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE || msg == EMPTY_HISTORY){
 		print_game_invalid_arg(state->game, msg, cmd);
 	} else {
-		print_generic_message(msg);
 		handle_message(state, msg);
 	}
 }
@@ -198,54 +199,43 @@ void handle_settings_message(ProgramState *state, EngineMessage msg, SettingComm
 	if(msg == INVALID_ARGUMENT){
 		print_settings_invalid_arg(cmd);
 	} else {
-		print_generic_message(msg);
 		handle_message(state, msg);
 	}
 }
 
 void handle_message(ProgramState *state, EngineMessage msg){
 	switch(msg){
-		case SUCCESS:
-			return;
 		case MALLOC_FAILURE:
-
+			state->indicators->quit = 1;
+			print_generic_message(msg);
 			return;
 		case INVALID_COMMAND:
-
-			return;
-		case INVALID_ARGUMENT:
-
-			return;
-		case ILLEGAL_MOVE:
-
-			return;
-		case EMPTY_HISTORY:
-
+			print_generic_message(msg);
 			return;
 		case START_GAME:
 			state->indicators->run_state = GAME;
 			state->game = create_game(state->settings);
 			free(state->settings);
 			if(!state->game){
-				print_error(MEMORY);
+				print_generic_message(MALLOC_FAILURE);
 				state->indicators->quit = 1;
 			}
 			return;
 		case RESTART:
 			state->settings = create_settings();
 			if(!state->settings){
-				print_error(MEMORY);
+				print_generic_message(MALLOC_FAILURE);
 				state->indicators->quit = 1;
 			}
 			state->indicators->run_state = SETTINGS;
 			state->indicators->print_settings_prompt = 1;
+			print_generic_message(msg);
 			return;
 		case QUIT:
-			/* Print quit message */
-			(state->indicators->run_state == GAME) ?
-				destroy_game(state->game) : free(state->settings);
 			state->indicators->quit = 1;
 			return;
+		default:
+			break;
 	}
 }
 

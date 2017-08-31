@@ -7,7 +7,7 @@ void print_player_color(Game *game){
 	printf("%s ", (game->player_color[game->current_player] == WHITE) ? "white" : "black");
 }
 
-void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd){
+void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd){
 	switch(cmd->type){
 		case MOVE:
 			if(msg == INVALID_ARGUMENT){
@@ -37,20 +37,18 @@ void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd){
 		case SAVE:
 			break;
 		case UNDO:
-			if(msg == INVALID_ARGUMENT){
+			if(msg == INVALID_COMMAND){
 				printf("Undo command not available in 2 players mode\n");
 			} else if (msg == EMPTY_HISTORY) {
 				printf("Empty history, move cannot be undone\n");
 			}
 			break;
-		case RESET:
-		case INVALID_GAME_COMMAND:
-		case GAME_QUIT:
+		default:
 			break;
 	}
 }
 
-void print_settings_invalid_arg(SettingCommand *cmd){
+void print_settings_error(SettingCommand *cmd){
 	switch(cmd->type){
 		case GAME_MODE:
 			printf("Wrong game mode\n");
@@ -69,10 +67,10 @@ void print_settings_invalid_arg(SettingCommand *cmd){
 void print_generic_message(EngineMessage msg){
 	switch(msg){
 		case MALLOC_FAILURE:
-			printf("Memory allocation failure\n");
+			printf("ERROR: Memory allocation failure\n");
 			break;
 		case INVALID_COMMAND:
-			printf("Invalid command\n");
+			printf("ERROR: Invalid command\n");
 			break;
 		case RESTART:
 			printf("Restarting...\n");
@@ -80,14 +78,6 @@ void print_generic_message(EngineMessage msg){
 		case QUIT:
 			printf("Exiting...\n");
 		default:
-			break;
-	}
-}
-
-void print_error(ErrorType error){
-	switch(error){
-		case MEMORY:
-			printf("ERROR: Memory allocation failure\n");
 			break;
 	}
 }

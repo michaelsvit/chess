@@ -138,8 +138,11 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 }
 
 void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cmd){
-	if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE || msg == EMPTY_HISTORY){
-		print_game_invalid_arg(state->game, msg, cmd);
+	if((msg == INVALID_COMMAND && cmd->type != INVALID_GAME_COMMAND)
+			|| msg == INVALID_ARGUMENT
+			|| msg == ILLEGAL_MOVE
+			|| msg == EMPTY_HISTORY){
+		print_game_error(state->game, msg, cmd);
 	} else {
 		handle_message(state, msg);
 	}
@@ -197,7 +200,7 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 
 void handle_settings_message(ProgramState *state, EngineMessage msg, SettingCommand *cmd){
 	if(msg == INVALID_ARGUMENT){
-		print_settings_invalid_arg(cmd);
+		print_settings_error(cmd);
 	} else {
 		handle_message(state, msg);
 	}

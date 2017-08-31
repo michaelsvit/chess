@@ -13,10 +13,6 @@
 
 #define POS_REPR_MAX_LENGTH 7
 
-typedef enum {
-	MEMORY
-} ErrorType;
-
 /*
  * Print color of current player.
  * @param game 	 game instance
@@ -29,7 +25,7 @@ void print_player_color(Game *game);
  * @param msg  	 returned engine message
  * @param cmd  	 command issued by user
  */
-void print_game_invalid_arg(Game *game, EngineMessage msg, GameCommand *cmd);
+void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd);
 
 /*
  * Print message to user according to given engine message.
@@ -41,13 +37,7 @@ void print_generic_message(EngineMessage msg);
  * Print invalid argument error for given settings command.
  * @param cmd 	 command issued by user
  */
-void print_settings_invalid_arg(SettingCommand *cmd);
-
-/*
- * Print generic error messages.
- * @param error 	 type of error
- */
-void print_error(ErrorType error);
+void print_settings_error(SettingCommand *cmd);
 
 /*
  * Print two moves that were undone by user.

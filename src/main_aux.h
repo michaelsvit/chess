@@ -18,26 +18,44 @@
 typedef enum {
 	SETTINGS,
 	GAME
-} State;
+} RunState;
 
 typedef struct {
 	int quit;
 	int print_settings_prompt;
 	int print_game_prompt;
-	State state;
+	RunState run_state;
 } Indicators;
 
+/* Struct to hold all of the main function's state variables */
+typedef struct {
+	char *user_input;
+	GameSettings *settings;
+	Game *game;
+	Indicators *indicators;
+} ProgramState;
+
 /*
- * Initialize indicators required for game management.
- * @param user_input 	 buffer for user input
- * @param settings   	 settings struct to initialize
- * @param indicators 	 indicators struct to initialize
+ * Create and initialize all required variables for program management.
+ * @return 	 pointer to struct holding variables on success, NULL otherwise
  */
-int init_game_variables(char **user_input, GameSettings **settings, Indicators **indicators);
+ProgramState *create_program_state();
+
+/*
+ * Free all allocated program management memory.
+ * @param state 	 program state struct
+ */
+void destroy_program_state(ProgramState *state);
+
+/*
+ * Initialize program state required for game management.
+ * @param prog_state 	 struct holding all program state variables
+ */
+int init_program_state(ProgramState *prog_state);
 
 /*
  * Create and initialize an indicators struct for main function management.
- * @return	pointer to indicators struct on success, NULL otherwise
+ * @return 	 pointer to indicators struct on success, NULL otherwise
  */
 Indicators *create_indicators();
 
@@ -48,6 +66,18 @@ Indicators *create_indicators();
  * @param len    	 maximum input length
  */
 void get_user_input(const char* prompt, char* buf, int len);
+
+/*
+ * Fetch and execute next game command from user.
+ * @param state 	 program state struct
+ */
+int fetch_and_exe_game(ProgramState *state);
+
+/*
+ * Fetch and execute next settings command from user.
+ * @param state 	 program state struct
+ */
+int fetch_and_exe_settings(ProgramState *state);
 
 /*
  * Execute given game command.
@@ -65,14 +95,11 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd);
 
 /*
  * Handler for engine messages returned in game state.
- * @param game     	 game instance
+ * @param state    	 program state struct
  * @param msg      	 returned message
  * @param cmd      	 command that was issued by user
- * @param settings 	 pointer to main function's settings variable in case of restart
- * @param state    	 game state
- * @param quit     	 flag indicating to quit the game
  */
-void handle_game_message(Game **game, EngineMessage msg, GameCommand *cmd, GameSettings **settings, Indicators *indicators);
+void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cmd);
 
 /*
  * Execute given setting command.
@@ -89,23 +116,18 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 
 /*
  * Handler for engine messages returned in settings state.
- * @param game     	 game instance
- * @param msg      	 returned message
- * @param cmd      	 command that was issued by user
- * @param settings 	 pointer to main function's settings variable in case of restart
- * @param state    	 game state
- * @param quit     	 flag indicating to quit the game
+ * @param state 	 program state struct
+ * @param msg   	 returned message
+ * @param cmd   	 command that was issued by user
  */
-void handle_settings_message(Game **game, EngineMessage msg, SettingCommand *cmd, GameSettings **settings, Indicators *indicators);
+void handle_settings_message(ProgramState *state, EngineMessage msg, SettingCommand *cmd);
 
 /*
  * Handle game engine messages.
- * @param msg      	 message to be handled
- * @param settings 	 pointer to main function's settings struct
- * @param state    	 pointer to variable holding game state
- * @param quit     	 pointer to game quit flag
+ * @param state 	 program state struct
+ * @param msg   	 message to be handled
  */
-void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Indicators *indicators);
+void handle_message(ProgramState *state, EngineMessage msg);
 
 /*
  * Create default game settings.

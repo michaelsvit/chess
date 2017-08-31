@@ -3,14 +3,27 @@
 #include <string.h>
 #include "main_aux.h"
 
-int init_game_variables(char **user_input, GameSettings **settings, Indicators **indicators){
-	*user_input = (char *)malloc(INPUT_SIZE);
-	*settings = create_settings();
-	*indicators = create_indicators();
-	if(!*user_input || !*settings || !*indicators){
-		free(user_input);
-		free(settings);
-		free(indicators);
+ProgramState *create_program_state(){
+	ProgramState *state = (ProgramState *)malloc(sizeof(ProgramState));
+	if(!state) return NULL;
+	init_program_state(state);
+	return state;
+}
+
+void destroy_program_state(ProgramState *state){
+	free(state->indicators);
+	free(state->user_input);
+	free(state);
+}
+
+int init_program_state(ProgramState *prog_state){
+	prog_state->user_input = (char *)malloc(INPUT_SIZE);
+	prog_state->settings = create_settings();
+	prog_state->indicators = create_indicators();
+	if(!prog_state->user_input || !prog_state->settings || !prog_state->indicators){
+		free(prog_state->user_input);
+		free(prog_state->settings);
+		free(prog_state->indicators);
 		return 0;
 	}
 	return 1;
@@ -22,7 +35,7 @@ Indicators *create_indicators(){
 	indicators->quit = 0;
 	indicators->print_game_prompt = 1;
 	indicators->print_settings_prompt = 1;
-	indicators->state = SETTINGS;
+	indicators->run_state = SETTINGS;
 	return indicators;
 }
 
@@ -32,6 +45,47 @@ void get_user_input(const char* prompt, char* buf, int len) {
 	if (buf[strlen(buf) - 1] == '\n') {
 		buf[strlen(buf) - 1] = '\0';
 	}
+}
+
+int fetch_and_exe_game(ProgramState *state){
+	if(state->indicators->print_game_prompt) print_board(state->game);
+	print_player_color(state->game);
+	get_user_input(GAME_PROMPT, state->user_input, INPUT_SIZE);
+	GameCommand *cmd = parse_game_command(state->user_input);
+	if(!cmd){
+		destroy_game(state->game);
+		return 0;
+	}
+	EngineMessage msg = execute_game_command(state->game, cmd);
+	if(msg != SUCCESS){
+		state->indicators->print_game_prompt = 0;
+		handle_game_message(state, msg, cmd);
+	} else {
+		state->indicators->print_game_prompt = 1;
+	}
+	free(cmd->arg);
+	free(cmd);
+	return 1;
+}
+
+int fetch_and_exe_settings(ProgramState *state){
+	char *prompt = NULL;
+	if(state->indicators->print_settings_prompt){
+		prompt = SETTINGS_PROMPT;
+		state->indicators->print_settings_prompt = 0;
+	}
+	get_user_input(prompt, state->user_input, INPUT_SIZE);
+	SettingCommand *cmd = parse_setting_command(state->user_input);
+	if(!cmd){
+		free(state->settings);
+		return 0;
+	}
+	EngineMessage msg = execute_setting_command(state->settings, cmd);
+	if(msg != SUCCESS)
+		handle_settings_message(state, msg, cmd);
+	free(cmd->arg);
+	free(cmd);
+	return 1;
 }
 
 EngineMessage execute_game_command(Game *game, GameCommand *cmd){
@@ -81,17 +135,12 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 	return SUCCESS;
 }
 
-void handle_game_message(
-		Game **game,
-		EngineMessage msg,
-		GameCommand *cmd,
-		GameSettings **settings,
-		Indicators *indicators){
+void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cmd){
 	if(msg == INVALID_ARGUMENT || msg == ILLEGAL_MOVE || msg == EMPTY_HISTORY){
-		print_game_invalid_arg(*game, msg, cmd);
+		print_game_invalid_arg(state->game, msg, cmd);
 	} else {
 		print_generic_message(msg);
-		handle_message(msg, game, settings, indicators);
+		handle_message(state, msg);
 	}
 }
 
@@ -145,21 +194,16 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 	return SUCCESS;
 }
 
-void handle_settings_message(
-		Game **game,
-		EngineMessage msg,
-		SettingCommand *cmd,
-		GameSettings **settings,
-		Indicators *indicators){
+void handle_settings_message(ProgramState *state, EngineMessage msg, SettingCommand *cmd){
 	if(msg == INVALID_ARGUMENT){
 		print_settings_invalid_arg(cmd);
 	} else {
 		print_generic_message(msg);
-		handle_message(msg, game, settings, indicators);
+		handle_message(state, msg);
 	}
 }
 
-void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Indicators *indicators){
+void handle_message(ProgramState *state, EngineMessage msg){
 	switch(msg){
 		case SUCCESS:
 			return;
@@ -179,27 +223,28 @@ void handle_message(EngineMessage msg, Game **game, GameSettings **settings, Ind
 
 			return;
 		case START_GAME:
-			indicators->state = GAME;
-			*game = create_game(*settings);
-			free(*settings);
-			if(!*game){
+			state->indicators->run_state = GAME;
+			state->game = create_game(state->settings);
+			free(state->settings);
+			if(!state->game){
 				print_error(MEMORY);
-				indicators->quit = 1;
+				state->indicators->quit = 1;
 			}
 			return;
 		case RESTART:
-			*settings = create_settings();
-			if(!*settings){
+			state->settings = create_settings();
+			if(!state->settings){
 				print_error(MEMORY);
-				indicators->quit = 1;
+				state->indicators->quit = 1;
 			}
-			indicators->state = SETTINGS;
-			indicators->print_settings_prompt = 1;
+			state->indicators->run_state = SETTINGS;
+			state->indicators->print_settings_prompt = 1;
 			return;
 		case QUIT:
 			/* Print quit message */
-			(indicators->state == GAME) ? destroy_game(*game) : free(*settings);
-			indicators->quit = 1;
+			(state->indicators->run_state == GAME) ?
+				destroy_game(state->game) : free(state->settings);
+			state->indicators->quit = 1;
 			return;
 	}
 }

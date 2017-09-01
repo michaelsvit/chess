@@ -53,6 +53,12 @@ void print_undo_two_moves(Game *game, GameMove *moves[]);
 void print_check(Color color);
 
 /*
+ * Print message informing user game is over and announce winner (or tie).
+ * @param game 	 game instance
+ */
+void print_game_over(Game *game);
+
+/*
  * Print which mode the game has been set to.
  * @param mode 	 current game mode
  */

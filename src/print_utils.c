@@ -103,6 +103,15 @@ void print_check(Color color){
 	printf("Check: %s King is threatend!\n", (color == WHITE) ? "white" : "black");
 }
 
+void print_game_over(Game *game){
+	if(game->check){
+		char *str = (game->player_color[game->current_player] == WHITE) ? "black" : "white";
+		printf("Checkmate! %s player wins the game\n", str);
+	} else {
+		printf("The game is tied\n");
+	}
+}
+
 void print_game_mode(int mode){
 	printf("Game mode is set to %s\n", (mode == ONE_PLAYER) ? "1 player" : "2 players");
 }

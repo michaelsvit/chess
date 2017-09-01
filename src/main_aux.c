@@ -218,6 +218,10 @@ void handle_message(ProgramState *state, EngineMessage msg){
 		case INVALID_COMMAND:
 			print_generic_message(msg);
 			return;
+		case GAME_OVER:
+			print_game_over(state->game);
+			state->indicators->quit = 1;
+			return;
 		case START_GAME:
 			state->indicators->run_state = GAME;
 			state->game = create_game(state->settings);
@@ -241,7 +245,7 @@ void handle_message(ProgramState *state, EngineMessage msg){
 			state->indicators->quit = 1;
 			return;
 		default:
-			break;
+			return;
 	}
 }
 

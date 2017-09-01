@@ -63,8 +63,6 @@ int fetch_and_exe_game(ProgramState *state){
 		state->indicators->print_game_prompt = 0;
 		handle_game_message(state, msg, cmd);
 	} else {
-		if(state->indicators->print_game_prompt && state->game->check && msg != GAME_OVER)
-			print_check(state->game->player_color[state->game->current_player]);
 		state->indicators->print_game_prompt = 1;
 	}
 	free(cmd->arg);
@@ -98,6 +96,8 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 		case MOVE:
 			if(cmd->valid_arg){
 				EngineMessage msg = move_game_piece(game, args[0], args[1], args[2], args[3]);
+				if(msg == SUCCESS && game->check)
+					print_check(game->player_color[game->current_player]);
 				return msg;
 			} else {
 				return INVALID_ARGUMENT;

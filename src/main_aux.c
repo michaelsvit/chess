@@ -95,7 +95,10 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 	switch (cmd->type) {
 		case MOVE:
 			if(cmd->valid_arg){
-				return move_game_piece(game, args[0], args[1], args[2], args[3]);
+				EngineMessage msg = move_game_piece(game, args[0], args[1], args[2], args[3]);
+				if(game->check && msg != GAME_OVER)
+					print_check(game->player_color[game->current_player]);
+				return msg;
 			} else {
 				return INVALID_ARGUMENT;
 			}

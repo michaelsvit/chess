@@ -47,6 +47,12 @@ void print_settings_error(SettingCommand *cmd);
 void print_undo_two_moves(Game *game, GameMove *moves[]);
 
 /*
+ * Print message informing user his king is threatened.
+ * @param color 	 color of current player
+ */
+void print_check(Color color);
+
+/*
  * Print which mode the game has been set to.
  * @param mode 	 current game mode
  */

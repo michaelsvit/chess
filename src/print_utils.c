@@ -99,6 +99,10 @@ void print_undo_two_moves(Game *game, GameMove *moves[]){
 	free(moves[1]);
 }
 
+void print_check(Color color){
+	printf("Check: %s King is threatend!\n", (color == WHITE) ? "white" : "black");
+}
+
 void print_game_mode(int mode){
 	printf("Game mode is set to %s\n", (mode == ONE_PLAYER) ? "1 player" : "2 players");
 }

@@ -117,6 +117,12 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	/* Determine if moving the piece ended with check state for enemy king */
 	game->check = is_check_state_created_enemy(game, piece);
 	game->current_player = !game->current_player;
+	int game_over = is_game_over(game);
+	if(game_over == -1){
+		return MALLOC_FAILURE;
+	} else if (game_over == 1) {
+		return GAME_OVER;
+	}
 
 	return SUCCESS;
 }

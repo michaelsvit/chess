@@ -98,7 +98,8 @@ void destroy_game(Game *game){
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y){
 	if(!game) return INVALID_ARGUMENT;
 	GamePiece *piece = game->board[src_y][src_x];
-	if(!piece || dst_x < 0 || dst_x > BOARD_SIZE-1 || dst_y < 0 || dst_y > BOARD_SIZE-1){
+	if(!piece) return ILLEGAL_MOVE;
+	if(dst_x < 0 || dst_x > BOARD_SIZE-1 || dst_y < 0 || dst_y > BOARD_SIZE-1){
 		return INVALID_ARGUMENT;
 	}
 	/* Make sure piece is the same color as current player */

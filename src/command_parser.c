@@ -151,7 +151,8 @@ int get_move_command(GameCommand *cmd){
 	if(status != 1) return status;
 
 	/* Consume "to" word from command */
-	if(strcmp(strtok(NULL, DELIMITER), "to") != 0){
+	char *middle_word = strtok(NULL, DELIMITER);
+	if(!middle_word || strcmp(middle_word, "to") != 0){
 		free(src);
 		cmd->type = INVALID_GAME_COMMAND;
 		return 1;

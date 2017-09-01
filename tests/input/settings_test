@@ -1,0 +1,32 @@
+game_mode 1
+game_mode 2
+game_mode 1
+print_setting
+game_mode 2
+print_setting
+game_mode 1
+difficulty 0
+difficulty 1
+difficulty 4
+difficulty 5
+difficulty 8
+difficulty a
+print_setting
+difficulty 1
+print_setting
+user_color a
+user_color 4
+user_color 1
+print_setting
+user_color 0
+print_setting
+user_color 1
+print_setting
+default
+print_setting
+user_color 0
+print_setting
+default
+print_setting
+start
+quit

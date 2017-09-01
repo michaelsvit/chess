@@ -1,0 +1,190 @@
+Specify game setting or type 'start' to begin a game with the current setting:
+Game mode is set to 2 players
+8| R N B K Q B N R |
+7| M M M M M M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ _ _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m m m m m m |
+1| r n b k q b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B K Q B N R |
+7| M M M M M M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ _ _ _ _ |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k q b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B K Q B N R |
+7| M M _ M M M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ M _ _ _ _ _ |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k q b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B K Q B N R |
+7| M M _ M M M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ M _ _ _ _ _ |
+4| _ q _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B K Q B N R |
+7| M M _ M M M M _ |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ q _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k _ b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B K Q B N R |
+7| M M _ M M M M _ |
+6| _ _ _ _ _ _ _ _ |
+5| _ q M _ _ _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B K Q B _ R |
+7| M M _ M M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ q M _ _ _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k _ b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+Check: black King is threatend!
+8| R N B K Q B _ R |
+7| M M _ q M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N _ K Q B _ R |
+7| M M _ B M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b k _ b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N _ K Q B _ R |
+7| M M _ B M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ b _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+Illegal move
+black player - enter your move:
+8| R N K _ Q B _ R |
+7| M M _ B M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ b _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N K _ Q B _ R |
+7| M M _ B M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ b _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N _ _ Q B _ R |
+7| M M K B M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ b _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+Check: black King is threatend!
+8| R N _ _ Q B _ R |
+7| M M K B M M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ _ _ _ M |
+4| _ _ _ m _ b _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+Illegal move
+black player - enter your move:
+8| R N _ _ Q B _ R |
+7| M M K B _ M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ M _ _ M |
+4| _ _ _ m _ b _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+Illegal move
+white player - enter your move:
+Illegal move
+white player - enter your move:
+Check: black King is threatend!
+8| R N _ _ Q B _ R |
+7| M M K B _ M M _ |
+6| _ _ _ _ _ N _ _ |
+5| _ _ M _ b _ _ M |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ k _ b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+Exiting...

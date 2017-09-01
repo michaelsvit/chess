@@ -1,0 +1,11 @@
+game_mode 2
+start
+move <2,D> to <4,D>
+move <7,D> to <5,D>
+move <1,E> to <4,B>
+move <7,C> to <6,C>
+move <1,C> to <5,F>
+move <1,C> to <4,F>
+move <8,D> to <6,D>
+move <8,D> to <7,D>
+quit

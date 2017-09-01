@@ -104,6 +104,9 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 			}
 		case GET_MOVES:
 			{
+				if(!(game->mode == ONE_PLAYER)
+						|| (game->difficulty != 1 && game->difficulty != 2))
+					return INVALID_COMMAND;
 				if(!cmd->valid_arg)
 					return INVALID_ARGUMENT;
 				SPArrayList *moves;

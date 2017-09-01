@@ -157,8 +157,6 @@ EngineMessage undo_move(Game *game, GameMove **removed_move){
 
 EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *piece){
 	*moves = NULL;
-	if(!(game->mode == ONE_PLAYER)
-			|| (game->difficulty != 1 && game->difficulty != 2)) return INVALID_COMMAND;
 	if(!game) return INVALID_ARGUMENT;
 	if(!piece || piece->color != game->player_color[game->current_player])
 		return ILLEGAL_MOVE;
@@ -226,7 +224,8 @@ int is_game_over(Game *game){
 		game->white_pieces : game->black_pieces;
 	for (int i = 0; i < spArrayListSize(pieces); ++i) {
 		SPArrayList *moves;
-		EngineMessage msg = get_possible_moves(&moves, game, spArrayListGetAt(pieces, i));
+		GamePiece *piece = (GamePiece *)spArrayListGetAt(pieces, i);
+		EngineMessage msg = get_possible_moves(&moves, game, piece);
 		/* Invalid argument message is not possible here */
 		if(msg == MALLOC_FAILURE) return -1;
 		if(spArrayListSize(moves) > 0){
@@ -501,7 +500,8 @@ int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int p
 }
 
 int is_check_state_created_enemy(Game *game, GamePiece *piece){
-	SPArrayList *enemy_pieces = (piece->color == WHITE) ? game->white_pieces : game->black_pieces;
+	SPArrayList *enemy_pieces = (piece->color == WHITE) ?
+		game->black_pieces : game->white_pieces;
 	GamePiece *enemy_king = find_king_piece(enemy_pieces);
 	return is_legal_move(game, piece, enemy_king->pos_x, enemy_king->pos_y);
 }

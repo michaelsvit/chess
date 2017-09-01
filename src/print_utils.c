@@ -179,19 +179,19 @@ int print_possible_moves(Game *game, SPArrayList *moves){
 	SPArrayList *list = spArrayListCreate(sizeof(GameMove), count);
 	if(!list) return 0;
 	/* Use insertion sort */
-	for (int i = 0; i < count; ++i) {
-		GameMove *move = spArrayListGetFirst(moves);
-		spArrayListRemoveFirst(moves);
-		int i;
-		for (i = 0; i < spArrayListSize(list); ++i) {
-			GameMove *temp = (GameMove *)spArrayListGetAt(list, i);
-			if(compare_positions(move->dst_x, move->dst_y, temp->dst_x, temp->dst_y) > 0){
-				spArrayListAddAt(list, move, i);
-				break;
-			}
+	spArrayListAddFirst(list, spArrayListGetFirst(moves));
+	for (int i = 1; i < count; ++i) {
+		GameMove *move = spArrayListGetAt(moves, i);
+		int j = 0;
+		GameMove *temp = (GameMove *)spArrayListGetAt(list, j);
+		while(j < count-1 && temp
+				&& compare_positions(move->dst_x, move->dst_y, temp->dst_x, temp->dst_y)>0){
+			j++;
+			temp = (GameMove *)spArrayListGetAt(list, j);
 		}
-		if(i == spArrayListSize(list)) spArrayListAddLast(list, move);
+		spArrayListAddAt(list, move, j);
 	}
+	spArrayListClear(moves);
 
 	/* Create list of string representations of move destinations */
 	SPArrayList *strings = spArrayListCreate(POS_REPR_MAX_LENGTH + 1, count);

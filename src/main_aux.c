@@ -119,6 +119,7 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 			}
 		case UNDO:
 			{
+				if(game->mode != ONE_PLAYER) return INVALID_COMMAND;
 				GameMove *moves[2];
 				EngineMessage msg = undo_move(game, &moves[0]);
 				if(msg != SUCCESS) return msg;

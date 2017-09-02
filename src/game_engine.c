@@ -115,8 +115,8 @@ EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int d
 	if(add_move_to_history(game, src_x, src_y, dst_x, dst_y) != SUCCESS) return MALLOC_FAILURE;
 	move_piece_to_position(game, piece, dst_x, dst_y);
 	/* Determine if moving the piece ended with check state for enemy king */
-	game->check = is_check_state_created_enemy(game, piece);
 	game->current_player = !game->current_player;
+	game->check = is_in_check_state(game);
 	int game_over = is_game_over(game);
 	if(game_over == -1){
 		return MALLOC_FAILURE;
@@ -304,10 +304,10 @@ EngineMessage add_game_pieces_set(Game *game, Color color){
 	if((msg = add_game_piece(game, BISHOP, color, BOARD_SIZE-3, row)) != SUCCESS) return msg;
 
 	/* Add queen */
-	if((msg = add_game_piece(game, QUEEN, color, 4, row)) != SUCCESS) return msg;
+	if((msg = add_game_piece(game, QUEEN, color, 3, row)) != SUCCESS) return msg;
 
 	/* Add king */
-	if((msg = add_game_piece(game, KING, color, 3, row)) != SUCCESS) return msg;
+	if((msg = add_game_piece(game, KING, color, 4, row)) != SUCCESS) return msg;
 	return SUCCESS;
 }
 
@@ -497,13 +497,6 @@ int is_check_state_created_allied(Game *game, GamePiece *piece, int pos_x, int p
 	int result = is_piece_threatened_after_move(game, king, move);
 	free(move);
 	return result;
-}
-
-int is_check_state_created_enemy(Game *game, GamePiece *piece){
-	SPArrayList *enemy_pieces = (piece->color == WHITE) ?
-		game->black_pieces : game->white_pieces;
-	GamePiece *enemy_king = find_king_piece(enemy_pieces);
-	return is_legal_move(game, piece, enemy_king->pos_x, enemy_king->pos_y);
 }
 
 void move_piece_to_position(Game *game, GamePiece *piece, int pos_x, int pos_y){

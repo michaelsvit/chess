@@ -10,10 +10,10 @@ Game mode is set to 2 players
 SETTINGS:
 GAME_MODE: 2
 Game mode is set to 1 player
+Wrong difficulty level. The value should be between 1 to 5
 Expert level not supported, please choose a value between 1 to 4:
-Expert level not supported, please choose a value between 1 to 4:
-Expert level not supported, please choose a value between 1 to 4:
-Expert level not supported, please choose a value between 1 to 4:
+Wrong difficulty level. The value should be between 1 to 5
+Wrong difficulty level. The value should be between 1 to 5
 SETTINGS:
 GAME_MODE: 1
 DIFFICULTY_LVL: 4

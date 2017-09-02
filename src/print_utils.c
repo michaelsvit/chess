@@ -54,7 +54,11 @@ void print_settings_error(SettingCommand *cmd){
 			printf("Wrong game mode\n");
 			break;
 		case DIFFICULTY:
-			printf("Expert level not supported, please choose a value between 1 to 4:\n");
+			if(cmd->valid_arg && *((int *)cmd->arg) == 5){
+				printf("Expert level not supported, please choose a value between 1 to 4:\n");
+			} else {
+				printf("Wrong difficulty level. The value should be between 1 to 5\n");
+			}
 			break;
 		case LOAD:
 			printf("Error: File doesn’t exist or cannot be opened\n");

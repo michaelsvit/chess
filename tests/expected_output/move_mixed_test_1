@@ -1,335 +1,187 @@
 Specify game setting or type 'start' to begin a game with the current setting:
 Game mode is set to 2 players
-8| R N B K Q B N R |
+8| R N B Q K B N R |
 7| M M M M M M M M |
 6| _ _ _ _ _ _ _ _ |
 5| _ _ _ _ _ _ _ _ |
 4| _ _ _ _ _ _ _ _ |
 3| _ _ _ _ _ _ _ _ |
 2| m m m m m m m m |
-1| r n b k q b n r |
+1| r n b q k b n r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Invalid position on the board
-white player - enter your move:
-Illegal move
-white player - enter your move:
-8| R N B K Q B N R |
+8| R N B Q K B N R |
 7| M M M M M M M M |
 6| _ _ _ _ _ _ _ _ |
 5| _ _ _ _ _ _ _ _ |
-4| _ _ _ _ _ _ _ _ |
-3| _ _ _ m _ _ _ _ |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
 2| m m m _ m m m m |
-1| r n b k q b n r |
+1| r n b q k b n r |
   -----------------
    A B C D E F G H
 black player - enter your move:
-The specified position does not contain your piece
-black player - enter your move:
-8| R N B K Q B N R |
-7| M M M _ M M M M |
+8| R N B Q K B N R |
+7| M M M M _ M M M |
 6| _ _ _ _ _ _ _ _ |
-5| _ _ _ M _ _ _ _ |
-4| _ _ _ _ _ _ _ _ |
-3| _ _ _ m _ _ _ _ |
+5| _ _ _ _ M _ _ _ |
+4| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
 2| m m m _ m m m m |
-1| r n b k q b n r |
+1| r n b q k b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B Q K B N R |
+7| M M M M _ M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ m _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b q k b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B _ K B N R |
+7| M M M M Q M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ m _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b q k b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B _ K B N R |
+7| M M M M Q M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ m _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ n _ _ |
+2| m m m _ m m m m |
+1| r n b q k b _ r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B _ K B N R |
+7| M M M M _ M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ Q _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ n _ _ |
+2| m m m _ m m m m |
+1| r n b q k b _ r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B _ K B N R |
+7| M M M M _ M M M |
+6| _ _ _ _ _ _ _ _ |
+5| _ _ _ _ n _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b q k b _ r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B _ K B _ R |
+7| M M M M _ M M M |
+6| _ _ _ _ _ _ _ N |
+5| _ _ _ _ n _ _ _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n b q k b _ r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+8| R N B _ K B _ R |
+7| M M M M _ M M M |
+6| _ _ _ _ _ _ _ N |
+5| _ _ _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ q k b _ r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+8| R N B _ K B _ R |
+7| M M M _ _ M M M |
+6| _ _ _ M _ _ _ N |
+5| _ _ _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ m m m m |
+1| r n _ q k b _ r |
   -----------------
    A B C D E F G H
 white player - enter your move:
 Illegal move
 white player - enter your move:
-8| R N B K Q B N R |
-7| M M M _ M M M M |
-6| _ _ _ _ _ _ _ _ |
-5| _ _ _ M _ _ _ _ |
+The specified position does not contain your piece
+white player - enter your move:
+8| R N B _ K B _ R |
+7| M M M _ _ M M M |
+6| _ _ _ M _ _ _ N |
+5| _ _ _ _ n _ b _ |
 4| _ _ _ _ m _ _ _ |
-3| _ _ _ m _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
 2| m m m _ _ m m m |
-1| r n b k q b n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-8| R N B K Q B N R |
-7| M M M _ M M M M |
-6| _ _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ _ _ |
-4| _ _ _ _ M _ _ _ |
-3| _ _ _ m _ _ _ _ |
-2| m m m _ _ m m m |
-1| r n b k q b n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-Illegal move
-white player - enter your move:
-8| R N B K Q B N R |
-7| M M M _ M M M M |
-6| _ _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ _ _ |
-4| _ _ _ _ M _ _ _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ _ m m m |
-1| r _ b k q b n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-8| R _ B K Q B N R |
-7| M M M _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ _ _ |
-4| _ _ _ _ M _ _ _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ _ m m m |
-1| r _ b k q b n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-Illegal move
-white player - enter your move:
-Illegal move
-white player - enter your move:
-8| R _ B K Q B N R |
-7| M M M _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ b _ |
-4| _ _ _ _ M _ _ _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ _ m m m |
-1| r _ _ k q b n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-Check: white King is threatend!
-8| R _ _ K Q B N R |
-7| M M M _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ b _ |
-4| _ _ _ _ M _ B _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ _ m m m |
-1| r _ _ k q b n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-Illegal move
-white player - enter your move:
-Illegal move
-white player - enter your move:
-Illegal move
-white player - enter your move:
-8| R _ _ K Q B N R |
-7| M M M _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ b _ |
-4| _ _ _ _ M _ B _ |
-3| n _ _ m _ m _ _ |
-2| m m m _ _ _ m m |
-1| r _ _ k q b n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-Illegal move
-black player - enter your move:
-8| _ _ R K Q B N R |
-7| M M M _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ b _ |
-4| _ _ _ _ M _ B _ |
-3| n _ _ m _ m _ _ |
-2| m m m _ _ _ m m |
-1| r _ _ k q b n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-Illegal move
-white player - enter your move:
-8| _ _ R K Q B N R |
-7| M M M _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ _ _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ _ _ m m |
-1| r _ _ k q b n r |
+1| r n _ q k b _ r |
   -----------------
    A B C D E F G H
 black player - enter your move:
 The specified position does not contain your piece
 black player - enter your move:
-8| _ _ R K Q B N R |
-7| M M _ _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ _ _ m m |
-1| r _ _ k q b n r |
+8| R N B _ K B _ R |
+7| M M M _ _ M M M |
+6| _ _ _ _ _ _ _ N |
+5| _ _ _ M n _ b _ |
+4| _ _ _ _ m _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k b _ r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-Illegal move
-white player - enter your move:
-Illegal move
-white player - enter your move:
-8| _ _ R K Q B N R |
-7| M M _ _ M M M M |
-6| N _ _ _ _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
+8| R N B _ K B _ R |
+7| M M M _ _ M M M |
+6| _ _ _ _ _ _ _ N |
+5| _ _ _ m n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k b _ r |
   -----------------
    A B C D E F G H
 black player - enter your move:
-Illegal move
-black player - enter your move:
-8| _ _ _ K Q B N R |
-7| M M _ _ M M M M |
-6| N _ R _ _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| n _ _ m _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-8| _ _ _ K Q B N R |
-7| M M _ _ M M M M |
-6| N _ R _ _ _ _ _ |
-5| _ n M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ m _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-8| _ _ _ K Q B N R |
-7| M M _ _ M M M M |
-6| _ _ R _ _ _ _ _ |
-5| _ n M _ _ _ b _ |
-4| _ N _ _ M _ m _ |
-3| _ _ _ m _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-8| _ _ _ K Q B N R |
-7| M M _ _ M M M M |
-6| _ _ R n _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ N _ _ M _ m _ |
-3| _ _ _ m _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-8| _ _ _ K Q B N R |
-7| M M _ _ M M M M |
-6| _ _ R n _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-Illegal move
-white player - enter your move:
-Illegal move
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-Illegal move
-white player - enter your move:
-Illegal move
-white player - enter your move:
-Check: black King is threatend!
-8| _ _ _ K Q B N R |
-7| M n _ _ M M M M |
-6| _ _ R _ _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-The specified position does not contain your piece
-black player - enter your move:
-The specified position does not contain your piece
-black player - enter your move:
-Illegal move
-black player - enter your move:
-8| _ _ _ _ Q B N R |
-7| M n _ K M M M M |
-6| _ _ R _ _ _ _ _ |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k q _ n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-8| _ _ _ _ Q B N R |
-7| M n _ K M M M M |
-6| _ _ R _ _ _ _ _ |
-5| q _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-8| _ _ _ _ Q B N R |
-7| M n _ K M M M M |
-6| _ _ _ _ _ _ _ R |
-5| q _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+8| R N B _ K B _ R |
+7| _ M M _ _ M M M |
+6| _ _ _ _ _ _ _ N |
+5| M _ _ m n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k b _ r |
   -----------------
    A B C D E F G H
 white player - enter your move:
 Illegal move
 white player - enter your move:
 Check: black King is threatend!
-8| _ _ _ q Q B N R |
-7| M n _ K M M M M |
-6| _ _ _ _ _ _ _ R |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+8| R N B _ K B _ R |
+7| _ M M _ _ M M M |
+6| _ _ _ _ _ _ _ N |
+5| M b _ m n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k _ _ r |
   -----------------
    A B C D E F G H
 black player - enter your move:
@@ -337,81 +189,73 @@ Illegal move
 black player - enter your move:
 Illegal move
 black player - enter your move:
-8| _ _ _ Q _ B N R |
-7| M n _ K M M M M |
-6| _ _ _ _ _ _ _ R |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+Illegal move
+black player - enter your move:
+8| R N B _ K B _ R |
+7| _ M _ _ _ M M M |
+6| _ _ M _ _ _ _ N |
+5| M b _ m n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k _ _ r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| _ _ _ Q _ B N R |
-7| M _ _ K M M M M |
-6| _ _ _ _ _ _ _ R |
-5| n _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+8| R N B _ K B _ R |
+7| _ M _ _ _ M M M |
+6| _ _ m _ _ _ _ N |
+5| M b _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k _ _ r |
   -----------------
    A B C D E F G H
 black player - enter your move:
-8| _ _ _ _ _ B N R |
-7| M _ _ K M M M M |
-6| _ _ _ _ _ _ _ R |
-5| Q _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+8| R _ B _ K B _ R |
+7| _ M _ _ _ M M M |
+6| N _ m _ _ _ _ N |
+5| M b _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k _ _ r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| _ _ _ _ _ B N R |
-7| M _ _ K M M M M |
-6| _ _ _ _ _ _ _ R |
-5| Q _ M _ _ _ _ _ |
-4| _ _ _ _ M _ m b |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+Check: black King is threatend!
+8| R _ B _ K B _ R |
+7| _ m _ _ _ M M M |
+6| N _ _ _ _ _ _ N |
+5| M b _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k _ _ r |
   -----------------
    A B C D E F G H
 black player - enter your move:
-8| _ _ _ _ _ B N R |
-7| M _ _ K M M _ M |
-6| _ _ _ _ _ _ M R |
-5| Q _ M _ _ _ _ _ |
-4| _ _ _ _ M _ m b |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+8| R _ _ _ K B _ R |
+7| _ m _ B _ M M M |
+6| N _ _ _ _ _ _ N |
+5| M b _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ q k _ _ r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| _ _ _ _ _ B N R |
-7| M _ _ K M M _ M |
-6| _ _ _ _ _ _ M R |
-5| Q _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k _ _ n r |
+8| R _ _ _ K B _ R |
+7| _ m _ q _ M M M |
+6| N _ _ _ _ _ _ N |
+5| M b _ _ n _ b _ |
+4| _ _ _ _ _ _ _ _ |
+3| _ _ _ _ _ _ _ _ |
+2| m m m _ _ m m m |
+1| r n _ _ k _ _ r |
   -----------------
    A B C D E F G H
-black player - enter your move:
-8| _ _ _ _ _ B N R |
-7| M _ _ K M M _ M |
-6| _ _ _ _ _ _ M R |
-5| _ _ M _ _ _ b _ |
-4| _ _ _ _ M _ m _ |
-3| _ _ _ N _ _ _ _ |
-2| m m m _ b _ m m |
-1| r _ _ k Q _ n r |
-  -----------------
-   A B C D E F G H
-Checkmate! black player wins the game
+Checkmate! white player wins the game
 Exiting...

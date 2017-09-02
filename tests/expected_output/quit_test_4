@@ -1,84 +1,66 @@
 Specify game setting or type 'start' to begin a game with the current setting:
 Game mode is set to 2 players
-8| R N B K Q B N R |
+8| R N B Q K B N R |
 7| M M M M M M M M |
 6| _ _ _ _ _ _ _ _ |
 5| _ _ _ _ _ _ _ _ |
 4| _ _ _ _ _ _ _ _ |
 3| _ _ _ _ _ _ _ _ |
 2| m m m m m m m m |
-1| r n b k q b n r |
+1| r n b q k b n r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| R N B K Q B N R |
+8| R N B Q K B N R |
 7| M M M M M M M M |
 6| _ _ _ _ _ _ _ _ |
 5| _ _ _ _ _ _ _ _ |
 4| _ _ _ m _ _ _ _ |
 3| _ _ _ _ _ _ _ _ |
 2| m m m _ m m m m |
-1| r n b k q b n r |
+1| r n b q k b n r |
   -----------------
    A B C D E F G H
 black player - enter your move:
-8| R N B K Q B N R |
+8| R N B Q K B N R |
 7| M M M _ M M M M |
 6| _ _ _ _ _ _ _ _ |
 5| _ _ _ M _ _ _ _ |
 4| _ _ _ m _ _ _ _ |
 3| _ _ _ _ _ _ _ _ |
 2| m m m _ m m m m |
-1| r n b k q b n r |
+1| r n b q k b n r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| R N B K Q B N R |
+Illegal move
+white player - enter your move:
+The specified position does not contain your piece
+white player - enter your move:
+Illegal move
+white player - enter your move:
+8| R N B Q K B N R |
 7| M M M _ M M M M |
 6| _ _ _ _ _ _ _ _ |
 5| _ _ _ M _ _ _ _ |
-4| _ q _ m _ _ _ _ |
+4| _ _ _ m _ b _ _ |
 3| _ _ _ _ _ _ _ _ |
 2| m m m _ m m m m |
-1| r n b k _ b n r |
+1| r n _ q k b n r |
   -----------------
    A B C D E F G H
 black player - enter your move:
-8| R N B K Q B N R |
-7| M M _ _ M M M M |
-6| _ _ M _ _ _ _ _ |
+8| R N B _ K B N R |
+7| M M M _ M M M M |
+6| _ _ _ Q _ _ _ _ |
 5| _ _ _ M _ _ _ _ |
-4| _ q _ m _ _ _ _ |
+4| _ _ _ m _ b _ _ |
 3| _ _ _ _ _ _ _ _ |
 2| m m m _ m m m m |
-1| r n b k _ b n r |
+1| r n _ q k b n r |
   -----------------
    A B C D E F G H
 white player - enter your move:
-Illegal move
-white player - enter your move:
-8| R N B K Q B N R |
-7| M M _ _ M M M M |
-6| _ _ M _ _ _ _ _ |
-5| _ _ _ M _ _ _ _ |
-4| _ q _ m _ b _ _ |
-3| _ _ _ _ _ _ _ _ |
-2| m m m _ m m m m |
-1| r n _ k _ b n r |
-  -----------------
-   A B C D E F G H
-black player - enter your move:
-Illegal move
-black player - enter your move:
-8| R N B _ Q B N R |
-7| M M _ K M M M M |
-6| _ _ M _ _ _ _ _ |
-5| _ _ _ M _ _ _ _ |
-4| _ q _ m _ b _ _ |
-3| _ _ _ _ _ _ _ _ |
-2| m m m _ m m m m |
-1| r n _ k _ b n r |
-  -----------------
-   A B C D E F G H
+The specified position does not contain your piece
 white player - enter your move:
 Exiting...

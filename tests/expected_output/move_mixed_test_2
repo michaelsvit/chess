@@ -93,7 +93,7 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| R N B Q K B N R |
 7| M M M _ _ M M M |
 6| _ _ _ _ _ _ _ _ |
@@ -135,7 +135,7 @@ white player - enter your move:
   -----------------
    A B C D E F G H
 black player - enter your move:
-Check: white King is threatend!
+Check: white King is threatened!
 8| R N B _ _ B N R |
 7| M M M K Q M M M |
 6| _ _ _ _ _ _ _ _ |
@@ -182,7 +182,7 @@ white player - enter your move:
   -----------------
    A B C D E F G H
 black player - enter your move:
-Check: white King is threatend!
+Check: white King is threatened!
 8| R N B _ _ B _ R |
 7| M M M K _ M M M |
 6| _ _ _ _ _ _ _ N |
@@ -222,7 +222,7 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| R N B _ _ B _ R |
 7| M M M _ _ M M M |
 6| _ _ _ K _ _ _ N |
@@ -247,7 +247,7 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| R N B _ _ B _ R |
 7| M M _ _ _ M M M |
 6| _ _ _ K _ _ _ N |
@@ -364,7 +364,7 @@ black player - enter your move:
 white player - enter your move:
 Illegal move
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| _ _ _ _ _ _ _ R |
 7| M m _ _ _ M M M |
 6| _ _ _ b _ _ _ N |
@@ -389,7 +389,7 @@ black player - enter your move:
 white player - enter your move:
 The specified position does not contain your piece
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| _ _ _ _ _ _ _ R |
 7| M m _ _ _ M M M |
 6| _ _ _ b _ _ _ N |
@@ -423,7 +423,7 @@ white player - enter your move:
   -----------------
    A B C D E F G H
 black player - enter your move:
-Check: white King is threatend!
+Check: white King is threatened!
 8| _ _ _ _ _ _ _ R |
 7| M m _ _ _ M M M |
 6| _ _ _ b _ _ _ N |
@@ -525,7 +525,7 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| _ _ _ _ _ _ _ _ |
 7| n m _ _ _ M b M |
 6| _ _ _ _ _ _ _ _ |
@@ -625,4 +625,3 @@ white player - enter your move:
   -----------------
    A B C D E F G H
 The game is tied
-Exiting...

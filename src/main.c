@@ -6,7 +6,6 @@ int main(/* int argc, char *argv[] */){
 	ProgramState *prog_state;
 	if(!(prog_state = create_program_state())){
 		print_generic_message(MALLOC_FAILURE);
-		print_generic_message(QUIT);
 		return 0;
 	}
 	do {
@@ -24,6 +23,5 @@ int main(/* int argc, char *argv[] */){
 	} while (!prog_state->indicators->quit);
 
 	destroy_program_state(prog_state);
-	print_generic_message(QUIT);
 	return 0;
 }

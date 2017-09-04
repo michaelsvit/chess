@@ -246,6 +246,7 @@ void handle_message(ProgramState *state, EngineMessage msg){
 			print_generic_message(msg);
 			return;
 		case QUIT:
+			print_generic_message(QUIT);
 			state->indicators->quit = 1;
 			return;
 		default:

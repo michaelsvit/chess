@@ -173,7 +173,7 @@ black player - enter your move:
 white player - enter your move:
 Illegal move
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| R N B _ K B _ R |
 7| _ M M _ _ M M M |
 6| _ _ _ _ _ _ _ N |
@@ -224,7 +224,7 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-Check: black King is threatend!
+Check: black King is threatened!
 8| R _ B _ K B _ R |
 7| _ m _ _ _ M M M |
 6| N _ _ _ _ _ _ N |
@@ -258,4 +258,3 @@ white player - enter your move:
   -----------------
    A B C D E F G H
 Checkmate! white player wins the game
-Exiting...

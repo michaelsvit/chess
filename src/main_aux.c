@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "main_aux.h"
+#include "minimax.h"
 
 ProgramState *create_program_state(){
 	ProgramState *state = (ProgramState *)malloc(sizeof(ProgramState));
@@ -50,6 +51,16 @@ void get_user_input(const char* prompt, char* buf, int len) {
 }
 
 int fetch_and_exe_game(ProgramState *state){
+	if (state->game->mode == ONE_PLAYER && state->game->current_player == PLAYER2) {
+		GameMove computerMove = minimax_suggest_move(state->game, state->game->difficulty);
+		EngineMessage msg = move_game_piece(state->game, computerMove.src_x, computerMove.src_y, computerMove.dst_x, computerMove.dst_y);
+		if(msg == SUCCESS && state->game->check) {
+			print_check(state->game->player_color[state->game->current_player]);
+			return msg;
+		} else {
+			return INVALID_ARGUMENT;
+		}
+	}
 	if(state->indicators->print_game_prompt) print_board(state->game);
 	print_player_color(state->game);
 	get_user_input(GAME_PROMPT, state->user_input, INPUT_SIZE);

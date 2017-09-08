@@ -38,7 +38,7 @@ typedef enum {
 	QUIT,
 	SUCCESS
 } EngineMessage;
-typedef enum {PLAYER1, PLAYER2} Player;
+typedef enum {PLAYER1=0, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;
 typedef enum {ONE_PLAYER=1, TWO_PLAYER} Mode;

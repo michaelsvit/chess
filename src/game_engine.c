@@ -27,12 +27,12 @@ Game *create_game(GameSettings *settings){
 			game->board[i][j] = NULL;
 		}
 	}
-	game->current_player = PLAYER1;
 	game->mode = settings->mode;
 	game->difficulty = settings->difficulty;
 	game->check = 0;
 	game->player_color[PLAYER1] = settings->player1_color;
 	game->player_color[PLAYER2] = !settings->player1_color;
+	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
 	if(init_game(game) != SUCCESS){
 		destroy_game(game);
 		return NULL;
@@ -79,6 +79,7 @@ Game *copy_game(Game *game){
 		copy->player_color[i] = game->player_color[i];
 	}
 	copy->mode = game->mode;
+	copy->current_player = game->current_player;
 	copy->difficulty = game->difficulty;
 	copy->check = game->check;
 	return copy;

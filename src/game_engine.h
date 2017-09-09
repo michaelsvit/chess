@@ -108,6 +108,7 @@ void destroy_game();
  * INVALID_ARGUMENT 	 game == NULL or piece == NULL or coordinates out of bounds
  * ILLEGAL_MOVE     	 move is not a legal move as defined by chess rules
  * MALLOC_FAILURE   	 failed to allocate memory when checking if king move is valid
+ * GAME_OVER        	 move succeeded and the game reached a final state
  * SUCCESS          	 otherwise
  */
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y);
@@ -125,10 +126,14 @@ EngineMessage undo_move(Game *game, GameMove **removed_move);
 
 /*
  * Get a list of all possible moves of a given game piece.
- * @param moves 	 array to be filled with possible moves
+ * @param moves 	 array to be filled with possible moves, will be set to NULL on failure
  * @param game  	 game instance
  * @param piece 	 game piece
- * @return      	 list of possible moves for piece on success, NULL otherwise
+ * @return
+ * SUCCESS          	 given array was filled with possible moves
+ * MALLOC_FAILURE   	 memory error occurred
+ * ILLEGAL_MOVE     	 piece is NULL or current player doesn't own it
+ * INVALID_ARGUMENT 	 game is NULL
  */
 EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *piece);
 

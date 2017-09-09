@@ -25,10 +25,12 @@ obj/print_utils.o: src/print_utils.c src/print_utils.h src/game_engine.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 obj/main_aux.o: src/main_aux.c src/main_aux.h src/command_parser.h src/game_engine.h src/print_utils.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
+obj/minimax.o: src/minimax.c src/minimax.h src/game_engine.h
+	$(CC) $(COMP_FLAG) -c $< -o $@
 obj/main.o: src/main.c src/main_aux.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
-# General rule to create object files
+# Generic rule to create object files
 obj/%.o: src/%.c src/%.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 

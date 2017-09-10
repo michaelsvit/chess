@@ -62,7 +62,7 @@ void print_game_over(Game *game);
  * Print which mode the game has been set to.
  * @param mode 	 current game mode
  */
-void print_game_mode(int mode);
+void print_game_mode(Mode mode);
 
 /*
  * Print game board in console mode.

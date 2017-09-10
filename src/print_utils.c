@@ -120,7 +120,7 @@ void print_game_over(Game *game){
 	}
 }
 
-void print_game_mode(int mode){
+void print_game_mode(Mode mode){
 	printf("Game mode is set to %s\n", (mode == ONE_PLAYER) ? "1 player" : "2 players");
 }
 

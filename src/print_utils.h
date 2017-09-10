@@ -48,9 +48,11 @@ void print_undo_two_moves(Game *game, GameMove *moves[]);
 
 /*
  * Print message informing user his king is threatened.
- * @param color 	 color of current player
+ * @param color          	 color of current player
+ * @param mode           	 game mode
+ * @param current_player 	 current game player
  */
-void print_check(Color color);
+void print_check(Color color, Mode mode, Player current_player);
 
 /*
  * Print message informing user game is over and announce winner (or tie).

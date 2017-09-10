@@ -119,16 +119,16 @@ EngineMessage minimax_node(
 		int *son_score,
 		int alpha,
 		int beta) {
-	if (max_depth == 0) {
-		*son_score = score(game);
-		return SUCCESS;
-	}
-
 	Color current_player_color = game->player_color[game->current_player];
 	int game_over = is_game_over(game);
 	int check_mate = (game_over && game->check);
 	if (game_over){
 		*son_score = get_game_over_value(current_player_color, check_mate);
+		return SUCCESS;
+	}
+
+	if (max_depth == 0) {
+		*son_score = score(game);
 		return SUCCESS;
 	}
 

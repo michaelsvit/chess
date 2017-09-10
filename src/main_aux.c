@@ -60,18 +60,19 @@ int fetch_and_exe_game(ProgramState *state){
 
 int fetch_and_exe_ai(ProgramState *state){
 	/* Computer's turn */
-	GameMove *computer_move = minimax_suggest_move(state->game, state->game->difficulty);
-	if(!computer_move){
+	GameMove *move = minimax_suggest_move(state->game, state->game->difficulty);
+	if(!move){
 		destroy_game(state->game);
 		return 0;
 	}
 	EngineMessage msg = move_game_piece(
 			state->game,
-			computer_move->src_x,
-			computer_move->src_y,
-			computer_move->dst_x,
-			computer_move->dst_y);
-	free(computer_move);
+			move->src_x,
+			move->src_y,
+			move->dst_x,
+			move->dst_y);
+	print_computer_move(state->game->board[move->dst_y][move->dst_x]->type, move);
+	free(move);
 	if (msg == SUCCESS && state->game->check) {
 		print_check(
 				state->game->player_color[state->game->current_player],

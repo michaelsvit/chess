@@ -28,6 +28,27 @@ void print_player_color(Game *game);
 void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd);
 
 /*
+ * Print message describing move executed by AI player.
+ * @param type 	 type of game piece that was moved
+ * @param move 	 move executed by AI
+ */
+void print_computer_move(PieceType type, GameMove *move);
+
+/*
+ * Convert piece type into a representing string.
+ * @param type 	 type of game piece to represent
+ * @return     	 string representing given piece
+ */
+char *get_type_repr(PieceType type);
+
+/*
+ * Convert coordinates into a string representing given position on board.
+ * @param pos_x 	 column of given position
+ * @param pos_y 	 row of given position
+ */
+void print_position_repr(int pos_x, int pos_y);
+
+/*
  * Print message to user according to given engine message.
  * @param msg 	 message to be printed
  */

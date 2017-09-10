@@ -134,7 +134,8 @@ void print_undo_two_moves(Game *game, GameMove *moves[]){
 }
 
 void print_check(Color color, Mode mode, Player current_player){
-	if (mode == ONE_PLAYER && current_player == PLAYER2) {
+	if (mode == ONE_PLAYER && current_player == PLAYER1) {
+		/* AI threatens user's king */
 		printf("Check!\n");
 	} else {
 		printf("Check: %s King is threatened!\n", (color == WHITE) ? "white" : "black");

@@ -131,7 +131,10 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 			if(cmd->valid_arg){
 				EngineMessage msg = move_game_piece(game, args[0], args[1], args[2], args[3]);
 				if(msg == SUCCESS && game->check)
-					print_check(game->player_color[game->current_player]);
+					print_check(
+							game->player_color[game->current_player],
+							game->mode,
+							game->current_player);
 				return msg;
 			} else {
 				return INVALID_ARGUMENT;

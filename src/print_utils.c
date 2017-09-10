@@ -112,7 +112,11 @@ void print_game_over(Game *game){
 		char *str = (game->player_color[game->current_player] == WHITE) ? "black" : "white";
 		printf("Checkmate! %s player wins the game\n", str);
 	} else {
-		printf("The game is tied\n");
+		if (game->mode == ONE_PLAYER) {
+			printf("The game ends in a tie\n");
+		} else {
+			printf("The game is tied\n");
+		}
 	}
 }
 

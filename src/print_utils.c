@@ -51,7 +51,7 @@ void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd){
 void print_computer_move(PieceType type, GameMove *move){
 	printf("Computer: move %s at ", get_type_repr(type));
 	print_position_repr(move->src_x, move->src_y);
-	printf("to ");
+	printf(" to ");
 	print_position_repr(move->dst_x, move->dst_y);
 	putchar('\n');
 }

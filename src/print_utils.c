@@ -108,7 +108,6 @@ void print_check(Color color){
 }
 
 void print_game_over(Game *game){
-	print_board(game);
 	if(game->check){
 		char *str = (game->player_color[game->current_player] == WHITE) ? "black" : "white";
 		printf("Checkmate! %s player wins the game\n", str);

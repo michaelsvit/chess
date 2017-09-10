@@ -74,6 +74,18 @@ void get_user_input(const char* prompt, char* buf, int len);
 int fetch_and_exe_game(ProgramState *state);
 
 /*
+ * Fetch and execute next (move) game command from AI player.
+ * @param state 	 program state struct
+ */
+int fetch_and_exe_ai(ProgramState *state);
+
+/*
+ * Fetch and execute next game command from human player.
+ * @param state 	 program state struct
+ */
+int fetch_and_exe_user(ProgramState *state);
+
+/*
  * Fetch and execute next settings command from user.
  * @param state 	 program state struct
  */

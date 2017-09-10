@@ -52,43 +52,55 @@ void get_user_input(const char* prompt, char* buf, int len) {
 
 int fetch_and_exe_game(ProgramState *state){
 	if (state->game->mode == ONE_PLAYER && state->game->current_player == PLAYER2) {
-		/* Computer's turn */
-		GameMove *computer_move = minimax_suggest_move(state->game, state->game->difficulty);
-		if(!computer_move){
-			destroy_game(state->game);
-			return 0;
-		}
-		EngineMessage msg = move_game_piece(
-				state->game,
-				computer_move->src_x,
-				computer_move->src_y,
-				computer_move->dst_x,
-				computer_move->dst_y);
-		free(computer_move);
-		if (msg == SUCCESS && state->game->check) {
-			print_check(state->game->player_color[state->game->current_player]);
-		} else {
-			handle_message(state, msg);
-		}
+		return fetch_and_exe_ai(state);
 	} else {
-		if(state->indicators->print_game_prompt) print_board(state->game);
-		print_player_color(state->game);
-		get_user_input(GAME_PROMPT, state->user_input, INPUT_SIZE);
-		GameCommand *cmd = parse_game_command(state->user_input);
-		if(!cmd){
-			destroy_game(state->game);
-			return 0;
-		}
-		EngineMessage msg = execute_game_command(state->game, cmd);
-		if(msg != SUCCESS){
-			state->indicators->print_game_prompt = 0;
-			handle_game_message(state, msg, cmd);
-		} else {
-			state->indicators->print_game_prompt = 1;
-		}
-		free(cmd->arg);
-		free(cmd);
+		return fetch_and_exe_user(state);
 	}
+}
+
+int fetch_and_exe_ai(ProgramState *state){
+	/* Computer's turn */
+	GameMove *computer_move = minimax_suggest_move(state->game, state->game->difficulty);
+	if(!computer_move){
+		destroy_game(state->game);
+		return 0;
+	}
+	EngineMessage msg = move_game_piece(
+			state->game,
+			computer_move->src_x,
+			computer_move->src_y,
+			computer_move->dst_x,
+			computer_move->dst_y);
+	free(computer_move);
+	if (msg == SUCCESS && state->game->check) {
+		print_check(
+				state->game->player_color[state->game->current_player],
+				state->game->mode,
+				state->game->current_player);
+	} else {
+		handle_message(state, msg);
+	}
+	return 1;
+}
+
+int fetch_and_exe_user(ProgramState *state){
+	if(state->indicators->print_game_prompt) print_board(state->game);
+	print_player_color(state->game);
+	get_user_input(GAME_PROMPT, state->user_input, INPUT_SIZE);
+	GameCommand *cmd = parse_game_command(state->user_input);
+	if(!cmd){
+		destroy_game(state->game);
+		return 0;
+	}
+	EngineMessage msg = execute_game_command(state->game, cmd);
+	if(msg != SUCCESS){
+		state->indicators->print_game_prompt = 0;
+		handle_game_message(state, msg, cmd);
+	} else {
+		state->indicators->print_game_prompt = 1;
+	}
+	free(cmd->arg);
+	free(cmd);
 	return 1;
 }
 

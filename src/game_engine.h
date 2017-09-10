@@ -98,6 +98,13 @@ Game *copy_game(Game *game);
 void destroy_game();
 
 /*
+ * Copy given game move.
+ * @param move 	 move to copy
+ * @return     	 pointer to generated copy on success, NULL otherwise
+ */
+GameMove *copy_move(GameMove *move);
+
+/*
  * Move a game piece from its current place to the given coordinates.
  * @param game  	 game instance
  * @param src_x 	 column of source position

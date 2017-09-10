@@ -7,6 +7,7 @@
 
 #include "command_parser.h"
 #include "game_engine.h"
+#include "minimax.h"
 #include "print_utils.h"
 
 #define INPUT_SIZE 1024

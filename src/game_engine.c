@@ -96,6 +96,16 @@ void destroy_game(Game *game){
 	free(game);
 }
 
+GameMove *copy_move(GameMove *move){
+	GameMove *copy = (GameMove *)malloc(sizeof(GameMove));
+	if(!copy) return NULL;
+	copy->src_x = move->src_x;
+	copy->src_y = move->src_y;
+	copy->dst_x = move->dst_x;
+	copy->dst_y = move->dst_y;
+	return copy;
+}
+
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y){
 	if(!game) return INVALID_ARGUMENT;
 	GamePiece *piece = game->board[src_y][src_x];

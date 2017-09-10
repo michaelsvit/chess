@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "main_aux.h"
-#include "minimax.h"
 
 ProgramState *create_program_state(){
 	ProgramState *state = (ProgramState *)malloc(sizeof(ProgramState));
@@ -60,9 +59,8 @@ int fetch_and_exe_game(ProgramState *state){
 
 int fetch_and_exe_ai(ProgramState *state){
 	/* Computer's turn */
-	GameMove *move = minimax_suggest_move(state->game, state->game->difficulty);
+	GameMove *move = minimax_suggest_move(state->game);
 	if(!move){
-		destroy_game(state->game);
 		return 0;
 	}
 	EngineMessage msg = move_game_piece(

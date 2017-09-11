@@ -1,5 +1,5 @@
 #ifndef MINIMAX_H
-#define MINIMAX_H value
+#define MINIMAX_H
 #include "game_engine.h"
 
 /*

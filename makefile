@@ -23,7 +23,9 @@ obj/game_engine.o: src/game_engine.c src/game_engine.h src/array_list.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 obj/print_utils.o: src/print_utils.c src/print_utils.h src/game_engine.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
-obj/main_aux.o: src/main_aux.c src/main_aux.h src/command_parser.h src/game_engine.h src/minimax.h src/print_utils.h
+obj/main_aux.o: src/main_aux.c src/main_aux.h src/command_parser.h src/game_engine.h src/minimax.h src/print_utils.h src/xml_serializer.h
+	$(CC) $(COMP_FLAG) -c $< -o $@
+obj/xml_serializer.o: src/xml_serializer.c src/xml_serializer.h src/game_engine.h src/print_utils.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 obj/minimax.o: src/minimax.c src/minimax.h src/game_engine.h
 	$(CC) $(COMP_FLAG) -c $< -o $@

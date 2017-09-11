@@ -198,7 +198,7 @@ EngineMessage exe_save_cmd(Game *game, char *file){
 	FILE *out = fopen(file, "w");
 	if(!out) return INVALID_ARGUMENT;
 	serialize_game(game, out);
-	return SUCCESS;
+	return GAME_SAVED;
 }
 
 EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cmd){

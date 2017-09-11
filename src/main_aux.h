@@ -9,6 +9,7 @@
 #include "game_engine.h"
 #include "minimax.h"
 #include "print_utils.h"
+#include "xml_serializer.h"
 
 #define INPUT_SIZE 1024
 
@@ -113,6 +114,16 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd);
  * @param cmd      	 command that was issued by user
  */
 void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cmd);
+
+/*
+ * Execute a save command given by user.
+ * @param game 	 game instance
+ * @param file 	 file path (relative or absolute)
+ * @return
+ * INVALID_ARGUMENT 	 file can't be opened for writing
+ * SUCCESS          	 otherwise
+ */
+EngineMessage exe_save_cmd(Game *game, char *file);
 
 /*
  * Execute given setting command.

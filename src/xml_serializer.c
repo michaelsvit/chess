@@ -17,6 +17,7 @@ void serialize_game(Game *game, FILE *out){
 
 void write_xml_tag(FILE *out){
 	open_tag("?xml version=\"1.0\" encoding=\"UTF-8\"?", out, 0);
+	putc('\n', out);
 }
 
 void write_current_player(Game *game, FILE *out, int indent){
@@ -59,7 +60,7 @@ void write_board(Game *game, FILE *out, int indent){
 		write_board_row(game, out, indent, BOARD_SIZE-1-i);
 	}
 	indent--;
-	close_tag("board", out, 0);
+	close_tag("board", out, indent);
 	putc('\n', out);
 }
 
@@ -72,7 +73,7 @@ void write_board_row(Game *game, FILE *out, int indent, int row){
 		GamePiece *piece = game->board[row][i];
 		putc(get_piece_repr(piece), out);
 	}
-	fprintf(out, "</row_%d\n>", row+1);
+	fprintf(out, "</row_%d>\n", row+1);
 }
 
 void open_tag(char *tag, FILE *out, int indent){

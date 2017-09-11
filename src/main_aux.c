@@ -151,6 +151,7 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 						game->board[args[1]][args[0]]);
 				if(msg == SUCCESS) print_possible_moves(game, moves);
 				spArrayListDestroy(moves);
+				if(msg == SUCCESS) return SUCCESS_NO_PRINT;
 				return msg;
 			}
 		case UNDO:
@@ -198,7 +199,7 @@ EngineMessage exe_save_cmd(Game *game, char *file){
 	FILE *out = fopen(file, "w");
 	if(!out) return INVALID_ARGUMENT;
 	serialize_game(game, out);
-	return GAME_SAVED;
+	return SUCCESS_NO_PRINT;
 }
 
 EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cmd){

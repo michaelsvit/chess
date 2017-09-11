@@ -35,6 +35,7 @@ void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd){
 			}
 			break;
 		case SAVE:
+			printf("File cannot be created or modified\n");
 			break;
 		case UNDO:
 			if(msg == INVALID_COMMAND){

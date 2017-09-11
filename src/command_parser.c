@@ -65,14 +65,9 @@ SettingCommand *get_settings_command(char *cmd_name, char *cmd_arg){
 	} else if (strcmp(cmd_name, "user_color") == 0) {
 		if(!get_arg_command(cmd, cmd_arg, USER_COLOR)) return NULL;
 	} else if (strcmp(cmd_name, "load") == 0) {
-		if(cmd_arg){
-			cmd->type = LOAD;
-			cmd->arg = malloc(strlen(cmd_arg)+1);
-			if(!cmd->arg) return NULL;
-			strcpy((char *)cmd->arg, cmd_arg);
-			cmd->valid_arg = 1;
-		} else {
-			cmd->type = INVALID_SETTING_COMMAND;
+		if(!get_load_command(cmd, cmd_arg)){
+			free(cmd);
+			return NULL;
 		}
 	} else if (strcmp(cmd_name, "default") == 0) {
 		cmd->type = DEFAULT;
@@ -103,6 +98,21 @@ int get_arg_command(SettingCommand *cmd, char *cmd_arg, SettingCommandType type)
 		*arg = atoi(cmd_arg);
 		cmd->arg = arg;
 		cmd->valid_arg = 1;
+	}
+	return 1;
+}
+
+int get_load_command(SettingCommand *cmd, char *cmd_arg){
+	if(cmd_arg){
+		cmd->type = LOAD;
+		cmd->arg = malloc(strlen(cmd_arg)+1);
+		if(!cmd->arg){
+			return 0;
+		}
+		strcpy((char *)cmd->arg, cmd_arg);
+		cmd->valid_arg = 1;
+	} else {
+		cmd->type = INVALID_SETTING_COMMAND;
 	}
 	return 1;
 }

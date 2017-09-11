@@ -81,6 +81,14 @@ SettingCommand *get_settings_command(char *cmd_name, char *cmd_arg);
 int get_arg_command(SettingCommand *cmd, char *cmd_arg, SettingCommandType type);
 
 /*
+ * Initialize a load command with given argument.
+ * @param cmd     	 command to be initialized
+ * @param cmd_arg 	 path (relative or absolute) to file to load from
+ * @return        	 true on success, false on memory failure
+ */
+int get_load_command(SettingCommand *cmd, char *cmd_arg);
+
+/*
  * Get game command according to given name and argument.
  * @param cmd_name  	 name of user command
  * @return          	 pointer to parsed command on success, NULL otherwise

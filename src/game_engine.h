@@ -14,6 +14,7 @@
  */
 #include <stdio.h>
 #include "array_list.h"
+#include "xml_serializer.h"
 
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
@@ -94,6 +95,17 @@ Game *create_game(GameSettings *settings);
  * @return     	 pointer to the generated copy on success, NULL otherwise
  */
 Game *copy_game(Game *game);
+
+/*
+ * Save game instance into given XML file.
+ * @param game 	 game instance
+ * @param file 	 file path (relative or absolute)
+ * @return
+ * INVALID_ARGUMENT 	 file can't be opened for writing
+ * SUCCESS          	 otherwise
+ */
+EngineMessage save_game(Game *game, char *file);
+
 
 /*
  * Load a saved game instance from given XML file.

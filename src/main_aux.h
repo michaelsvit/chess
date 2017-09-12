@@ -117,16 +117,6 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd);
 void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cmd);
 
 /*
- * Execute a save command given by user.
- * @param game 	 game instance
- * @param file 	 file path (relative or absolute)
- * @return
- * INVALID_ARGUMENT 	 file can't be opened for writing
- * SUCCESS          	 otherwise
- */
-EngineMessage exe_save_cmd(Game *game, char *file);
-
-/*
  * Execute given setting command.
  * @param game     	 game instance
  * @param settings 	 current set of settings to be used by game

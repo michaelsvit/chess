@@ -96,6 +96,13 @@ void destroy_game(Game *game){
 	free(game);
 }
 
+EngineMessage save_game(Game *game, char *file){
+	FILE *out = fopen(file, "w");
+	if(!out) return INVALID_ARGUMENT;
+	serialize_game(game, out);
+	return SUCCESS_NO_PRINT;
+}
+
 GameMove *copy_move(GameMove *move){
 	GameMove *copy = (GameMove *)malloc(sizeof(GameMove));
 	if(!copy) return NULL;

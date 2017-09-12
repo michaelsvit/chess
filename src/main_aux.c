@@ -171,7 +171,7 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 			}
 		case SAVE:
 			if (cmd->valid_arg) {
-				return exe_save_cmd(game, (char *)cmd->arg);
+				return save_game(game, (char *)cmd->arg);
 			} else {
 				return INVALID_ARGUMENT;
 			}
@@ -194,13 +194,6 @@ void handle_game_message(ProgramState *state, EngineMessage msg, GameCommand *cm
 	} else {
 		handle_message(state, msg);
 	}
-}
-
-EngineMessage exe_save_cmd(Game *game, char *file){
-	FILE *out = fopen(file, "w");
-	if(!out) return INVALID_ARGUMENT;
-	serialize_game(game, out);
-	return SUCCESS_NO_PRINT;
 }
 
 EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cmd){

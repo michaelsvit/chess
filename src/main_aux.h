@@ -26,6 +26,7 @@ typedef struct {
 	int quit;
 	int print_settings_prompt;
 	int print_game_prompt;
+	int game_loaded;
 	RunState run_state;
 } Indicators;
 

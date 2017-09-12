@@ -37,6 +37,7 @@ Indicators *create_indicators(){
 	indicators->quit = 0;
 	indicators->print_game_prompt = 1;
 	indicators->print_settings_prompt = 1;
+	indicators->game_loaded = 0;
 	indicators->run_state = SETTINGS;
 	return indicators;
 }
@@ -234,8 +235,12 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 			}
 			return INVALID_COMMAND;
 		case LOAD:
-			/* TODO: Implement */
-			break;
+			if(cmd->valid_arg){
+				free(cmd->arg);
+				if(!(cmd->arg = fopen(cmd->arg, "r"))) return INVALID_ARGUMENT;
+				return GAME_LOAD;
+			}
+			return INVALID_ARGUMENT;
 		case DEFAULT:
 			set_default_settings(settings);
 			break;
@@ -255,6 +260,9 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 void handle_settings_message(ProgramState *state, EngineMessage msg, SettingCommand *cmd){
 	if(msg == INVALID_ARGUMENT){
 		print_settings_error(cmd);
+	} else if (msg == GAME_LOAD) {
+		state->game = load_game((FILE *)cmd->arg);
+		state->indicators->game_loaded = 1;
 	} else {
 		handle_message(state, msg);
 	}
@@ -275,7 +283,8 @@ void handle_message(ProgramState *state, EngineMessage msg){
 			return;
 		case START_GAME:
 			state->indicators->run_state = GAME;
-			state->game = create_game(state->settings);
+			if(!state->indicators->game_loaded)
+				state->game = create_game(state->settings);
 			free(state->settings);
 			if(!state->game){
 				print_generic_message(MALLOC_FAILURE);

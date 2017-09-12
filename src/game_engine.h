@@ -12,6 +12,7 @@
  * get_possible_moves 	 get all possible moves for a given game piece
  * is_game_over       	 checks if the given game instance reached a final state
  */
+#include <stdio.h>
 #include "array_list.h"
 
 #define BOARD_SIZE 8
@@ -33,11 +34,12 @@ typedef enum {
 	ILLEGAL_MOVE,
 	EMPTY_HISTORY,
 	GAME_OVER,
+	GAME_LOAD,
 	START_GAME,
-	SUCCESS_NO_PRINT,
 	RESTART,
 	QUIT,
-	SUCCESS
+	SUCCESS,
+	SUCCESS_NO_PRINT
 } EngineMessage;
 typedef enum {PLAYER1=0, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
@@ -92,6 +94,13 @@ Game *create_game(GameSettings *settings);
  * @return     	 pointer to the generated copy on success, NULL otherwise
  */
 Game *copy_game(Game *game);
+
+/*
+ * Load a saved game instance from given XML file.
+ * @param in 	 XML file to be loaded
+ * @return   	 pointer to loaded game on success, NULL otherwise
+ */
+Game *load_game(FILE *in);
 
 /*
  * Destroy an existing game instance and free all allocated memory.

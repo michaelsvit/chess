@@ -36,8 +36,10 @@ typedef enum {
 	START_GAME,
 	RESTART,
 	QUIT,
-	SUCCESS
+	SUCCESS,
+	SDL_ERROR
 } EngineMessage;
+
 typedef enum {PLAYER1=0, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;

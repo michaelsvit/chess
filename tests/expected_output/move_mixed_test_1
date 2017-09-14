@@ -247,14 +247,4 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| R _ _ _ K B _ R |
-7| _ m _ q _ M M M |
-6| N _ _ _ _ _ _ N |
-5| M b _ _ n _ b _ |
-4| _ _ _ _ _ _ _ _ |
-3| _ _ _ _ _ _ _ _ |
-2| m m m _ _ m m m |
-1| r n _ _ k _ _ r |
-  -----------------
-   A B C D E F G H
 Checkmate! white player wins the game

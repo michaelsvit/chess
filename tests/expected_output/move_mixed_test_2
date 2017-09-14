@@ -614,14 +614,4 @@ black player - enter your move:
   -----------------
    A B C D E F G H
 white player - enter your move:
-8| _ _ _ _ _ _ _ _ |
-7| n m _ _ _ _ _ _ |
-6| _ _ _ _ _ b _ _ |
-5| _ _ _ _ _ _ r _ |
-4| _ _ _ _ _ K _ M |
-3| _ _ _ m _ _ _ m |
-2| m m _ _ k m _ _ |
-1| r _ _ _ _ b n _ |
-  -----------------
-   A B C D E F G H
 The game is tied

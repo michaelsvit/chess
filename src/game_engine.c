@@ -418,6 +418,7 @@ int read_content(Tag tag, Game *game){
 int read_board_row(Game *game, int row){
 	char *row_str = content();
 	for (int i = 0; i < BOARD_SIZE; ++i) {
+		if (row_str[i] == '_') continue;
 		PieceType piece_type = get_piece_type(row_str[i]);
 		Color piece_color = get_piece_color(row_str[i]);
 		EngineMessage msg = add_game_piece(game, piece_type, piece_color, i, row);

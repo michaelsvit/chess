@@ -8,7 +8,7 @@ void init_serializer(FILE *out){
 void write_tag(char *tag, char *content, FILE *out, int indent){
 	open_tag(tag, out, indent);
 	fprintf(out, "%s", content);
-	close_tag(tag, out, indent);
+	close_tag(tag, out, 0);
 	putc('\n', out);
 }
 

@@ -119,7 +119,7 @@ int fetch_and_exe_settings(ProgramState *state){
 	EngineMessage msg = execute_setting_command(state->settings, cmd);
 	if(msg != SUCCESS)
 		handle_settings_message(state, msg, cmd);
-	free(cmd->arg);
+	if(cmd->type != LOAD) free(cmd->arg);
 	free(cmd);
 	return 1;
 }
@@ -229,8 +229,12 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 			return INVALID_COMMAND;
 		case LOAD:
 			if(cmd->valid_arg){
-				free(cmd->arg);
-				if(!(cmd->arg = fopen(cmd->arg, "r"))) return INVALID_ARGUMENT;
+				char *file = (char *)cmd->arg;
+				if(!(cmd->arg = fopen(file, "r"))){
+					free(file);
+					return INVALID_ARGUMENT;
+				}
+				free(file);
 				return GAME_LOAD;
 			}
 			return INVALID_ARGUMENT;
@@ -255,7 +259,7 @@ void handle_settings_message(ProgramState *state, EngineMessage msg, SettingComm
 		print_settings_error(cmd);
 	} else if (msg == GAME_LOAD) {
 		FILE *in = (FILE *)cmd->arg;
-		load_game(in);
+		state->game = load_game(in);
 		fclose(in);
 		state->indicators->game_loaded = 1;
 	} else {

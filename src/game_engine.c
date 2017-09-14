@@ -99,7 +99,11 @@ void destroy_game(Game *game){
 EngineMessage save_game(Game *game, char *file){
 	FILE *out = fopen(file, "w");
 	if(!out) return INVALID_ARGUMENT;
-	serialize_game(game, out);
+	if(!serialize_game(game, out)){
+		fclose(out);
+		return MALLOC_FAILURE;
+	}
+	fclose(out);
 	return SUCCESS_NO_PRINT;
 }
 
@@ -256,6 +260,150 @@ int is_game_over(Game *game){
 }
 
 /******************************** Auxiliary functions ******************************/
+
+int serialize_game(Game *game, FILE *out){
+	init_serializer(out);
+	int indent = 0;
+	open_tag("game", out, indent);
+	putc('\n', out);
+	indent++;
+	write_tag(
+			"current_turn",
+			(game->player_color[game->current_player] == WHITE) ? "1" : "0",
+			out,
+			indent);
+	write_tag(
+			"game_mode",
+			(game->mode == ONE_PLAYER) ? "1" : "2",
+			out,
+			indent);
+	if(game->mode == ONE_PLAYER){
+		char *difficulty = (char *)malloc(2);
+		if (!difficulty) return 0;
+		sprintf(difficulty, "%d", game->difficulty);
+		write_tag(
+				"difficulty",
+				difficulty,
+				out,
+				indent);
+		free(difficulty);
+		write_tag(
+				"user_color",
+				(game->player_color[PLAYER1] == WHITE) ? "1" : "0",
+				out,
+				indent);
+	}
+	if(!write_board(game, out, indent)) return 0;
+	indent--;
+	close_tag("game", out, indent);
+	putc('\n', out);
+	return 1;
+}
+
+char get_piece_repr(GamePiece *piece); /* definition is in print_utils.c */
+
+int write_board(Game *game, FILE *out, int indent){
+	open_tag("board", out, indent);
+	putc('\n', out);
+	indent++;
+	for (int i = 0; i < BOARD_SIZE; ++i) {
+		char *row_str = (char *)malloc(BOARD_SIZE+1);
+		if(!row_str) return 0;
+		for (int j = 0; j < BOARD_SIZE; j++) {
+			GamePiece *piece = game->board[BOARD_SIZE-1-i][j];
+			row_str[j] = get_piece_repr(piece);
+		}
+		row_str[BOARD_SIZE] = '\0';
+		char *row_tag = (char *)malloc(6);
+		if(!row_tag){
+			free(row_str);
+			return 0;
+		}
+		sprintf(row_tag, "row_%d", BOARD_SIZE-i);
+		write_tag(row_tag, row_str, out, indent);
+		free(row_str);
+		free(row_tag);
+	}
+	indent--;
+	close_tag("board", out, indent);
+	putc('\n', out);
+	return 1;
+}
+
+int read_content(Tag tag, Game *game){
+	switch (tag){
+		case CUR_PLAYER_TAG:
+			/* Assume for now that PLAYER1 is white */
+			game->current_player = !atoi(content());
+			break;
+		case MODE_TAG:
+			game->mode = atoi(content());
+			break;
+		case DIFFICULTY_TAG:
+			if(game->mode == ONE_PLAYER)
+				game->difficulty = atoi(content());
+			break;
+		case USER_COLOR_TAG:
+			if(game->mode == ONE_PLAYER){
+				Color user_color = atoi(content());
+				if(user_color == BLACK){
+					/* Need to flip current player */
+					game->current_player = PLAYER2;
+					game->player_color[PLAYER1] = BLACK;
+					game->player_color[PLAYER2] = WHITE;
+				}
+				break;
+			}
+		case BOARD_TAG:
+			for (int i = 0; i < BOARD_SIZE; ++i) {
+				next_open();
+				if(!read_board_row(game, BOARD_SIZE-1-i)) return 0;
+				next_close();
+			}
+			break;
+		default:
+			break;
+	}
+	return 1;
+}
+
+int read_board_row(Game *game, int row){
+	char *row_str = content();
+	for (int i = 0; i < BOARD_SIZE; ++i) {
+		PieceType piece_type = get_piece_type(row_str[i]);
+		Color piece_color = get_piece_color(row_str[i]);
+		EngineMessage msg = add_game_piece(game, piece_type, piece_color, i, row);
+		if(msg == MALLOC_FAILURE) return 0;
+	}
+	return 1;
+}
+
+PieceType get_piece_type(char repr){
+	repr = tolower(repr);
+	switch (repr){
+		case 'm':
+			return PAWN;
+		case 'r':
+			return ROOK;
+		case 'n':
+			return KNIGHT;
+		case 'b':
+			return BISHOP;
+		case 'q':
+			return QUEEN;
+		case 'k':
+			return KING;
+	}
+	return 0; /* unreachable */
+}
+
+Color get_piece_color(char repr){
+	if (repr >= 'a' && repr <= 'z') {
+		return WHITE;
+	} else {
+		return BLACK;
+	}
+}
 
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
 	GamePiece *piece = (GamePiece *)malloc(sizeof(GamePiece));

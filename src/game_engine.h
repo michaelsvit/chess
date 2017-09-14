@@ -186,6 +186,54 @@ int is_game_over(Game *game);
 /**************** Auxiliary functions - should not be called outside this module ***********/
 /*******************************************************************************************/
 
+
+/*
+ * Serialize given game instance into an XML tree and write it to given file.
+ * @param game 	 game instance
+ * @param out  	 write target file
+ * @return     	 true on success, false on malloc failure
+ */
+int serialize_game(Game *game, FILE *out);
+
+/*
+ * Serialize and write game board into given file in XML format.
+ * @param game   	 game instance
+ * @param out    	 write target file
+ * @param indent 	 indent level
+ * @return       	 true on success, false on malloc failure
+ */
+int write_board(Game *game, FILE *out, int indent);
+
+/*
+ * Read tag contents into game instance.
+ * @param tag  	 last tag that was read
+ * @param game 	 game instance
+ * @return     	 true on success, false on malloc failure
+ */
+int read_content(Tag tag, Game *game);
+
+/*
+ * Read board row contents into game instance.
+ * @param game 	 game instance
+ * @param row  	 row index
+ * @return     	 true if read succeeded, false on malloc failure
+ */
+int read_board_row(Game *game, int row);
+
+/*
+ * Convert given character to corresponding game piece type.
+ * @param repr 	 character representation of game piece
+ * @return     	 enum value of piece type
+ */
+PieceType get_piece_type(char repr);
+
+/*
+ * Convert given character to corresponding game piece color.
+ * @param repr 	 character representation of game piece
+ * @return     	 enum value of piece color
+ */
+Color get_piece_color(char repr);
+
 /*
  * Create a single game piece of the given type and color and initialize its position
  * to the given coordinates.

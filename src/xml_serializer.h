@@ -2,70 +2,21 @@
 #define XML_SERIALIZER_H
 
 #include <stdio.h>
-#include "game_engine.h"
-#include "print_utils.h"
-
-/*
- * Serialize given game instance into an XML tree and write it to given file.
- * @param game 	 game instance
- * @param out  	 write target file
- */
-void serialize_game(Game *game, FILE *out);
 
 /*
  * Write XML opening tag to file.
  * @param out 	 write target file
  */
-void write_xml_tag(FILE *out);
+void init_serializer(FILE *out);
 
 /*
- * Write current player to target file.
- * @param game   	 game instance
- * @param out    	 write target file
- * @param indent 	 indent level
+ * Write given tag with given content to file.
+ * @param tag     	 name of tag
+ * @param content 	 tag contents
+ * @param out     	 write target file
+ * @param indent  	 indent level
  */
-void write_current_player(Game *game, FILE *out, int indent);
-
-/*
- * Write game mode to target file.
- * @param game   	 game instance
- * @param out    	 write target file
- * @param indent 	 indent level
- */
-void write_mode(Game *game, FILE *out, int indent);
-
-/*
- * Write game difficulty to target file (only if in one-player mode).
- * @param game   	 game instance
- * @param out    	 write target file
- * @param indent 	 indent level
- */
-void write_difficulty(Game *game, FILE *out, int indent);
-
-/*
- * Write user's piece color to target file (only if in one-player mode).
- * @param game   	 game instance
- * @param out    	 write target file
- * @param indent 	 indent level
- */
-void write_color(Game *game, FILE *out, int indent);
-
-/*
- * Write game board to target file.
- * @param game   	 game instance
- * @param out    	 write target file
- * @param indent 	 indent level
- */
-void write_board(Game *game, FILE *out, int indent);
-
-/*
- * Write a single row of the game board to target file.
- * @param game   	 game instance
- * @param out    	 write target file
- * @param indent 	 indent level
- * @param row    	 row index
- */
-void write_board_row(Game *game, FILE *out, int indent, int row);
+void write_tag(char *tag, char *content, FILE *out, int indent);
 
 /*
  * Write opening tag to target file.

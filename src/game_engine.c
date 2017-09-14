@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <ctype.h>
 #include "game_engine.h"
 
 /******************************* Interface functions *********************************/
@@ -105,6 +106,53 @@ EngineMessage save_game(Game *game, char *file){
 	}
 	fclose(out);
 	return SUCCESS_NO_PRINT;
+}
+
+Game *load_game(FILE *in){
+	/* Initialize game object */
+	Game *game = malloc(sizeof(Game));
+	if(!game) return NULL;
+
+	game->white_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
+	game->black_pieces = spArrayListCreate(sizeof(GamePiece), ARRAY_SIZE);
+	game->move_history = spArrayListCreate(sizeof(GameMove), HISTORY_SIZE);
+	game->removed_pieces = spArrayListCreate(sizeof(GamePiece), HISTORY_SIZE);
+	if(!game->white_pieces ||
+			!game->black_pieces ||
+			!game->move_history ||
+			!game->removed_pieces){
+		destroy_game(game);
+		return NULL;
+	}
+
+	/* Initialize board to be empty */
+	for(int i = 0; i < BOARD_SIZE; i++){
+		for(int j = 0; j < BOARD_SIZE; j++){
+			game->board[i][j] = NULL;
+		}
+	}
+	game->mode = 1;
+	game->difficulty = 2;
+	game->check = 0;
+	game->player_color[PLAYER1] = WHITE;
+	game->player_color[PLAYER2] = BLACK;
+	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
+
+	/* Load file into game object */
+	char *buf;
+	init_parser(in, &buf);
+	next_open(); /* consume opening GAME_TAG */
+	Tag tag;
+	while((tag = next_open()) != GAME_TAG){
+		if(!read_content(tag, game)){
+			free(buf);
+			destroy_game(game);
+			return NULL;
+		}
+		next_close(); /* consume closing tag */
+	}
+	free(buf);
+	return game;
 }
 
 GameMove *copy_move(GameMove *move){

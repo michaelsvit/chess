@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "array_list.h"
 #include "xml_serializer.h"
+#include "xml_parser.h"
 
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
@@ -106,11 +107,10 @@ Game *copy_game(Game *game);
  */
 EngineMessage save_game(Game *game, char *file);
 
-
 /*
  * Load a saved game instance from given XML file.
- * @param in 	 XML file to be loaded
- * @return   	 pointer to loaded game on success, NULL otherwise
+ * @param in   	 XML file to be loaded
+ * @return     	 pointer to loaded game on success, NULL otherwise
  */
 Game *load_game(FILE *in);
 

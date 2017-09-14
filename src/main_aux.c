@@ -254,7 +254,9 @@ void handle_settings_message(ProgramState *state, EngineMessage msg, SettingComm
 	if(msg == INVALID_ARGUMENT){
 		print_settings_error(cmd);
 	} else if (msg == GAME_LOAD) {
-		state->game = load_game((FILE *)cmd->arg);
+		FILE *in = (FILE *)cmd->arg;
+		load_game(in);
+		fclose(in);
 		state->indicators->game_loaded = 1;
 	} else {
 		handle_message(state, msg);

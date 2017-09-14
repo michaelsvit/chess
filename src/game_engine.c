@@ -152,6 +152,7 @@ Game *load_game(FILE *in){
 		next_close(); /* consume closing tag */
 	}
 	free(buf);
+	game->check = is_in_check_state(game);
 	return game;
 }
 

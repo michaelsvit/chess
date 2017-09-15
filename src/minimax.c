@@ -26,6 +26,8 @@ int minimax_node(Game *game, int max_depth, GameMove **suggested_move, int alpha
 		for (int j = 0; j < spArrayListSize(moves); j++){
 			/* For each possible move of piece */
 			GameMove *move = (GameMove *)spArrayListGetAt(moves, j);
+			/* Init best_move so it doesn't return NULL */
+			if(max_depth == game->difficulty && !best_move) best_move = copy_move(move);
 			Game *copy = copy_game(game);
 			if (!copy) return quit_error(NULL, moves, error);
 			EngineMessage msg = move_game_piece(copy, move->src_x, move->src_y, move->dst_x, move->dst_y);

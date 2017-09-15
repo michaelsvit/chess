@@ -3,8 +3,9 @@
 
 #include <SDL.h>
 #include <SDL_video.h>
+#include "../game_engine.h"
 
-typedef enum {NO_EVENT = 0, PIECE_MOVED, BUTTON_CLICKED} EventType;
+typedef enum {NO_EVENT = 0, PIECE_MOVED, NEW_GAME, EXIT_SETTINGS_SCREEN} EventType;
 
 
 typedef struct {
@@ -16,10 +17,7 @@ typedef struct {
             int new_piece_row;
             int new_piece_col;
         } move;
-
-        struct ButtonClick {
-            int button_id;
-        } button;
+        GameSettings new_game_settings;
     } data;
 } GameEvent;
 

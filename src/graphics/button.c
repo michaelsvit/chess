@@ -1,7 +1,7 @@
 #include "button.h"
 #include "utils.h"
 
-EngineMessage create_button(Button **button, SDL_Rect *area, SDL_Renderer *renderer, int button_id, char *reg_path, char *pushed_path) {
+EngineMessage create_button(Button **button, SDL_Rect *area, SDL_Renderer *renderer, char *reg_path, char *pushed_path) {
 	Button *new_button = (Button*)calloc(1, sizeof(Button));
 	if (!new_button) {
 		return MALLOC_FAILURE;
@@ -16,7 +16,6 @@ EngineMessage create_button(Button **button, SDL_Rect *area, SDL_Renderer *rende
 		destroy_button(new_button);
 		return SDL_ERROR;
 	}
-	new_button->button_id = button_id;
 	new_button->area = *area;
 	new_button->is_pushed = 0;
 
@@ -46,8 +45,7 @@ void destroy_button(Button *button) {
 	free(button);
 }
 
-EngineMessage button_event_handler(SDL_Event *event, Button *button, GameEvent *game_event) {
-	game_event->type = NO_EVENT;
+int button_event_handler(SDL_Event *event, Button *button) {
 	switch (event->type) {
 		case SDL_MOUSEBUTTONDOWN:
 			if (event->button.x >= button->area.x && event->button.x <= button->area.x + button->area.w
@@ -58,10 +56,9 @@ EngineMessage button_event_handler(SDL_Event *event, Button *button, GameEvent *
 		case SDL_MOUSEBUTTONUP:
 			if (button->is_pushed == 1) {
 				button->is_pushed = 0;
-				game_event->type = BUTTON_CLICKED;
-				game_event->data.button.button_id = button->button_id;
+				return 1;
 			}
 			break;
 	}
-	return SUCCESS;
+	return 0;
 }

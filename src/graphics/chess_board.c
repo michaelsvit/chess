@@ -96,7 +96,7 @@ void destroy_chess_board(ChessBoard *board) {
 	free(board);
 }
 
-EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *game_event) {
+void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *game_event) {
 	game_event->type = NO_EVENT;
 
 	switch (event->type) {
@@ -135,7 +135,5 @@ EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board, Gam
 			}
 			break;
 	}
-	return SUCCESS;
-
 }
 

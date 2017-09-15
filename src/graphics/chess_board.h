@@ -31,6 +31,6 @@ typedef struct {
 EngineMessage create_chess_board(ChessBoard **board, SDL_Rect *board_area, SDL_Renderer *renderer);
 EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *game);
 void destroy_chess_board(ChessBoard *board);
-EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *new_game_event);
+void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *new_game_event);
 
 #endif

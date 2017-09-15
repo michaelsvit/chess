@@ -5,7 +5,19 @@
 #include <SDL_video.h>
 #include "../game_engine.h"
 
-typedef enum {NO_EVENT = 0, PIECE_MOVED, NEW_GAME, EXIT_SETTINGS_SCREEN} EventType;
+typedef enum {
+    NO_EVENT = 0,
+    PIECE_MOVED,
+    NEW_GAME,
+    RESTART_GAME,
+    SAVE_GAME,
+    UNDO_MOVE,
+    MOVE_TO_MAIN_MENU,
+    MOVE_TO_SETTINGS_WINDOW,
+    MOVE_TO_LOAD_SCREEN,
+    EXIT_SETTINGS_SCREEN,
+    QUIT_GAME,
+} EventType;
 
 
 typedef struct {

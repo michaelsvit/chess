@@ -32,9 +32,6 @@ int minimax_node(Game* game, unsigned int max_depth, GameMove* suggested_move, i
 	if (!game) {
 		return 0;
 	}
-	if (max_depth == 0) {
-		return score(game);
-	}
 
 	Color current_player_color = game->player_color[game->current_player];
 	int game_over = is_game_over(game);
@@ -48,6 +45,9 @@ int minimax_node(Game* game, unsigned int max_depth, GameMove* suggested_move, i
 	}
 	if (game_over) {
 		return 0;
+	}
+	if (max_depth == 0) {
+		return score(game);
 	}
 
 	int son_score;

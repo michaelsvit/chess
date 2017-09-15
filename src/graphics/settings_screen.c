@@ -160,8 +160,13 @@ void settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_sc
 	if (is_start_button_visible(settings_screen) && button_event_handler(event, settings_screen->start_button)) {
 		game_event->type = NEW_GAME;
 		game_event->data.new_game_settings.mode = settings_screen->mode->choice;
-		game_event->data.new_game_settings.difficulty = settings_screen->difficulty->choice;
-		game_event->data.new_game_settings.player1_color = settings_screen->color->choice;
+		if (game_event->data.new_game_settings.mode == 0) {
+			game_event->data.new_game_settings.difficulty = settings_screen->difficulty->choice;
+			game_event->data.new_game_settings.player1_color = settings_screen->color->choice;
+		} else {
+			game_event->data.new_game_settings.difficulty = 1;
+			game_event->data.new_game_settings.player1_color = WHITE;
+		}
 	}
 	
 	if (button_event_handler(event, settings_screen->back_button)) {

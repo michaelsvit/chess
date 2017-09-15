@@ -1,9 +1,10 @@
 #ifndef MULTIPLE_CHOICE_H
 #define MULTIPLE_CHOICE_H
 
-#include "../game_engine.h"
 #include <SDL.h>
 #include <SDL_video.h>
+
+#include "../game_engine.h"
 
 #define MAX_NUM_CHOICES 5
 

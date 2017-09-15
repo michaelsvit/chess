@@ -117,8 +117,8 @@ void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *g
 		case SDL_MOUSEBUTTONUP:
 			if (board->is_dragging) {
 				board->is_dragging = 0;
-				// return game event.
 
+				// return game event.
 				game_event->type = PIECE_MOVED;
 				game_event->data.move.prev_piece_row = board->dragging_piece_row;
 				game_event->data.move.prev_piece_col = board->dragging_piece_col;

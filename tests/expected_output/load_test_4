@@ -1,0 +1,26 @@
+Specify game setting or type 'start' to begin a game with the current setting:
+8| _ N B Q _ B N R |
+7| _ M M M _ K M M |
+6| _ _ _ _ _ _ _ _ |
+5| M _ _ _ M _ _ _ |
+4| _ _ _ _ m _ _ _ |
+3| _ _ n _ _ _ _ _ |
+2| m m m b _ m m m |
+1| _ r _ _ k b n r |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+Check: black King is threatened!
+8| _ N B Q _ B N R |
+7| _ M M M _ K M M |
+6| _ _ _ _ _ _ _ _ |
+5| M _ _ _ M _ _ _ |
+4| _ _ b _ m _ _ _ |
+3| _ _ n _ _ _ _ _ |
+2| m m m b _ m m m |
+1| _ r _ _ k _ n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+black player - enter your move:
+Exiting...

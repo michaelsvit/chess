@@ -1,0 +1,3 @@
+load tests/saved_games/save4.xml
+start
+quit

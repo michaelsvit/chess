@@ -1,0 +1,4 @@
+load tests/saved_games/save2.xml
+start
+move <7,D> to <5,D>
+quit

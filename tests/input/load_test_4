@@ -1,0 +1,5 @@
+load tests/saved_games/save3.xml
+start
+move <1,F> to <4,C>
+save tests/saved_games/save5.xml
+quit

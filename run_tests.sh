@@ -5,7 +5,10 @@ handle_diff(){
 	select ans in 'Yes' 'No' 'Quit';
 	do
 		case $ans in
-			Yes ) diff -cy "$1" "${1/expected_/}"; break;;
+			Yes )
+				echo 'Expected - left, found - right'
+				diff -y "$1" "${1/expected_/}"
+				break;;
 			No ) break;;
 			Quit ) exit;;
 		esac

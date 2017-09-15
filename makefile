@@ -1,3 +1,4 @@
+$(shell mkdir -p 'obj')
 CC = gcc
 EXEC = chessprog
 SOURCES = $(wildcard src/*.c)

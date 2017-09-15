@@ -150,6 +150,8 @@ int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move)
  */
 int is_game_over(Game *game);
 
+EngineMessage restart_game(Game *game);
+
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/
 /*******************************************************************************************/

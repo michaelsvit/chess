@@ -32,7 +32,7 @@ Game *create_game(GameSettings *settings){
 	game->check = 0;
 	game->player_color[PLAYER1] = settings->player1_color;
 	game->player_color[PLAYER2] = !settings->player1_color;
-	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
+
 	if(init_game(game) != SUCCESS){
 		destroy_game(game);
 		return NULL;
@@ -238,6 +238,13 @@ int is_game_over(Game *game){
 	return 1;
 }
 
+EngineMessage restart_game(Game *game) {
+	spArrayListClear(game->black_pieces);
+	spArrayListClear(game->white_pieces);
+	spArrayListClear(game->move_history);
+	spArrayListClear(game->removed_pieces);
+	return init_game(game);
+}
 /******************************** Auxiliary functions ******************************/
 
 GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
@@ -253,6 +260,7 @@ GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
 EngineMessage init_game(Game *game){
 	/* Create all pieces and place them on the board */
 	EngineMessage msg;
+	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
 	msg = add_game_pieces_set(game, WHITE);
 	if(msg != SUCCESS) return msg;
 	msg = add_game_pieces_set(game, BLACK);

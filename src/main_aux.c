@@ -52,14 +52,16 @@ void get_user_input(const char* prompt, char* buf, int len) {
 
 int fetch_and_exe_game(ProgramState *state){
 	if (state->game->mode == ONE_PLAYER && state->game->current_player == PLAYER2) {
-		GameMove computerMove = minimax_suggest_move(state->game, state->game->difficulty);
-		EngineMessage msg = move_game_piece(state->game, computerMove.src_x, computerMove.src_y, computerMove.dst_x, computerMove.dst_y);
-		if(msg == SUCCESS && state->game->check) {
-			print_check(state->game->player_color[state->game->current_player]);
+		GameMove computer_move;
+		EngineMessage msg = minimax_suggest_move(state->game, state->game->difficulty, &computer_move);
+		if (msg != SUCCESS) {
 			return msg;
-		} else {
-			return INVALID_ARGUMENT;
 		}
+		msg = move_game_piece(state->game, computer_move.src_x, computer_move.src_y, computer_move.dst_x, computer_move.dst_y);
+		if (msg == SUCCESS && state->game->check) {
+			print_check(state->game->player_color[state->game->current_player]);
+		}
+		return msg;
 	}
 	if(state->indicators->print_game_prompt) print_board(state->game);
 	print_player_color(state->game);

@@ -16,6 +16,6 @@
  * On success the function returns GameMove
  * which is the best move for the current player.
  */
-GameMove minimax_suggest_move(Game* currentGame, unsigned int maxDepth);
+EngineMessage minimax_suggest_move(Game* game, unsigned int max_depth, GameMove *suggested_move);
 
 #endif

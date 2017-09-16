@@ -99,6 +99,7 @@ void destroy_game_screen(GameScreen *game_screen) {
 
 EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
 	EngineMessage msg = SUCCESS;
+	GameMove comp_move;
 
 	if (game_screen->game) {
 		destroy_game(game_screen->game);
@@ -109,7 +110,10 @@ EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
 		return MALLOC_FAILURE;
 	}
 	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
-		GameMove comp_move = minimax_suggest_move(game_screen->game, game_screen->game->difficulty);
+		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
+		if (msg != SUCCESS) {
+			return msg;
+		}
 		msg = move_game_piece(game_screen->game, comp_move.src_x, comp_move.src_y, comp_move.dst_x, comp_move.dst_y);
 	}
 
@@ -181,7 +185,10 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	}
 
 	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
-		comp_move = minimax_suggest_move(game_screen->game, game_screen->game->difficulty);
+		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
+		if (msg != SUCCESS) {
+			return msg;
+		}
 		msg = move_game_piece(game_screen->game, comp_move.src_x, comp_move.src_y, comp_move.dst_x, comp_move.dst_y);
 	}
 

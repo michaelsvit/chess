@@ -397,12 +397,12 @@ int read_content(Tag tag, Game *game){
 				Color user_color = atoi(content());
 				if(user_color == BLACK){
 					/* Need to flip current player */
-					game->current_player = PLAYER2;
+					game->current_player = PLAYER1;
 					game->player_color[PLAYER1] = BLACK;
 					game->player_color[PLAYER2] = WHITE;
 				}
-				break;
 			}
+			break;
 		case BOARD_TAG:
 			for (int i = 0; i < BOARD_SIZE; ++i) {
 				next_open();

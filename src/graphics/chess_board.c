@@ -43,12 +43,16 @@ EngineMessage create_chess_board(ChessBoard **board, SDL_Rect *board_area, SDL_R
 
 EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *game) {
 	SDL_Rect current_rect;
-	SDL_RenderCopy(renderer, board->board_texture, NULL, &(board->board_area)); //need &(board->board_area)???
+	SDL_RenderCopy(renderer, board->board_texture, NULL, &board->board_area);
 	int i, j;
 	int cur_i = 0;
 	int cur_j = 0;
 	int width = board->board_area.w/BOARD_SIZE;
 	int height = board->board_area.h/BOARD_SIZE;
+
+	if (!game) {
+		return SUCCESS;
+	}
 
 	for (i = 0; i < BOARD_SIZE; i++) {
 		for (j = 0; j < BOARD_SIZE; j++) {

@@ -134,7 +134,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		                                         chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
 	}
 
-	if (button_event_handler(event, game_screen->restart_button)) {
+	if (button_event_handler(event, game_screen->restart_button) && game_screen->game) {
 		msg = restart_game(game_screen->game);
 	}
 
@@ -146,7 +146,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		game_event->type = MOVE_TO_LOAD_SCREEN;
 	}
 
-	if (button_event_handler(event, game_screen->undo_button)) {
+	if (button_event_handler(event, game_screen->undo_button) && game_screen->game) {
 		msg = undo_move(game_screen->game, &move);
 	}
 

@@ -7,18 +7,19 @@ EngineMessage create_chess_board(ChessBoard **board, SDL_Rect *board_area, SDL_R
 	if (!new_board) {
 		return MALLOC_FAILURE;
 	}
-	new_board->piece_textures[0][PAWN] = create_texture(renderer, "./images/white_pawn.bmp");
-	new_board->piece_textures[0][BISHOP] = create_texture(renderer, "./images/white_bishop.bmp");
-	new_board->piece_textures[0][ROOK] = create_texture(renderer, "./images/white_rook.bmp");
-	new_board->piece_textures[0][KNIGHT] = create_texture(renderer, "./images/white_knight.bmp");
-	new_board->piece_textures[0][QUEEN] = create_texture(renderer, "./images/white_queen.bmp");
-	new_board->piece_textures[0][KING] = create_texture(renderer, "./images/white_king.bmp");
-	new_board->piece_textures[1][PAWN] = create_texture(renderer, "./images/black_pawn.bmp");
-	new_board->piece_textures[1][BISHOP] = create_texture(renderer, "./images/black_bishop.bmp");
-	new_board->piece_textures[1][ROOK] = create_texture(renderer, "./images/black_rook.bmp");
-	new_board->piece_textures[1][KNIGHT] = create_texture(renderer, "./images/black_knight.bmp");
-	new_board->piece_textures[1][QUEEN] = create_texture(renderer, "./images/black_queen.bmp");
-	new_board->piece_textures[1][KING] = create_texture(renderer, "./images/black_king.bmp");
+
+	new_board->piece_textures[WHITE][PAWN] = create_texture(renderer, "./images/white_pawn.bmp");
+	new_board->piece_textures[WHITE][BISHOP] = create_texture(renderer, "./images/white_bishop.bmp");
+	new_board->piece_textures[WHITE][ROOK] = create_texture(renderer, "./images/white_rook.bmp");
+	new_board->piece_textures[WHITE][KNIGHT] = create_texture(renderer, "./images/white_knight.bmp");
+	new_board->piece_textures[WHITE][QUEEN] = create_texture(renderer, "./images/white_queen.bmp");
+	new_board->piece_textures[WHITE][KING] = create_texture(renderer, "./images/white_king.bmp");
+	new_board->piece_textures[BLACK][PAWN] = create_texture(renderer, "./images/black_pawn.bmp");
+	new_board->piece_textures[BLACK][BISHOP] = create_texture(renderer, "./images/black_bishop.bmp");
+	new_board->piece_textures[BLACK][ROOK] = create_texture(renderer, "./images/black_rook.bmp");
+	new_board->piece_textures[BLACK][KNIGHT] = create_texture(renderer, "./images/black_knight.bmp");
+	new_board->piece_textures[BLACK][QUEEN] = create_texture(renderer, "./images/black_queen.bmp");
+	new_board->piece_textures[BLACK][KING] = create_texture(renderer, "./images/black_king.bmp");
 
 	for (i = 0; i < NUM_PIECES_TYPES; i++) {
 		if ((!new_board->piece_textures[0][i]) || (!new_board->piece_textures[1][i])) {

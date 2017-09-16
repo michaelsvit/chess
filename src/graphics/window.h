@@ -6,6 +6,7 @@
 
 #include "game_screen.h"
 #include "settings_screen.h"
+#include "main_screen.h"
 
 typedef enum {
     NO_WINDOW_EVENT = 0,
@@ -19,8 +20,8 @@ typedef struct {
 typedef enum {
 	SETTINGS_SCREEN,
 	GAME_SCREEN,
-	/*MAIN_MENU,
-	LOAD_SCREEN,*/
+	MAIN_SCREEN,
+	//LOAD_SCREEN
 } ScreenType;
 
 typedef struct {
@@ -28,7 +29,8 @@ typedef struct {
 	SDL_Renderer *renderer;
 	ScreenType screen;
 	GameScreen *game_screen;
-	SettingsScreen *settings_screen; 
+	SettingsScreen *settings_screen;
+	MainScreen *main_screen;
 } Window;
 
 EngineMessage create_window(Window **window);

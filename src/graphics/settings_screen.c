@@ -137,7 +137,7 @@ EngineMessage draw_settings_screen(SDL_Renderer *renderer, SettingsScreen *setti
 EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_screen, SettingsScreenEvent *settings_screen_event) {
 	ButtonEvent button_event;
 
-	settings_screen_event->type = NO_SETTINGS_SCREEN_EVENT;
+	settings_screen_event->type = SETTINGS_SCREEN_NO_EVENT;
 
 	switch (settings_screen->stage) {
 		case MODE_STAGE:
@@ -162,7 +162,7 @@ EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *se
 
 	button_event_handler(event, settings_screen->start_button, &button_event);
 	if (is_start_button_visible(settings_screen) && button_event.type == BUTTON_PUSHED) {
-		settings_screen_event->type = NEW_GAME;
+		settings_screen_event->type = SETTINGS_SCREEN_NEW_GAME;
 		if (settings_screen->mode->choice == 0) {
 			settings_screen_event->data.settings.mode = ONE_PLAYER;
 			settings_screen_event->data.settings.difficulty = 1 + settings_screen->difficulty->choice;
@@ -181,7 +181,7 @@ EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *se
 		} else if (settings_screen->stage == DIFFICULTY_STAGE) {
 			settings_screen->stage = MODE_STAGE;
 		} else if (settings_screen->stage == MODE_STAGE) {
-			settings_screen_event->type = EXIT_SETTINGS_SCREEN;
+			settings_screen_event->type = SETTINGS_SCREEN_EXIT;
 		}
 	}
 	return SUCCESS;

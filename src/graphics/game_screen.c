@@ -140,7 +140,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	ChessBoardEvent chess_board_event;
 	ButtonEvent button_event;
 
-	game_screen_event->type = NO_GAME_SCREEN_EVENT;
+	game_screen_event->type = GAME_SCREEN_NO_EVENT;
 
 	chess_board_event_handler(event, game_screen->chess_board, &chess_board_event);
 	if (chess_board_event.type == PIECE_MOVED) {
@@ -155,12 +155,12 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 
 	button_event_handler(event, game_screen->save_button, &button_event);
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = SAVE_GAME;
+		game_screen_event->type = GAME_SCREEN_SAVE_GAME;
 	}
 
 	button_event_handler(event, game_screen->load_button, &button_event);
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = MOVE_TO_LOAD_SCREEN;
+		game_screen_event->type = GAME_SCREEN_MOVE_TO_LOAD_SCREEN;
 	}
 
 	button_event_handler(event, game_screen->undo_button, &button_event);
@@ -171,20 +171,20 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 
 	button_event_handler(event, game_screen->new_game_button, &button_event);
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = MOVE_TO_SETTINGS_SCREEN;
+		game_screen_event->type = GAME_SCREEN_MOVE_TO_SETTINGS_SCREEN;
 	}
 
 	button_event_handler(event, game_screen->main_menu_button, &button_event);
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = MOVE_TO_MAIN_MENU;
+		game_screen_event->type = GAME_SCREEN_MOVE_TO_MAIN_MENU;
 	}
 
 	button_event_handler(event, game_screen->quit_button, &button_event);
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = QUIT_GAME;
+		game_screen_event->type = GAME_SCREEN_QUIT;
 	}
 
-	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
+	if (game_screen->game && game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
 		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
 		if (msg != SUCCESS) {
 			return msg;

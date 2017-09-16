@@ -8,9 +8,9 @@
 
 
 typedef enum {
-	NO_SETTINGS_SCREEN_EVENT = 0,
-	NEW_GAME,
-	EXIT_SETTINGS_SCREEN
+	SETTINGS_SCREEN_NO_EVENT = 0,
+	SETTINGS_SCREEN_NEW_GAME,
+	SETTINGS_SCREEN_EXIT
 } SettingsScreenEventType;
 
 typedef struct {

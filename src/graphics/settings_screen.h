@@ -6,6 +6,20 @@
 #include "button.h"
 #include "multiple_choice.h"
 
+
+typedef enum {
+	NO_SETTINGS_SCREEN_EVENT = 0,
+	NEW_GAME,
+	EXIT_SETTINGS_SCREEN
+} SettingsScreenEventType;
+
+typedef struct {
+    SettingsScreenEventType type;
+    union EventData {
+        GameSettings settings;
+    } data;
+} SettingsScreenEvent;
+
 typedef enum {
 	MODE_STAGE,
 	DIFFICULTY_STAGE,
@@ -28,7 +42,7 @@ EngineMessage draw_settings_screen(SDL_Renderer *renderer, SettingsScreen *setti
 
 void destroy_settings_screen(SettingsScreen *settings_screen);
 
-void settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_screen, GameEvent *game_event);
+EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_screen, SettingsScreenEvent *Settings_screen_event);
 
 void reset_settings_screen(SettingsScreen *settings_screen);
 

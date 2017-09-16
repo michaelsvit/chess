@@ -1,10 +1,19 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "../game_engine.h"
-#include "event.h"
 #include <SDL.h>
 #include <SDL_video.h>
+
+#include "../game_engine.h"
+
+typedef enum {
+    NO_BUTTON_EVENT = 0,
+    BUTTON_PUSHED
+} ButtonEventType;
+
+typedef struct {
+    ButtonEventType type;
+} ButtonEvent;
 
 typedef struct {
     SDL_Texture* regular_texture;
@@ -18,6 +27,6 @@ EngineMessage draw_button(SDL_Renderer *renderer, Button *button);
 void destroy_button(Button *button);
 
 // return 1 if clicked, 0 otherwise.
-int button_event_handler(SDL_Event *event, Button *button);
+EngineMessage button_event_handler(SDL_Event *event, Button *button, ButtonEvent *button_event);
 
 #endif

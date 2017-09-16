@@ -60,7 +60,7 @@ void destroy_multiple_choice(MultipleChoice *multiple_choice) {
 	free(multiple_choice);
 }
 
-void multiple_choice_event_handler(SDL_Event *event, MultipleChoice *multiple_choice) {
+EngineMessage multiple_choice_event_handler(SDL_Event *event, MultipleChoice *multiple_choice) {
 	int i;
 
 	switch (event->type) {
@@ -73,4 +73,6 @@ void multiple_choice_event_handler(SDL_Event *event, MultipleChoice *multiple_ch
 			}
 			break;
 	}
+
+	return SUCCESS;
 }

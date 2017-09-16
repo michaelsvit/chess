@@ -1,12 +1,29 @@
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H
 
-#include "../game_engine.h"
-#include "event.h"
 #include <SDL.h>
 #include <SDL_video.h>
 
+#include "../game_engine.h"
+
 #define NUM_PIECES_TYPES 6
+
+typedef enum {
+    NO_CHESS_BOARD_EVENT = 0,
+    PIECE_MOVED
+} ChessBoardEventType;
+
+typedef struct {
+    ChessBoardEventType type;
+    union ChessBoardEventData {
+        struct PieceMove {
+            int prev_piece_row;
+            int prev_piece_col;
+            int new_piece_row;
+            int new_piece_col;
+        } move;
+    } data;
+} ChessBoardEvent;
 
 typedef struct {
     SDL_Texture* board_texture;
@@ -31,6 +48,6 @@ typedef struct {
 EngineMessage create_chess_board(ChessBoard **board, SDL_Rect *board_area, SDL_Renderer *renderer);
 EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *game);
 void destroy_chess_board(ChessBoard *board);
-void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *new_game_event);
+EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , ChessBoardEvent *chess_board_event);
 
 #endif

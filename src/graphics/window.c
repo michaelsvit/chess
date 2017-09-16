@@ -76,31 +76,34 @@ EngineMessage draw_window(Window *window) {
 	return SUCCESS;
 }
 
-void window_event_handler(SDL_Event *event, Window *window, GameEvent *game_event) {
-	GameEvent screen_event;
+void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_event) {
+	GameScreenEvent game_screen_event;
+	SettingsScreenEvent settings_screen_event;
+
+	window_event->type = NO_WINDOW_EVENT;
 
 	if (event->type == SDL_QUIT) {
-		game_event->type = QUIT_GAME;
+		window_event->type = QUIT_WINDOW;
 		return;
 	}
 
 	switch (window->screen) {
 		case SETTINGS_SCREEN:
-			settings_screen_event_handler(event, window->settings_screen, &screen_event);
-			if (screen_event.type == NEW_GAME) {
+			settings_screen_event_handler(event, window->settings_screen, &settings_screen_event);
+			if (settings_screen_event.type == NEW_GAME) {
 				window->screen = GAME_SCREEN;
-				start_new_game(&screen_event.data.new_game_settings, window->game_screen);
-			} else if (screen_event.type == EXIT_SETTINGS_SCREEN) {
-				window->screen = GAME_SCREEN; //to change to main menu
+				start_new_game(&settings_screen_event.data.settings, window->game_screen);
+			} else if (settings_screen_event.type == EXIT_SETTINGS_SCREEN) {
+				window->screen = GAME_SCREEN;
 			}
 			break;
 		case GAME_SCREEN:
-			game_screen_event_handler(event, window->game_screen, &screen_event);
-			if (screen_event.type == MOVE_TO_SETTINGS_SCREEN) {
+			game_screen_event_handler(event, window->game_screen, &game_screen_event);
+			if (game_screen_event.type == MOVE_TO_SETTINGS_SCREEN) {
 				reset_settings_screen(window->settings_screen);
 				window->screen = SETTINGS_SCREEN;
-			} else if (screen_event.type == QUIT_GAME) {
-				game_event->type = QUIT_GAME;
+			} else if (game_screen_event.type == QUIT_GAME) {
+				window_event->type = QUIT_WINDOW;
 			}
 			break;
 	}

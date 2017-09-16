@@ -5,7 +5,6 @@
 #include <SDL_video.h>
 
 #include "main_aux.h"
-#include "graphics/event.h"
 #include "graphics/window.h"
 
 int cli_main() {
@@ -40,12 +39,12 @@ int gui_main() {
 
 	while (1) {
 		SDL_Event event;
-		GameEvent game_event;
+		WindowEvent window_event;
 
 		draw_window(window);
 		SDL_WaitEvent(&event);
-		window_event_handler(&event, window, &game_event);
-		if (game_event.type == QUIT_GAME) {
+		window_event_handler(&event, window, &window_event);
+		if (window_event.type == QUIT_WINDOW) {
 			break;
 		}
 	}

@@ -30,6 +30,6 @@ typedef struct {
 EngineMessage create_multiple_choice(MultipleChoice **multiple_choice, SDL_Renderer *renderer, ChoiceButtonArguments choices[], int num_choices);
 EngineMessage draw_multiple_choice(SDL_Renderer *renderer, MultipleChoice *multiple_choice);
 void destroy_multiple_choice(MultipleChoice *multiple_choice);
-void multiple_choice_event_handler(SDL_Event *event, MultipleChoice *multiple_choice);
+EngineMessage multiple_choice_event_handler(SDL_Event *event, MultipleChoice *multiple_choice);
 
 #endif

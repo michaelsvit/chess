@@ -8,6 +8,15 @@
 #include "settings_screen.h"
 
 typedef enum {
+    NO_WINDOW_EVENT = 0,
+    QUIT_WINDOW
+} WindowEventType;
+
+typedef struct {
+    WindowEventType type;
+} WindowEvent;
+
+typedef enum {
 	SETTINGS_SCREEN,
 	GAME_SCREEN,
 	/*MAIN_MENU,
@@ -28,6 +37,6 @@ void destroy_window(Window *window);
 
 EngineMessage draw_window(Window *window);
 
-void window_event_handler(SDL_Event *event, Window *window, GameEvent *game_event);
+void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_event);
 
 #endif

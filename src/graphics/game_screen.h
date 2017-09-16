@@ -8,6 +8,20 @@
 #include "chess_board.h"
 #include "button.h"
 
+
+typedef enum {
+	NO_GAME_SCREEN_EVENT = 0,
+	SAVE_GAME,
+	MOVE_TO_LOAD_SCREEN,
+	MOVE_TO_SETTINGS_SCREEN,
+	MOVE_TO_MAIN_MENU,
+	QUIT_GAME
+} GameScreenEventType;
+
+typedef struct {
+    GameScreenEventType type;
+} GameScreenEvent;
+
 typedef struct {
 	Game *game;
 	ChessBoard *chess_board;
@@ -28,6 +42,6 @@ EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen);
 
 EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen);
 
-EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_screen, GameEvent *game_event);
+EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_screen, GameScreenEvent *game_screen_event);
 
 #endif

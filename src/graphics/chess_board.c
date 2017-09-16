@@ -101,8 +101,8 @@ void destroy_chess_board(ChessBoard *board) {
 	free(board);
 }
 
-void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *game_event) {
-	game_event->type = NO_EVENT;
+EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , ChessBoardEvent *chess_board_event) {
+	chess_board_event->type = NO_CHESS_BOARD_EVENT;
 
 	switch (event->type) {
 		case SDL_MOUSEBUTTONDOWN:
@@ -124,13 +124,13 @@ void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *g
 				board->is_dragging = 0;
 
 				// return game event.
-				game_event->type = PIECE_MOVED;
-				game_event->data.move.prev_piece_row = board->dragging_piece_row;
-				game_event->data.move.prev_piece_col = board->dragging_piece_col;
+				chess_board_event->type = PIECE_MOVED;
+				chess_board_event->data.move.prev_piece_row = board->dragging_piece_row;
+				chess_board_event->data.move.prev_piece_col = board->dragging_piece_col;
 
-				game_event->data.move.new_piece_row = (board->current_mouse_y_pos - board->board_area.y) * BOARD_SIZE / board->board_area.h;
-				game_event->data.move.new_piece_row = BOARD_SIZE - 1 - game_event->data.move.new_piece_row;
-				game_event->data.move.new_piece_col = (board->current_mouse_x_pos - board->board_area.x) * BOARD_SIZE / board->board_area.w;
+				chess_board_event->data.move.new_piece_row = (board->current_mouse_y_pos - board->board_area.y) * BOARD_SIZE / board->board_area.h;
+				chess_board_event->data.move.new_piece_row = BOARD_SIZE - 1 - chess_board_event->data.move.new_piece_row;
+				chess_board_event->data.move.new_piece_col = (board->current_mouse_x_pos - board->board_area.x) * BOARD_SIZE / board->board_area.w;
 			}
 			break;
 		case SDL_MOUSEMOTION:
@@ -140,5 +140,7 @@ void chess_board_event_handler(SDL_Event *event, ChessBoard *board, GameEvent *g
 			}
 			break;
 	}
+
+	return SUCCESS;
 }
 

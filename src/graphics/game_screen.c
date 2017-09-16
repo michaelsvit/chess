@@ -129,45 +129,55 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 	return SUCCESS;
 }
 
-EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_screen, GameEvent *game_event) {
-	game_event->type = NO_EVENT;
+EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_screen, GameScreenEvent *game_screen_event) {
 	EngineMessage msg = SUCCESS;
-	GameEvent chess_board_event;
 	GameMove *move;
 	GameMove comp_move;
-	
+	ChessBoardEvent chess_board_event;
+	ButtonEvent button_event;
+
+	game_screen_event->type = NO_GAME_SCREEN_EVENT;
+
 	chess_board_event_handler(event, game_screen->chess_board, &chess_board_event);
 	if (chess_board_event.type == PIECE_MOVED) {
 		msg = move_game_piece(game_screen->game, chess_board_event.data.move.prev_piece_col, chess_board_event.data.move.prev_piece_row, 
 		                                         chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
 	}
 
-	if (button_event_handler(event, game_screen->restart_button) && game_screen->game) {
+	button_event_handler(event, game_screen->restart_button, &button_event);
+	if (button_event.type ==  BUTTON_PUSHED && game_screen->game) {
 		msg = restart_game(game_screen->game);
 	}
 
-	if (button_event_handler(event, game_screen->save_button)) {
-		game_event->type = SAVE_GAME;
+	button_event_handler(event, game_screen->save_button, &button_event);
+	if (button_event.type == BUTTON_PUSHED) {
+		game_screen_event->type = SAVE_GAME;
 	}
 
-	if (button_event_handler(event, game_screen->load_button)) {
-		game_event->type = MOVE_TO_LOAD_SCREEN;
+	button_event_handler(event, game_screen->load_button, &button_event);
+	if (button_event.type == BUTTON_PUSHED) {
+		game_screen_event->type = MOVE_TO_LOAD_SCREEN;
 	}
 
-	if (button_event_handler(event, game_screen->undo_button) && game_screen->game) {
+	button_event_handler(event, game_screen->undo_button, &button_event);
+	if (button_event.type == BUTTON_PUSHED && game_screen->game) {
 		msg = undo_move(game_screen->game, &move);
+		free(move);
 	}
 
-	if (button_event_handler(event, game_screen->new_game_button)) {
-		game_event->type = MOVE_TO_SETTINGS_SCREEN;
+	button_event_handler(event, game_screen->new_game_button, &button_event);
+	if (button_event.type == BUTTON_PUSHED) {
+		game_screen_event->type = MOVE_TO_SETTINGS_SCREEN;
 	}
 
-	if (button_event_handler(event, game_screen->main_menu_button)) {
-		game_event->type = MOVE_TO_MAIN_MENU;
+	button_event_handler(event, game_screen->main_menu_button, &button_event);
+	if (button_event.type == BUTTON_PUSHED) {
+		game_screen_event->type = MOVE_TO_MAIN_MENU;
 	}
 
-	if (button_event_handler(event, game_screen->quit_button)) {
-		game_event->type = QUIT_GAME;
+	button_event_handler(event, game_screen->quit_button, &button_event);
+	if (button_event.type == BUTTON_PUSHED) {
+		game_screen_event->type = QUIT_GAME;
 	}
 
 	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {

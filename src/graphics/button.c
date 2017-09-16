@@ -45,7 +45,9 @@ void destroy_button(Button *button) {
 	free(button);
 }
 
-int button_event_handler(SDL_Event *event, Button *button) {
+EngineMessage button_event_handler(SDL_Event *event, Button *button, ButtonEvent *button_event) {
+	button_event->type = NO_BUTTON_EVENT;
+
 	switch (event->type) {
 		case SDL_MOUSEBUTTONDOWN:
 			if (event->button.x >= button->area.x && event->button.x <= button->area.x + button->area.w
@@ -56,9 +58,9 @@ int button_event_handler(SDL_Event *event, Button *button) {
 		case SDL_MOUSEBUTTONUP:
 			if (button->is_pushed == 1) {
 				button->is_pushed = 0;
-				return 1;
+				button_event->type = BUTTON_PUSHED;
 			}
 			break;
 	}
-	return 0;
+	return SUCCESS;
 }

@@ -151,7 +151,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	}
 
 	if (button_event_handler(event, game_screen->new_game_button)) {
-		game_event->type = MOVE_TO_SETTINGS_WINDOW;
+		game_event->type = MOVE_TO_SETTINGS_SCREEN;
 	}
 
 	if (button_event_handler(event, game_screen->main_menu_button)) {

@@ -179,3 +179,10 @@ void settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_sc
 		}
 	}
 }
+
+void reset_settings_screen(SettingsScreen *settings_screen) {
+	settings_screen->stage = MODE_STAGE;
+	settings_screen->mode->choice = -1;
+	settings_screen->difficulty->choice = -1;
+	settings_screen->color->choice = -1;
+}

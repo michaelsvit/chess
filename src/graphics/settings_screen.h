@@ -30,4 +30,6 @@ void destroy_settings_screen(SettingsScreen *settings_screen);
 
 void settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_screen, GameEvent *game_event);
 
+void reset_settings_screen(SettingsScreen *settings_screen);
+
 #endif

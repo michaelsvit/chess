@@ -96,7 +96,8 @@ void window_event_handler(SDL_Event *event, Window *window, GameEvent *game_even
 			break;
 		case GAME_SCREEN:
 			game_screen_event_handler(event, window->game_screen, &screen_event);
-			if (screen_event.type == MOVE_TO_SETTINGS_WINDOW) {
+			if (screen_event.type == MOVE_TO_SETTINGS_SCREEN) {
+				reset_settings_screen(window->settings_screen);
 				window->screen = SETTINGS_SCREEN;
 			} else if (screen_event.type == QUIT_GAME) {
 				game_event->type = QUIT_GAME;

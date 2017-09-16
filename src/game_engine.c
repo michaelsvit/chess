@@ -239,10 +239,16 @@ int is_game_over(Game *game){
 }
 
 EngineMessage restart_game(Game *game) {
+	for(int i = 0; i < BOARD_SIZE; i++){
+		for(int j = 0; j < BOARD_SIZE; j++){
+			game->board[i][j] = NULL;
+		}
+	}
 	spArrayListClear(game->black_pieces);
 	spArrayListClear(game->white_pieces);
 	spArrayListClear(game->move_history);
 	spArrayListClear(game->removed_pieces);
+
 	return init_game(game);
 }
 /******************************** Auxiliary functions ******************************/

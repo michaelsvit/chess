@@ -1,4 +1,5 @@
 #include "game_screen.h"
+#include "../minimax.h"
 
 EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *renderer) {
 	EngineMessage msg;
@@ -97,6 +98,8 @@ void destroy_game_screen(GameScreen *game_screen) {
 }
 
 EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
+	EngineMessage msg = SUCCESS;
+
 	if (game_screen->game) {
 		destroy_game(game_screen->game);
 	}
@@ -105,8 +108,12 @@ EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
 	if (!game_screen->game) {
 		return MALLOC_FAILURE;
 	}
+	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
+		GameMove comp_move = minimax_suggest_move(game_screen->game, game_screen->game->difficulty);
+		msg = move_game_piece(game_screen->game, comp_move.src_x, comp_move.src_y, comp_move.dst_x, comp_move.dst_y);
+	}
 
-	return SUCCESS;
+	return msg;
 }
 
 EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) {
@@ -127,6 +134,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	EngineMessage msg = SUCCESS;
 	GameEvent chess_board_event;
 	GameMove *move;
+	GameMove comp_move;
 	
 	chess_board_event_handler(event, game_screen->chess_board, &chess_board_event);
 	if (chess_board_event.type == PIECE_MOVED) {
@@ -160,6 +168,11 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 
 	if (button_event_handler(event, game_screen->quit_button)) {
 		game_event->type = QUIT_GAME;
+	}
+
+	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
+		comp_move = minimax_suggest_move(game_screen->game, game_screen->game->difficulty);
+		msg = move_game_piece(game_screen->game, comp_move.src_x, comp_move.src_y, comp_move.dst_x, comp_move.dst_y);
 	}
 
 	return msg;

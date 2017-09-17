@@ -234,20 +234,23 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	}
 
 	if (game_screen->game->mode == ONE_PLAYER) {
-		button_event_handler(event, game_screen->undo_button, &button_event);
-	}
-	if (button_event.type == BUTTON_PUSHED && game_screen->game) {
-		msg = undo_move(game_screen->game, &move);
+		msg = button_event_handler(event, game_screen->undo_button, &button_event);
 		if (msg != SUCCESS) {
 			return msg;
 		}
-		free(move);
+		if (button_event.type == BUTTON_PUSHED && game_screen->game) {
+			msg = undo_move(game_screen->game, &move);
+			if (msg != SUCCESS) {
+				return msg;
+			}
+			free(move);
 
-		msg = undo_move(game_screen->game, &move);
-		if (msg != SUCCESS) {
-			return msg;
+			msg = undo_move(game_screen->game, &move);
+			if (msg != SUCCESS) {
+				return msg;
+			}
+			free(move);
 		}
-		free(move);
 	}
 
 	if (game_screen->game && game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {

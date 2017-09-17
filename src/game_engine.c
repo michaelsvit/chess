@@ -489,11 +489,11 @@ EngineMessage init_game(Game *game){
 }
 
 EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y){
-	GamePiece *pawn = create_game_piece(type, color, pos_x, pos_y);
-	if(!pawn) return MALLOC_FAILURE;
+	GamePiece *piece = create_game_piece(type, color, pos_x, pos_y);
+	if(!piece) return MALLOC_FAILURE;
 	SPArrayList *piece_set = (color == WHITE) ? game->white_pieces : game->black_pieces;
-	spArrayListAddLast(piece_set, pawn); /* cannot fail on a new board */
-	game->board[pos_y][pos_x] = pawn;
+	spArrayListAddLast(piece_set, piece); /* cannot fail on a new board */
+	game->board[pos_y][pos_x] = piece;
 	return SUCCESS;
 }
 
@@ -622,6 +622,7 @@ int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		/* Pawn cannot jump above another piece */
 		if(is_occupied_position(game, piece->pos_x, piece->pos_y + direction)) return 0;
 		/* Pawn stays in same column, target position must be unoccupied */
+		if (piece->pos_x != pos_x) return 0;
 		if (is_occupied_position(game, pos_x, pos_y)) return 0;
 	}
 	return 1;

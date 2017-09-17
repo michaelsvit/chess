@@ -46,9 +46,19 @@ void destroy_main_screen(MainScreen *main_screen) {
 }
 
 EngineMessage draw_main_screen(SDL_Renderer *renderer, MainScreen *main_screen) {
-	draw_button(renderer, main_screen->load_button);
-	draw_button(renderer, main_screen->new_game_button);
-	draw_button(renderer, main_screen->quit_button);
+	EngineMessage err;
+	err = draw_button(renderer, main_screen->load_button);
+	if (err != SUCCESS) {
+		return err;
+	}
+	err = draw_button(renderer, main_screen->new_game_button);
+	if (err != SUCCESS) {
+		return err;
+	}
+	err = draw_button(renderer, main_screen->quit_button);
+	if (err != SUCCESS) {
+		return err;
+	}
 	return SUCCESS;
 }
 
@@ -58,17 +68,26 @@ EngineMessage main_screen_event_handler(SDL_Event *event, MainScreen *main_scree
 
 	main_screen_event->type = MAIN_SCREEN_NO_EVENT;
 
-	button_event_handler(event, main_screen->load_button, &button_event);
+	msg = button_event_handler(event, main_screen->load_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
 	if (button_event.type == BUTTON_PUSHED) {
 		main_screen_event->type = MAIN_SCREEN_MOVE_TO_LOAD_SCREEN;
 	}
 
-	button_event_handler(event, main_screen->new_game_button, &button_event);
+	msg = button_event_handler(event, main_screen->new_game_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
 	if (button_event.type == BUTTON_PUSHED) {
 		main_screen_event->type = MAIN_SCREEN_MOVE_TO_SETTINGS_SCREEN;
 	}
 
-	button_event_handler(event, main_screen->quit_button, &button_event);
+	msg = button_event_handler(event, main_screen->quit_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
 	if (button_event.type == BUTTON_PUSHED) {
 		main_screen_event->type = MAIN_SCREEN_QUIT;
 	}

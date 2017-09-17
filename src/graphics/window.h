@@ -40,6 +40,6 @@ void destroy_window(Window *window);
 
 EngineMessage draw_window(Window *window);
 
-void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_event);
+EngineMessage window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_event);
 
 #endif

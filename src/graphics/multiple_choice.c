@@ -36,11 +36,16 @@ EngineMessage create_multiple_choice(MultipleChoice **multiple_choice, SDL_Rende
 
 EngineMessage draw_multiple_choice(SDL_Renderer *renderer, MultipleChoice *multiple_choice) {
 	int i;
+	int err;
 	for (i = 0; i < multiple_choice->num_choices; i++) {
 		if (multiple_choice->choice == i) {
-			SDL_RenderCopy(renderer, multiple_choice->choices[i].pushed_texture, NULL, &(multiple_choice->choices[i].area));
+			err = SDL_RenderCopy(renderer, multiple_choice->choices[i].pushed_texture, NULL, &(multiple_choice->choices[i].area));
 		} else {
-			SDL_RenderCopy(renderer, multiple_choice->choices[i].regular_texture, NULL, &(multiple_choice->choices[i].area));
+			err = SDL_RenderCopy(renderer, multiple_choice->choices[i].regular_texture, NULL, &(multiple_choice->choices[i].area));
+		}
+
+		if (err != 0) {
+			return SDL_ERROR;
 		}
 	}
 	return SUCCESS;

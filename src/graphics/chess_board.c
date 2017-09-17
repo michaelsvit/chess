@@ -43,8 +43,14 @@ EngineMessage create_chess_board(ChessBoard **board, SDL_Rect *board_area, SDL_R
 }
 
 EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *game) {
+	int err;
 	SDL_Rect current_rect;
-	SDL_RenderCopy(renderer, board->board_texture, NULL, &board->board_area);
+	err = SDL_RenderCopy(renderer, board->board_texture, NULL, &board->board_area);
+
+	if (err != 0) {
+		return SDL_ERROR;
+	}
+
 	int i, j;
 	int cur_i = 0;
 	int cur_j = 0;
@@ -67,7 +73,10 @@ EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *
 					current_rect.y = (BOARD_SIZE - 1 - i) * height + board->board_area.y;
 					current_rect.w = width;
 					current_rect.h = height;
-					SDL_RenderCopy(renderer, current_texture, NULL, &current_rect);
+					err = SDL_RenderCopy(renderer, current_texture, NULL, &current_rect);
+					if (err != 0) {
+						return SDL_ERROR;
+					}
 				}
 			}
 		}
@@ -78,7 +87,10 @@ EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *
 		current_rect.y = board->board_area.y + (BOARD_SIZE - 1 - cur_i) * height + board->current_mouse_y_pos - board->start_mouse_y_pos;
 		current_rect.w = width;
 		current_rect.h = height;
-		SDL_RenderCopy(renderer, current_texture, NULL, &current_rect);
+		err = SDL_RenderCopy(renderer, current_texture, NULL, &current_rect);
+		if (err != 0) {
+			return SDL_ERROR;
+		}
 	}
 	return SUCCESS;
 }

@@ -26,12 +26,16 @@ EngineMessage create_button(Button **button, SDL_Rect *area, SDL_Renderer *rende
 
 
 EngineMessage draw_button(SDL_Renderer *renderer, Button *button) {
+	int err;
 	if (button->is_pushed == 0) {
-		SDL_RenderCopy(renderer, button->regular_texture, NULL, &(button->area));
+		err = SDL_RenderCopy(renderer, button->regular_texture, NULL, &(button->area));
 	} else {
-		SDL_RenderCopy(renderer, button->pushed_texture, NULL, &(button->area));
+		err = SDL_RenderCopy(renderer, button->pushed_texture, NULL, &(button->area));
 	}
 
+	if (err != 0) {
+		return SDL_ERROR;
+	}
 	return SUCCESS;
 }
 

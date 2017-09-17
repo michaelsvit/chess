@@ -71,25 +71,33 @@ void destroy_window(Window *window) {
 }
 
 EngineMessage draw_window(Window *window) {
-	SDL_RenderClear(window->renderer);
+	EngineMessage err;
+	err = SDL_RenderClear(window->renderer);
+	if (err != 0) {
+		return SDL_ERROR;
+	}
 
 	switch (window->screen) {
 		case SETTINGS_SCREEN:
-			draw_settings_screen(window->renderer, window->settings_screen);
+			err = draw_settings_screen(window->renderer, window->settings_screen);
 			break;
 		case GAME_SCREEN:
-			draw_game_screen(window->renderer, window->game_screen);
+			err = draw_game_screen(window->renderer, window->game_screen);
 			break;
 		case MAIN_SCREEN:
-			draw_main_screen(window->renderer, window->main_screen);
+			err = draw_main_screen(window->renderer, window->main_screen);
 			break;
+	}
+	if (err != SUCCESS) {
+		return err;
 	}
 
 	SDL_RenderPresent(window->renderer);
 	return SUCCESS;
 }
 
-void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_event) {
+EngineMessage window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_event) {
+	EngineMessage err = SUCCESS;
 	GameScreenEvent game_screen_event;
 	SettingsScreenEvent settings_screen_event;
 	MainScreenEvent main_screen_event;
@@ -98,12 +106,15 @@ void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_
 
 	if (event->type == SDL_QUIT) {
 		window_event->type = QUIT_WINDOW;
-		return;
+		return err;
 	}
 
 	switch (window->screen) {
 		case MAIN_SCREEN:
-			main_screen_event_handler(event, window->main_screen, &main_screen_event);
+			err = main_screen_event_handler(event, window->main_screen, &main_screen_event);
+			if (err != SUCCESS) {
+				return err;
+			}
 			if (main_screen_event.type == MAIN_SCREEN_MOVE_TO_SETTINGS_SCREEN) {
 				reset_settings_screen(window->settings_screen);
 				window->back_screen = MAIN_SCREEN;
@@ -113,16 +124,25 @@ void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_
 			}
 			break;
 		case SETTINGS_SCREEN:
-			settings_screen_event_handler(event, window->settings_screen, &settings_screen_event);
+			err = settings_screen_event_handler(event, window->settings_screen, &settings_screen_event);
+			if (err != SUCCESS) {
+				return err;
+			}
 			if (settings_screen_event.type == SETTINGS_SCREEN_NEW_GAME) {
 				window->screen = GAME_SCREEN;
-				start_new_game(&settings_screen_event.data.settings, window->game_screen);
+				err = start_new_game(&settings_screen_event.data.settings, window->game_screen);
+				if (err != SUCCESS) {
+					return err;
+				}
 			} else if (settings_screen_event.type == SETTINGS_SCREEN_EXIT) {
 				window->screen = window->back_screen;
 			}
 			break;
 		case GAME_SCREEN:
-			game_screen_event_handler(event, window->game_screen, &game_screen_event);
+			err = game_screen_event_handler(event, window->game_screen, &game_screen_event);
+			if (err != SUCCESS) {
+				return err;
+			}
 			if (game_screen_event.type == GAME_SCREEN_MOVE_TO_SETTINGS_SCREEN) {
 				reset_settings_screen(window->settings_screen);
 				window->back_screen = GAME_SCREEN;
@@ -134,4 +154,6 @@ void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_
 			}
 			break;
 	}
+
+	return SUCCESS;
 }

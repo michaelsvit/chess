@@ -31,19 +31,32 @@ int cli_main() {
 	return 0;
 }
 
-int gui_main() {
+EngineMessage gui_main() {
+	EngineMessage err = SUCCESS;
 	SDL_Init(SDL_INIT_VIDEO);
 
 	Window *window;
-	create_window(&window);
+	err = create_window(&window);
+	if (err != SUCCESS){
+		if (err == SDL_ERROR) {
+			printf("SDL_ERROR: %s\n", SDL_GetError());
+		}
+		return err;
+	}
 
 	while (1) {
 		SDL_Event event;
 		WindowEvent window_event;
 
-		draw_window(window);
+		err = draw_window(window);
+		if (err != SUCCESS) {
+			break;
+		}
 		SDL_WaitEvent(&event);
-		window_event_handler(&event, window, &window_event);
+		err = window_event_handler(&event, window, &window_event);
+		if (err != SUCCESS){
+			break;
+		}
 		if (window_event.type == QUIT_WINDOW) {
 			break;
 		}
@@ -52,10 +65,14 @@ int gui_main() {
 	destroy_window(window);
 	SDL_Quit();
 
-	return 0;
+	if (err == SDL_ERROR) {
+		printf("SDL_ERROR: %s\n", SDL_GetError());
+	}
+
+	return err;
 }
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 	if (argc == 1) {
 		return cli_main();
 	};

@@ -110,48 +110,70 @@ int is_start_button_visible(SettingsScreen *settings_screen) {
 }
 
 EngineMessage draw_settings_screen(SDL_Renderer *renderer, SettingsScreen *settings_screen) {
+
+	EngineMessage err;
 	switch (settings_screen->stage) {
 		case MODE_STAGE:
-			draw_multiple_choice(renderer, settings_screen->mode);
+			err = draw_multiple_choice(renderer, settings_screen->mode);
 			break;
 		case DIFFICULTY_STAGE:
-			draw_multiple_choice(renderer, settings_screen->difficulty);
+			err = draw_multiple_choice(renderer, settings_screen->difficulty);
 			break;
 		case COLOR_STAGE:
-			draw_multiple_choice(renderer, settings_screen->color);
+			err = draw_multiple_choice(renderer, settings_screen->color);
 			break;
 	}
+	if (err != SUCCESS) {
+		return err;
+	}
 
-	draw_button(renderer, settings_screen->back_button);
+	err = draw_button(renderer, settings_screen->back_button);
+	if (err != SUCCESS) {
+		return err;
+	}
 
 	if (is_next_button_visible(settings_screen)) {
-		draw_button(renderer, settings_screen->next_button);
+		err = draw_button(renderer, settings_screen->next_button);
+		if (err != SUCCESS) {
+			return err;
+		}
 	}
 	if (is_start_button_visible(settings_screen)) {
-		draw_button(renderer, settings_screen->start_button);
+		err = draw_button(renderer, settings_screen->start_button);
+		if (err != SUCCESS) {
+			return err;
+		}
 	}
 
 	return SUCCESS;
 }
 
 EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_screen, SettingsScreenEvent *settings_screen_event) {
+	EngineMessage msg = SUCCESS;
 	ButtonEvent button_event;
 
 	settings_screen_event->type = SETTINGS_SCREEN_NO_EVENT;
 
 	switch (settings_screen->stage) {
 		case MODE_STAGE:
-			multiple_choice_event_handler(event, settings_screen->mode);
+			msg = multiple_choice_event_handler(event, settings_screen->mode);
 			break;
 		case DIFFICULTY_STAGE:
-			multiple_choice_event_handler(event, settings_screen->difficulty);
+			msg = multiple_choice_event_handler(event, settings_screen->difficulty);
 			break;
 		case COLOR_STAGE:
-			multiple_choice_event_handler(event, settings_screen->color);
+			msg = multiple_choice_event_handler(event, settings_screen->color);
 			break;
 	}
 
-	button_event_handler(event, settings_screen->next_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
+
+	msg = button_event_handler(event, settings_screen->next_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
 	if (is_next_button_visible(settings_screen) && button_event.type == BUTTON_PUSHED) {
 		if (settings_screen->stage == MODE_STAGE) {
 			settings_screen->stage = DIFFICULTY_STAGE;
@@ -160,7 +182,10 @@ EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *se
 		}
 	}
 
-	button_event_handler(event, settings_screen->start_button, &button_event);
+	msg = button_event_handler(event, settings_screen->start_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
 	if (is_start_button_visible(settings_screen) && button_event.type == BUTTON_PUSHED) {
 		settings_screen_event->type = SETTINGS_SCREEN_NEW_GAME;
 		if (settings_screen->mode->choice == 0) {
@@ -174,7 +199,10 @@ EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *se
 		}
 	}
 
-	button_event_handler(event, settings_screen->back_button, &button_event);
+	msg = button_event_handler(event, settings_screen->back_button, &button_event);
+	if (msg != SUCCESS) {
+		return msg;
+	}
 	if (button_event.type == BUTTON_PUSHED) {
 		if (settings_screen->stage == COLOR_STAGE) {
 			settings_screen->stage = DIFFICULTY_STAGE;

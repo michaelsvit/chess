@@ -951,14 +951,12 @@ SPArrayList *get_queen_moves(Game *game, GamePiece *piece){
 	}
 
 	for(int i = 0; i < spArrayListSize(rook_moves); i++){
-		spArrayListAddLast(moves, spArrayListGetAt(rook_moves, i));
+		spArrayListAddLast(moves, copy_move(spArrayListGetAt(rook_moves, i)));
 	}
 	for(int i = 0; i < spArrayListSize(bishop_moves); i++){
-		spArrayListAddLast(moves, spArrayListGetAt(bishop_moves, i));
+		spArrayListAddLast(moves, copy_move(spArrayListGetAt(bishop_moves, i)));
 	}
-	spArrayListClear(rook_moves);
 	spArrayListDestroy(rook_moves);
-	spArrayListClear(bishop_moves);
 	spArrayListDestroy(bishop_moves);
 	return moves;
 }

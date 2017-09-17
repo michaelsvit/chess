@@ -177,7 +177,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	if (chess_board_event.type == PIECE_MOVED) {
 		msg = move_game_piece(game_screen->game, chess_board_event.data.move.prev_piece_col, chess_board_event.data.move.prev_piece_row, 
 		                                         chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
-		if (msg != SUCCESS) {
+		if (msg != SUCCESS && msg != ILLEGAL_MOVE) {
 			return msg;
 		}
 	}

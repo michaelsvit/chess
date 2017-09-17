@@ -27,6 +27,7 @@ EngineMessage create_window(Window **window) {
 	}
 
 	new_window->screen = MAIN_SCREEN;
+	new_window->back_screen = MAIN_SCREEN;
 
 	msg = create_main_screen(&new_window->main_screen, new_window->renderer);
 	if(msg != SUCCESS) {
@@ -104,6 +105,8 @@ void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_
 		case MAIN_SCREEN:
 			main_screen_event_handler(event, window->main_screen, &main_screen_event);
 			if (main_screen_event.type == MAIN_SCREEN_MOVE_TO_SETTINGS_SCREEN) {
+				reset_settings_screen(window->settings_screen);
+				window->back_screen = MAIN_SCREEN;
 				window->screen = SETTINGS_SCREEN;
 			} else if (main_screen_event.type == MAIN_SCREEN_QUIT) {
 				window_event->type = QUIT_WINDOW;
@@ -115,13 +118,14 @@ void window_event_handler(SDL_Event *event, Window *window, WindowEvent *window_
 				window->screen = GAME_SCREEN;
 				start_new_game(&settings_screen_event.data.settings, window->game_screen);
 			} else if (settings_screen_event.type == SETTINGS_SCREEN_EXIT) {
-				window->screen = GAME_SCREEN;
+				window->screen = window->back_screen;
 			}
 			break;
 		case GAME_SCREEN:
 			game_screen_event_handler(event, window->game_screen, &game_screen_event);
 			if (game_screen_event.type == GAME_SCREEN_MOVE_TO_SETTINGS_SCREEN) {
 				reset_settings_screen(window->settings_screen);
+				window->back_screen = GAME_SCREEN;
 				window->screen = SETTINGS_SCREEN;
 			} else if (game_screen_event.type == GAME_SCREEN_MOVE_TO_MAIN_MENU) {
 				window->screen = MAIN_SCREEN;

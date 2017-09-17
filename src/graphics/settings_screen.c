@@ -20,10 +20,10 @@ EngineMessage create_settings_screen(SettingsScreen **settings_screen, SDL_Rende
 	}
 
 	ChoiceButtonArguments difficulty_choices[] = {
-		{.regular_path = "./images/noob.bmp", .pushed_path = "./images/noob_pushed.bmp", .area={.x = 100, .y = 100, .w = 200, .h = 100}},
-		{.regular_path = "./images/easy.bmp", .pushed_path = "./images/easy_pushed.bmp", .area={.x = 100, .y = 300, .w = 200, .h = 100}},
-		{.regular_path = "./images/moderate.bmp", .pushed_path = "./images/moderate_pushed.bmp", .area={.x = 100, .y = 500, .w = 200, .h = 100}},
-		{.regular_path = "./images/hard.bmp", .pushed_path = "./images/hard_pushed.bmp", .area={.x = 100, .y = 100, .w = 700, .h = 100}}
+		{.regular_path = "./images/noob.bmp", .pushed_path = "./images/noob_pushed.bmp", .area={.x = 100, .y = 80, .w = 200, .h = 100}},
+		{.regular_path = "./images/easy.bmp", .pushed_path = "./images/easy_pushed.bmp", .area={.x = 100, .y = 260, .w = 200, .h = 100}},
+		{.regular_path = "./images/moderate.bmp", .pushed_path = "./images/moderate_pushed.bmp", .area={.x = 100, .y = 440, .w = 200, .h = 100}},
+		{.regular_path = "./images/hard.bmp", .pushed_path = "./images/hard_pushed.bmp", .area={.x = 100, .y = 620, .w = 200, .h = 100}}
 	};
 	ret = create_multiple_choice(&new_settings_screen->difficulty, renderer, difficulty_choices, 4);
 	if (ret != SUCCESS) {
@@ -32,8 +32,8 @@ EngineMessage create_settings_screen(SettingsScreen **settings_screen, SDL_Rende
 	}
 
 	ChoiceButtonArguments color_choices[] = {
-		{.regular_path = "./images/white.bmp", .pushed_path = "./images/white_pushed.bmp", .area={.x = 200, .y = 100, .w = 200, .h = 100}},
-		{.regular_path = "./images/black.bmp", .pushed_path = "./images/black_pushed.bmp", .area={.x = 400, .y = 100, .w = 200, .h = 100}}
+		{.regular_path = "./images/white.bmp", .pushed_path = "./images/white_pushed.bmp", .area={.x = 200, .y = 300, .w = 150, .h = 100}},
+		{.regular_path = "./images/black.bmp", .pushed_path = "./images/black_pushed.bmp", .area={.x = 400, .y = 300, .w = 150, .h = 100}}
 	};
 	ret = create_multiple_choice(&new_settings_screen->color, renderer, color_choices, 2);
 	if (ret != SUCCESS) {
@@ -181,6 +181,7 @@ EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *se
 		} else if (settings_screen->stage == DIFFICULTY_STAGE) {
 			settings_screen->stage = MODE_STAGE;
 		} else if (settings_screen->stage == MODE_STAGE) {
+			reset_settings_screen(settings_screen);
 			settings_screen_event->type = SETTINGS_SCREEN_EXIT;
 		}
 	}

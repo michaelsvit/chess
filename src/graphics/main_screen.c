@@ -7,21 +7,21 @@ EngineMessage create_main_screen(MainScreen **main_screen, SDL_Renderer *rendere
 	if (!new_main_screen) {
 		return MALLOC_FAILURE;
 	}
-	SDL_Rect load_area = {.x = 25, .y = 14, .w = 150, .h = 100};
+	SDL_Rect load_area = {.x = 350, .y = 300, .w = 200, .h = 100};
 	msg = create_button(&new_main_screen->load_button, &load_area, renderer, "./images/load.bmp", "./images/load_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_main_screen(new_main_screen);
 		return msg;
 	}
 
-	SDL_Rect new_game_area = {.x = 25, .y = 462, .w = 150, .h = 100};
+	SDL_Rect new_game_area = {.x = 350, .y = 500, .w = 200, .h = 100};
 	msg = create_button(&new_main_screen->new_game_button, &new_game_area, renderer, "./images/new_game.bmp", "./images/new_game_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_main_screen(new_main_screen);
 		return msg;
 	}
 
-	SDL_Rect quit_area = {.x = 25, .y = 686, .w = 150, .h = 100};
+	SDL_Rect quit_area = {.x = 350, .y = 700, .w = 200, .h = 100};
 	msg = create_button(&new_main_screen->quit_button, &quit_area, renderer, "./images/quit.bmp", "./images/quit_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_main_screen(new_main_screen);

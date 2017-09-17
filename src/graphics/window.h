@@ -28,6 +28,7 @@ typedef struct {
 	SDL_Window *sdl_window;
 	SDL_Renderer *renderer;
 	ScreenType screen;
+	ScreenType back_screen;
 	GameScreen *game_screen;
 	SettingsScreen *settings_screen;
 	MainScreen *main_screen;

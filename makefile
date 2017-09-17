@@ -1,4 +1,4 @@
-$(shell mkdir -p 'obj')
+$(shell mkdir -p 'obj/graphics')
 CC = gcc
 EXEC = chessprog
 SOURCES = $(wildcard src/*.c) $(wildcard src/graphics/*.c)

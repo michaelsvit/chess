@@ -1,7 +1,6 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include "game_engine.h"
 #include "minimax.h"
 
 int color_score(Game* game, Color color) {

@@ -232,9 +232,8 @@ int print_possible_moves(Game *game, SPArrayList *moves){
 			j++;
 			temp = (GameMove *)spArrayListGetAt(list, j);
 		}
-		spArrayListAddAt(list, move, j);
+		spArrayListAddAt(list, copy_move(move), j);
 	}
-	spArrayListClear(moves);
 
 	/* Create list of string representations of move destinations */
 	SPArrayList *strings = spArrayListCreate(POS_REPR_MAX_LENGTH + 1, count);

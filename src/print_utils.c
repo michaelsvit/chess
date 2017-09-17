@@ -35,6 +35,7 @@ void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd){
 			}
 			break;
 		case SAVE:
+			printf("File cannot be created or modified\n");
 			break;
 		case UNDO:
 			if(msg == INVALID_COMMAND){
@@ -46,6 +47,36 @@ void print_game_error(Game *game, EngineMessage msg, GameCommand *cmd){
 		default:
 			break;
 	}
+}
+
+void print_computer_move(PieceType type, GameMove *move){
+	printf("Computer: move %s at ", get_type_repr(type));
+	print_position_repr(move->src_x, move->src_y);
+	printf(" to ");
+	print_position_repr(move->dst_x, move->dst_y);
+	putchar('\n');
+}
+
+char *get_type_repr(PieceType type){
+	switch (type) {
+		case PAWN:
+			return "pawn";
+		case ROOK:
+			return "rook";
+		case KNIGHT:
+			return "knight";
+		case BISHOP:
+			return "bishop";
+		case QUEEN:
+			return "queen";
+		case KING:
+			return "king";
+	}
+	return NULL; /* unreachable */
+}
+
+void print_position_repr(int pos_x, int pos_y){
+	printf("<%d,%c>", pos_y+1, pos_x+'A');
 }
 
 void print_settings_error(SettingCommand *cmd){
@@ -103,21 +134,29 @@ void print_undo_two_moves(Game *game, GameMove *moves[]){
 	free(moves[1]);
 }
 
-void print_check(Color color){
-	printf("Check: %s King is threatened!\n", (color == WHITE) ? "white" : "black");
+void print_check(Color color, Mode mode, Player current_player){
+	if (mode == ONE_PLAYER && current_player == PLAYER1) {
+		/* AI threatens user's king */
+		printf("Check!\n");
+	} else {
+		printf("Check: %s King is threatened!\n", (color == WHITE) ? "white" : "black");
+	}
 }
 
 void print_game_over(Game *game){
-	print_board(game);
 	if(game->check){
 		char *str = (game->player_color[game->current_player] == WHITE) ? "black" : "white";
 		printf("Checkmate! %s player wins the game\n", str);
 	} else {
-		printf("The game is tied\n");
+		if (game->mode == ONE_PLAYER) {
+			printf("The game ends in a tie\n");
+		} else {
+			printf("The game is tied\n");
+		}
 	}
 }
 
-void print_game_mode(int mode){
+void print_game_mode(Mode mode){
 	printf("Game mode is set to %s\n", (mode == ONE_PLAYER) ? "1 player" : "2 players");
 }
 

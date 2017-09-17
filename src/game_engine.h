@@ -12,7 +12,10 @@
  * get_possible_moves 	 get all possible moves for a given game piece
  * is_game_over       	 checks if the given game instance reached a final state
  */
+#include <stdio.h>
 #include "array_list.h"
+#include "xml_serializer.h"
+#include "xml_parser.h"
 
 #define BOARD_SIZE 8
 #define ARRAY_SIZE 16
@@ -33,11 +36,13 @@ typedef enum {
 	ILLEGAL_MOVE,
 	EMPTY_HISTORY,
 	GAME_OVER,
+	GAME_LOAD,
 	START_GAME,
 	RESTART,
 	QUIT,
 	SUCCESS,
-	SDL_ERROR
+	SUCCESS_NO_PRINT,
+	SDL_ERROR,
 } EngineMessage;
 
 typedef enum {PLAYER1=0, PLAYER2} Player;
@@ -95,9 +100,33 @@ Game *create_game(GameSettings *settings);
 Game *copy_game(Game *game);
 
 /*
+ * Save game instance into given XML file.
+ * @param game 	 game instance
+ * @param file 	 file path (relative or absolute)
+ * @return
+ * INVALID_ARGUMENT 	 file can't be opened for writing
+ * SUCCESS          	 otherwise
+ */
+EngineMessage save_game(Game *game, char *file);
+
+/*
+ * Load a saved game instance from given XML file.
+ * @param in   	 XML file to be loaded
+ * @return     	 pointer to loaded game on success, NULL otherwise
+ */
+Game *load_game(FILE *in);
+
+/*
  * Destroy an existing game instance and free all allocated memory.
  */
 void destroy_game();
+
+/*
+ * Copy given game move.
+ * @param move 	 move to copy
+ * @return     	 pointer to generated copy on success, NULL otherwise
+ */
+GameMove *copy_move(GameMove *move);
 
 /*
  * Move a game piece from its current place to the given coordinates.
@@ -110,6 +139,7 @@ void destroy_game();
  * INVALID_ARGUMENT 	 game == NULL or piece == NULL or coordinates out of bounds
  * ILLEGAL_MOVE     	 move is not a legal move as defined by chess rules
  * MALLOC_FAILURE   	 failed to allocate memory when checking if king move is valid
+ * GAME_OVER        	 move succeeded and the game reached a final state
  * SUCCESS          	 otherwise
  */
 EngineMessage move_game_piece(Game *game, int src_x, int src_y, int dst_x, int dst_y);
@@ -127,10 +157,14 @@ EngineMessage undo_move(Game *game, GameMove **removed_move);
 
 /*
  * Get a list of all possible moves of a given game piece.
- * @param moves 	 array to be filled with possible moves
+ * @param moves 	 array to be filled with possible moves, will be set to NULL on failure
  * @param game  	 game instance
  * @param piece 	 game piece
- * @return      	 list of possible moves for piece on success, NULL otherwise
+ * @return
+ * SUCCESS          	 given array was filled with possible moves
+ * MALLOC_FAILURE   	 memory error occurred
+ * ILLEGAL_MOVE     	 piece is NULL or current player doesn't own it
+ * INVALID_ARGUMENT 	 game is NULL
  */
 EngineMessage get_possible_moves(SPArrayList **moves, Game *game, GamePiece *piece);
 
@@ -155,6 +189,54 @@ EngineMessage restart_game(Game *game);
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/
 /*******************************************************************************************/
+
+
+/*
+ * Serialize given game instance into an XML tree and write it to given file.
+ * @param game 	 game instance
+ * @param out  	 write target file
+ * @return     	 true on success, false on malloc failure
+ */
+int serialize_game(Game *game, FILE *out);
+
+/*
+ * Serialize and write game board into given file in XML format.
+ * @param game   	 game instance
+ * @param out    	 write target file
+ * @param indent 	 indent level
+ * @return       	 true on success, false on malloc failure
+ */
+int write_board(Game *game, FILE *out, int indent);
+
+/*
+ * Read tag contents into game instance.
+ * @param tag  	 last tag that was read
+ * @param game 	 game instance
+ * @return     	 true on success, false on malloc failure
+ */
+int read_content(Tag tag, Game *game);
+
+/*
+ * Read board row contents into game instance.
+ * @param game 	 game instance
+ * @param row  	 row index
+ * @return     	 true if read succeeded, false on malloc failure
+ */
+int read_board_row(Game *game, int row);
+
+/*
+ * Convert given character to corresponding game piece type.
+ * @param repr 	 character representation of game piece
+ * @return     	 enum value of piece type
+ */
+PieceType get_piece_type(char repr);
+
+/*
+ * Convert given character to corresponding game piece color.
+ * @param repr 	 character representation of game piece
+ * @return     	 enum value of piece color
+ */
+Color get_piece_color(char repr);
 
 /*
  * Create a single game piece of the given type and color and initialize its position

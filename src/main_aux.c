@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "main_aux.h"
-#include "minimax.h"
 
 ProgramState *create_program_state(){
 	ProgramState *state = (ProgramState *)malloc(sizeof(ProgramState));
@@ -38,6 +37,7 @@ Indicators *create_indicators(){
 	indicators->quit = 0;
 	indicators->print_game_prompt = 1;
 	indicators->print_settings_prompt = 1;
+	indicators->game_loaded = 0;
 	indicators->run_state = SETTINGS;
 	return indicators;
 }
@@ -52,17 +52,32 @@ void get_user_input(const char* prompt, char* buf, int len) {
 
 int fetch_and_exe_game(ProgramState *state){
 	if (state->game->mode == ONE_PLAYER && state->game->current_player == PLAYER2) {
-		GameMove computer_move;
-		EngineMessage msg = minimax_suggest_move(state->game, state->game->difficulty, &computer_move);
-		if (msg != SUCCESS) {
-			return msg;
-		}
-		msg = move_game_piece(state->game, computer_move.src_x, computer_move.src_y, computer_move.dst_x, computer_move.dst_y);
-		if (msg == SUCCESS && state->game->check) {
-			print_check(state->game->player_color[state->game->current_player]);
-		}
-		return msg;
+		return fetch_and_exe_ai(state);
+	} else {
+		return fetch_and_exe_user(state);
 	}
+}
+
+int fetch_and_exe_ai(ProgramState *state){
+	GameMove computer_move;
+	EngineMessage msg = minimax_suggest_move(state->game, state->game->difficulty, &computer_move);
+	if (msg != SUCCESS) {
+		handle_message(state, msg);
+		return 0;
+	}
+	msg = move_game_piece(state->game, computer_move.src_x, computer_move.src_y, computer_move.dst_x, computer_move.dst_y);
+	if (msg != SUCCESS) {
+		handle_message(state, msg);
+		return 0;
+	}
+	print_computer_move(state->game->board[computer_move.dst_y][computer_move.dst_x]->type, &computer_move);
+	if (state->game->check) {
+		print_check(state->game->player_color[state->game->current_player], state->game->mode, state->game->current_player);
+	}
+	return 1;
+}
+
+int fetch_and_exe_user(ProgramState *state){
 	if(state->indicators->print_game_prompt) print_board(state->game);
 	print_player_color(state->game);
 	get_user_input(GAME_PROMPT, state->user_input, INPUT_SIZE);
@@ -98,7 +113,7 @@ int fetch_and_exe_settings(ProgramState *state){
 	EngineMessage msg = execute_setting_command(state->settings, cmd);
 	if(msg != SUCCESS)
 		handle_settings_message(state, msg, cmd);
-	free(cmd->arg);
+	if(cmd->type != LOAD) free(cmd->arg);
 	free(cmd);
 	return 1;
 }
@@ -110,7 +125,10 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 			if(cmd->valid_arg){
 				EngineMessage msg = move_game_piece(game, args[0], args[1], args[2], args[3]);
 				if(msg == SUCCESS && game->check)
-					print_check(game->player_color[game->current_player]);
+					print_check(
+							game->player_color[game->current_player],
+							game->mode,
+							game->current_player);
 				return msg;
 			} else {
 				return INVALID_ARGUMENT;
@@ -128,6 +146,7 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 						game->board[args[1]][args[0]]);
 				if(msg == SUCCESS) print_possible_moves(game, moves);
 				spArrayListDestroy(moves);
+				if(msg == SUCCESS) return SUCCESS_NO_PRINT;
 				return msg;
 			}
 		case UNDO:
@@ -145,8 +164,11 @@ EngineMessage execute_game_command(Game *game, GameCommand *cmd){
 				return SUCCESS;
 			}
 		case SAVE:
-			/* TODO: Implement */
-			break;
+			if (cmd->valid_arg) {
+				return save_game(game, (char *)cmd->arg);
+			} else {
+				return INVALID_ARGUMENT;
+			}
 		case RESET:
 			return RESTART;
 		case GAME_QUIT:
@@ -200,8 +222,16 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 			}
 			return INVALID_COMMAND;
 		case LOAD:
-			/* TODO: Implement */
-			break;
+			if(cmd->valid_arg){
+				char *file = (char *)cmd->arg;
+				if(!(cmd->arg = fopen(file, "r"))){
+					free(file);
+					return INVALID_ARGUMENT;
+				}
+				free(file);
+				return GAME_LOAD;
+			}
+			return INVALID_ARGUMENT;
 		case DEFAULT:
 			set_default_settings(settings);
 			break;
@@ -221,6 +251,11 @@ EngineMessage execute_setting_command(GameSettings *settings, SettingCommand *cm
 void handle_settings_message(ProgramState *state, EngineMessage msg, SettingCommand *cmd){
 	if(msg == INVALID_ARGUMENT){
 		print_settings_error(cmd);
+	} else if (msg == GAME_LOAD) {
+		FILE *in = (FILE *)cmd->arg;
+		state->game = load_game(in);
+		fclose(in);
+		state->indicators->game_loaded = 1;
 	} else {
 		handle_message(state, msg);
 	}
@@ -241,7 +276,8 @@ void handle_message(ProgramState *state, EngineMessage msg){
 			return;
 		case START_GAME:
 			state->indicators->run_state = GAME;
-			state->game = create_game(state->settings);
+			if(!state->indicators->game_loaded)
+				state->game = create_game(state->settings);
 			free(state->settings);
 			if(!state->game){
 				print_generic_message(MALLOC_FAILURE);

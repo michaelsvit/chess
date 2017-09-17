@@ -1,0 +1,4 @@
+game_mode 2
+start
+save tests/does_not_exit/save.xml
+quit

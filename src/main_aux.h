@@ -7,7 +7,9 @@
 
 #include "command_parser.h"
 #include "game_engine.h"
+#include "minimax.h"
 #include "print_utils.h"
+#include "xml_serializer.h"
 
 #define INPUT_SIZE 1024
 
@@ -24,6 +26,7 @@ typedef struct {
 	int quit;
 	int print_settings_prompt;
 	int print_game_prompt;
+	int game_loaded;
 	RunState run_state;
 } Indicators;
 
@@ -72,6 +75,18 @@ void get_user_input(const char* prompt, char* buf, int len);
  * @param state 	 program state struct
  */
 int fetch_and_exe_game(ProgramState *state);
+
+/*
+ * Fetch and execute next (move) game command from AI player.
+ * @param state 	 program state struct
+ */
+int fetch_and_exe_ai(ProgramState *state);
+
+/*
+ * Fetch and execute next game command from human player.
+ * @param state 	 program state struct
+ */
+int fetch_and_exe_user(ProgramState *state);
 
 /*
  * Fetch and execute next settings command from user.

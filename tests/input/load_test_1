@@ -1,0 +1,12 @@
+load save1.xml
+start
+move <7,H> to <5,H>
+move <7,G> to <5,G>
+move <7,C> to <6,C>
+move <7,B> to <5,B>
+move <8,D> to <6,F>
+move <2,D> to <4,D>
+move <1,C> to <4,F>
+move <8,D> to <6,F>
+move <8,B> to <6,A>
+quit

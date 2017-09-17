@@ -2,25 +2,26 @@
 #include <stdlib.h>
 
 #include "game_engine.h"
+#include "minimax.h"
 
 int color_score(Game* game, Color color) {
-	int colorScore = 0;
+	int value = 0;
 	SPArrayList *pieces = (color == WHITE) ? game->white_pieces : game->black_pieces;
 	for(int i = 0; i < spArrayListSize(pieces); i++) {
 		GamePiece* piece = (GamePiece*)spArrayListGetAt(pieces, i);
 		if (piece->type == PAWN) {
-			colorScore += 1;
+			value += 1;
 		} else if (piece->type == KNIGHT || piece->type == BISHOP) {
-			colorScore += 3;
+			value += 3;
 		} else if (piece->type == ROOK) {
-			colorScore += 5;
+			value += 5;
 		} else if (piece->type == QUEEN) {
-			colorScore += 9;
+			value += 9;
 		} else if (piece->type == KING) {
-			colorScore += 100;
+			value += 100;
 		}
 	}
-	return colorScore;
+	return value;
 }
 
 int score(Game* game) {

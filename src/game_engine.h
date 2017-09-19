@@ -43,6 +43,8 @@ typedef enum {
 	SUCCESS,
 	SUCCESS_NO_PRINT,
 	SDL_ERROR,
+	SAVE_ERROR,
+	LOAD_ERROR
 } EngineMessage;
 
 typedef enum {PLAYER1=0, PLAYER2} Player;
@@ -107,7 +109,7 @@ Game *copy_game(Game *game);
  * INVALID_ARGUMENT 	 file can't be opened for writing
  * SUCCESS          	 otherwise
  */
-EngineMessage save_game(Game *game, char *file);
+EngineMessage save_game(Game *game, const char *file);
 
 /*
  * Load a saved game instance from given XML file.

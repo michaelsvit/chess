@@ -48,6 +48,12 @@ EngineMessage create_window(Window **window) {
 		return msg;
 	}
 
+	msg = create_load_screen(&new_window->load_screen, new_window->renderer);
+	if(msg != SUCCESS) {
+		destroy_window(new_window);
+		return msg;
+	}
+
 	*window = new_window;
 	return SUCCESS;
 }
@@ -61,6 +67,9 @@ void destroy_window(Window *window) {
 	}
 	if (window->main_screen) {
 		destroy_main_screen(window->main_screen);
+	}
+	if (window->load_screen) {
+		destroy_load_screen(window->load_screen);
 	}
 	if (window->renderer) {
 		SDL_DestroyRenderer(window->renderer);
@@ -88,6 +97,9 @@ EngineMessage draw_window(Window *window) {
 		case MAIN_SCREEN:
 			err = draw_main_screen(window->renderer, window->main_screen);
 			break;
+		case LOAD_SCREEN:
+			err = draw_load_screen(window->renderer, window->load_screen);
+			break;
 	}
 	if (err != SUCCESS) {
 		return err;
@@ -102,6 +114,7 @@ EngineMessage window_event_handler(SDL_Event *event, Window *window, WindowEvent
 	GameScreenEvent game_screen_event;
 	SettingsScreenEvent settings_screen_event;
 	MainScreenEvent main_screen_event;
+	LoadScreenEvent load_screen_event;
 
 	window_event->type = NO_WINDOW_EVENT;
 
@@ -120,6 +133,10 @@ EngineMessage window_event_handler(SDL_Event *event, Window *window, WindowEvent
 				reset_settings_screen(window->settings_screen);
 				window->back_screen = MAIN_SCREEN;
 				window->screen = SETTINGS_SCREEN;
+			} else if (main_screen_event.type == MAIN_SCREEN_MOVE_TO_LOAD_SCREEN) {
+				reset_load_screen(window->load_screen);
+				window->back_screen = MAIN_SCREEN;
+				window->screen = LOAD_SCREEN;
 			} else if (main_screen_event.type == MAIN_SCREEN_QUIT) {
 				window_event->type = QUIT_WINDOW;
 			}
@@ -150,8 +167,27 @@ EngineMessage window_event_handler(SDL_Event *event, Window *window, WindowEvent
 				window->screen = SETTINGS_SCREEN;
 			} else if (game_screen_event.type == GAME_SCREEN_MOVE_TO_MAIN_MENU) {
 				window->screen = MAIN_SCREEN;
+			} else if (game_screen_event.type == GAME_SCREEN_MOVE_TO_LOAD_SCREEN) {
+				reset_load_screen(window->load_screen);
+				window->back_screen = GAME_SCREEN;
+				window->screen = LOAD_SCREEN;
 			} else if (game_screen_event.type == GAME_SCREEN_QUIT) {
 				window_event->type = QUIT_WINDOW;
+			}
+			break;
+		case LOAD_SCREEN:
+			err = load_screen_event_handler(event, window->load_screen, &load_screen_event);
+			if (err != SUCCESS) {
+				return err;
+			}
+			if (load_screen_event.type == LOAD_SCREEN_LOAD_GAME) {
+				err = start_load_game(window->load_screen->saved_games->choice, window->game_screen);
+				if (err != SUCCESS) {
+					return err;
+				}
+				window->screen = GAME_SCREEN;
+			} else if (load_screen_event.type == LOAD_SCREEN_BACK) {
+				window->screen = window->back_screen;
 			}
 			break;
 	}

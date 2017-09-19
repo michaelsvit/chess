@@ -97,7 +97,7 @@ void destroy_game(Game *game){
 	free(game);
 }
 
-EngineMessage save_game(Game *game, char *file){
+EngineMessage save_game(Game *game, const char *file){
 	FILE *out = fopen(file, "w");
 	if(!out) return INVALID_ARGUMENT;
 	if(!serialize_game(game, out)){

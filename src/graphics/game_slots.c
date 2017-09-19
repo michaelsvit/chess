@@ -20,7 +20,7 @@ int num_saved_games() {
 			return i;
 		}
 	}
-	return i;
+	return MAX_SAVED_GAME;
 }
 
 Game* load_saved_game(int slot) {
@@ -28,25 +28,25 @@ Game* load_saved_game(int slot) {
 	if(!out) {
 		return NULL;
 	}
-	return load_game(out);
+	Game *game = load_game(out);
+	fclose(out);
+	return game;
 }
-
 
 EngineMessage new_saved_game(Game *game) {
 	int i;
 	int err;
-	const char* file_name;
 	int num = num_saved_games();
-	if (num == 0) {
-		file_name = files[0];
-		return save_game(game, file_name);
-	}
+
 	if (num == MAX_SAVED_GAME) {
-		remove(files[num - 1]);
+		err = remove(files[num - 1]);
+		if (err != 0) {
+			return SAVE_ERROR;
+		}
+		num--;
 	}
 
 	for (i = num; i > 0; i--) {
-		printf("%d\n", i);
 		err = rename(files[i - 1], files[i]);
 		if (err != 0) {
 			return SAVE_ERROR;

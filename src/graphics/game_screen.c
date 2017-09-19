@@ -159,7 +159,7 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 		return err;
 	}
 
-	if (game_screen->game->mode == ONE_PLAYER) {
+	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {
 		err = draw_button(renderer, game_screen->undo_button);
 		if (err != SUCCESS) {
 			return err;
@@ -207,7 +207,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	}
 	if (button_event.type == BUTTON_PUSHED) {
 		msg = new_saved_game(game_screen->game);
-		if (msg != SUCCESS) {
+		if (msg != SUCCESS && msg != SUCCESS_NO_PRINT) {
 			return msg;
 		}
 	}
@@ -244,7 +244,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		game_screen_event->type = GAME_SCREEN_QUIT;
 	}
 
-	if (game_screen->game->mode == ONE_PLAYER) {
+	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {
 		msg = button_event_handler(event, game_screen->undo_button, &button_event);
 		if (msg != SUCCESS) {
 			return msg;

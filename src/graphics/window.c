@@ -180,7 +180,11 @@ EngineMessage window_event_handler(SDL_Event *event, Window *window, WindowEvent
 				return err;
 			}
 			if (load_screen_event.type == LOAD_SCREEN_LOAD_GAME) {
-				window->screen = LOAD_SCREEN;
+				err = start_load_game(window->load_screen->saved_games->choice, window->game_screen);
+				if (err != SUCCESS) {
+					return err;
+				}
+				window->screen = GAME_SCREEN;
 			} else if (load_screen_event.type == LOAD_SCREEN_BACK) {
 				window->screen = window->back_screen;
 			}

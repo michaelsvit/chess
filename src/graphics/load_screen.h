@@ -13,7 +13,8 @@ typedef enum {
 } LoadScreenEventType;
 
 typedef struct {
-    LoadScreenEventType type;
+	LoadScreenEventType type;
+	int slot_number;
 } LoadScreenEvent;
 
 typedef struct {
@@ -22,9 +23,9 @@ typedef struct {
 	Button *back_button;
 } LoadScreen;
 
-void reset_load_screen(LoadScreen *load_screen);
-
 EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *renderer);
+
+void reset_load_screen(LoadScreen *load_screen);
 
 EngineMessage draw_load_screen(SDL_Renderer *renderer, LoadScreen *load_screen);
 

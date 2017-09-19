@@ -1,32 +1,7 @@
 #include <unistd.h>
 
 #include "load_screen.h"
-
-
-const char* files[] = {
-	"./chess_0.xml",
-	"./chess_1.xml",
-	"./chess_2.xml",
-	"./chess_3.xml",
-	"./chess_4.xml"
-};
-
-#define MAX_SAVED_GAME 5
-
-
-void reset_load_screen(LoadScreen *load_screen) {
-	int i;
-	const char *file_name;
-	load_screen->saved_games->choice = -1;
-	for (i = 0; i < MAX_SAVED_GAME; i++) {
-		file_name = files[i];
-		if (access(file_name, F_OK) != 0) {
-			load_screen->saved_games->num_choices = i;
-			return;
-		}
-	}
-	load_screen->saved_games->num_choices = MAX_SAVED_GAME;
-}
+#include "game_slots.h"
 
 
 EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *renderer) {
@@ -67,6 +42,11 @@ EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *rendere
 	return SUCCESS;
 }
 
+void reset_load_screen(LoadScreen *load_screen) {
+	load_screen->saved_games->choice = -1;
+	load_screen->saved_games->num_choices = num_saved_games();
+}
+
 EngineMessage draw_load_screen(SDL_Renderer *renderer, LoadScreen *load_screen) {
 	EngineMessage err;
 	err = draw_multiple_choice(renderer, load_screen->saved_games);
@@ -103,7 +83,7 @@ EngineMessage load_screen_event_handler(SDL_Event *event, LoadScreen *load_scree
 	EngineMessage msg = SUCCESS;
 	ButtonEvent button_event;
 	load_screen_event->type = LOAD_SCREEN_NO_EVENT;
-	
+
 	msg = multiple_choice_event_handler(event, load_screen->saved_games);
 	if (msg != SUCCESS) {
 		return msg;
@@ -123,6 +103,7 @@ EngineMessage load_screen_event_handler(SDL_Event *event, LoadScreen *load_scree
 			return msg;
 		}
 		if (button_event.type == BUTTON_PUSHED) {
+			load_screen_event->slot_number = load_screen->saved_games->choice;
 			load_screen_event->type = LOAD_SCREEN_LOAD_GAME;
 		}
 	}

@@ -120,6 +120,14 @@ EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
 	return msg;
 }
 
+EngineMessage start_load_game(int slot_num, GameScreen *game_screen) {
+	game_screen->game = load_saved_game(slot_num);
+	if (game_screen->game == NULL) {
+		return LOAD_ERROR;
+	}
+	return SUCCESS;
+}
+
 EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) {
 	EngineMessage err;
 	err = draw_chess_board(renderer, game_screen->chess_board, game_screen->game);
@@ -198,7 +206,10 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		return msg;
 	}
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = GAME_SCREEN_SAVE_GAME;
+		msg = new_saved_game(game_screen->game);
+		if (msg != SUCCESS) {
+			return msg;
+		}
 	}
 
 	msg = button_event_handler(event, game_screen->load_button, &button_event);

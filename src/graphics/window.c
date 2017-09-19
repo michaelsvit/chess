@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "window.h"
 
 
@@ -7,7 +8,7 @@ EngineMessage create_window(Window **window) {
 	if (!new_window) {
 		return MALLOC_FAILURE;
 	}
-	
+
 	new_window->sdl_window = SDL_CreateWindow("Chess",	// window title
 			SDL_WINDOWPOS_CENTERED,			// initial x position
 			SDL_WINDOWPOS_CENTERED,			// initial y position

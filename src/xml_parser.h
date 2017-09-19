@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 
-#define OPEN_DELIM "\t<>\n"
-#define CLOSE_DELIM "\t<\\>\n"
+#define OPEN_DELIM "\t<>\n\r"
+#define CLOSE_DELIM "\t<\\>\n\r"
 #define CONTENT_DELIM "><"
 
 typedef enum {

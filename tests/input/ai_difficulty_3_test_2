@@ -1,0 +1,3 @@
+load tests/ai_tests/difficulty_3_test_2.xml
+start
+quit

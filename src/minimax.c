@@ -29,45 +29,27 @@ int score(Game* game) {
 	return white - black;
 }
 
-EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int beta, GameMove *suggested_move, int *node_score) {
-	if (!game) {
-		return INVALID_ARGUMENT;
+int game_over_score(Game *game){
+	if(game->check){
+		return (game->player_color[game->current_player] == WHITE) ? INT_MIN : INT_MAX;
+	} else {
+		return 0;
 	}
+}
 
+EngineMessage handle_edge_case(Game *game, int game_over, int *node_score){
+	if (game_over == -1) return MALLOC_FAILURE;
+	if(node_score) *node_score = game_over ? game_over_score(game) : score(game);
+	return SUCCESS;
+}
+
+EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int beta, GameMove *suggested_move, int *node_score) {
 	EngineMessage msg = SUCCESS;
 	Color current_player_color = game->player_color[game->current_player];
 
 	int game_over = is_game_over(game);
-	if (game_over == -1) {
-		return MALLOC_FAILURE;
-	}
-
-	int check_mate = (game_over && game->check);
-
-	if (current_player_color == WHITE && check_mate) {
-		if (node_score) {
-			*node_score = INT_MIN;
-		}
-		return msg;
-	}
-	if (current_player_color == BLACK && check_mate) {
-		if (node_score) {
-			*node_score =  INT_MAX;
-		}
-		return msg;
-	}
-	if (game_over) {
-		// Tie
-		if (node_score) {
-			*node_score = 0;
-		}
-		return msg;
-	}
-	if (max_depth == 0) {
-		if (node_score) {
-			*node_score = score(game);
-		}
-		return msg;
+	if (game_over || max_depth == 0){
+		return handle_edge_case(game, game_over, node_score);
 	}
 
 	int son_score;
@@ -76,10 +58,8 @@ EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int be
 	for (int i = 0; i < spArrayListSize(pieces); i++) {
 		GamePiece *piece = (GamePiece *)spArrayListGetAt(pieces, i);
 		SPArrayList *moves;
+		if ((msg = get_possible_moves(&moves, game, piece)) != SUCCESS) return msg;
 
-		if ((msg = get_possible_moves(&moves, game, piece)) != SUCCESS) {
-			return msg;
-		}
 		for (int j = 0; j < spArrayListSize(moves); j++) {
 			GameMove *move = (GameMove *)spArrayListGetAt(moves, j);
 			Game *copy = copy_game(game);
@@ -116,21 +96,13 @@ EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int be
 			}
 
 			destroy_game(copy);
-			if (alpha >= beta){
-				break;
-			}
+			if (alpha >= beta) break;
 		}
 		spArrayListDestroy(moves);
-		if (alpha >= beta){
-			break;
-		}
+		if (alpha >= beta) break;
 	}
 
-	if (current_player_color == WHITE && node_score) {
-		*node_score = alpha;
-	} else if (current_player_color == BLACK && node_score) {
-		*node_score = beta;
-	}
+	if (node_score) *node_score = (current_player_color == WHITE) ? alpha : beta;
 	return SUCCESS;
 }
 

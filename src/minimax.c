@@ -43,7 +43,13 @@ EngineMessage handle_edge_case(Game *game, int game_over, int *node_score){
 	return SUCCESS;
 }
 
-EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int beta, GameMove *suggested_move, int *node_score) {
+EngineMessage quit_error(Game *game, SPArrayList *moves){
+	destroy_game(game);
+	spArrayListDestroy(moves);
+	return MALLOC_FAILURE;
+}
+
+EngineMessage minimax_node(Game* game, int max_depth, int alpha, int beta, GameMove *suggested_move, int *node_score) {
 	EngineMessage msg = SUCCESS;
 	Color current_player_color = game->player_color[game->current_player];
 
@@ -62,35 +68,28 @@ EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int be
 
 		for (int j = 0; j < spArrayListSize(moves); j++) {
 			GameMove *move = (GameMove *)spArrayListGetAt(moves, j);
+			/* Make sure suggested_move is initialized */
+			if (max_depth == game->difficulty && suggested_move && suggested_move->src_x == -1)
+				*suggested_move = *move;
+
 			Game *copy = copy_game(game);
-			if (!copy) {
-				spArrayListDestroy(moves);
-				return MALLOC_FAILURE;
-			}
+			if (!copy) return quit_error(NULL, moves);
 
 			msg = move_game_piece(copy, piece->pos_x, piece->pos_y, move->dst_x, move->dst_y);
-			if (msg != SUCCESS && msg != GAME_OVER) {
-				// GAME_OVER is returned by move_game_piece not when move_game_piece fails, but when game is over AFTER the move was done.
-				spArrayListDestroy(moves);
-				destroy_game(copy);
-				return msg;
-			}
+			if (msg != SUCCESS && msg != GAME_OVER) return quit_error(copy, moves);
 
-			if ((msg = minimax_node(copy, max_depth-1, alpha, beta, NULL, &son_score)) != SUCCESS) {
-				spArrayListDestroy(moves);
-				destroy_game(copy);
-				return msg;
-			}
+			if ((msg = minimax_node(copy, max_depth-1, alpha, beta, NULL, &son_score)) != SUCCESS)
+				return quit_error(copy, moves);
 
 			if (current_player_color == WHITE && son_score > alpha) {
 				alpha = son_score;
-				if (suggested_move != NULL) {
+				if (max_depth == game->difficulty) {
 					*suggested_move = *move;
 				}
 			}
 			if (current_player_color == BLACK && son_score < beta) {
 				beta = son_score;
-				if (suggested_move != NULL) {
+				if (max_depth == game->difficulty) {
 					*suggested_move = *move;
 				}
 			}
@@ -107,15 +106,5 @@ EngineMessage minimax_node(Game* game, unsigned int max_depth, int alpha, int be
 }
 
 EngineMessage minimax_suggest_move(Game* game, unsigned int max_depth, GameMove *suggested_move) {
-	if (!game) {
-		return INVALID_ARGUMENT;
-	}
-	int game_over = is_game_over(game);
-	if (game_over == -1) {
-		return MALLOC_FAILURE;
-	}
-	if (game_over) {
-		return ILLEGAL_MOVE;
-	}
 	return minimax_node(game, max_depth, INT_MIN, INT_MAX, suggested_move, NULL);
 }

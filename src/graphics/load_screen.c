@@ -36,6 +36,11 @@ EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *rendere
 		destroy_load_screen(new_load_screen);
 		return ret;
 	}
+	ret = create_inactive_texture(&new_load_screen->inactive_load_button, &load_area, renderer, "./images/inactive_load.bmp");
+	if (ret != SUCCESS) {
+		destroy_load_screen(new_load_screen);
+		return ret;
+	}
 
 	*load_screen = new_load_screen;
 
@@ -62,6 +67,11 @@ EngineMessage draw_load_screen(SDL_Renderer *renderer, LoadScreen *load_screen) 
 		if (err != SUCCESS) {
 			return err;
 		}
+	} else {
+		err = draw_inactive_texture(renderer, load_screen->inactive_load_button);
+		if (err != SUCCESS) {
+			return err;
+		}
 	}
 	return SUCCESS;
 }
@@ -75,6 +85,9 @@ void destroy_load_screen(LoadScreen *load_screen) {
 	}
 	if (load_screen->back_button) {
 		destroy_button(load_screen->back_button);
+	}
+	if (load_screen->inactive_load_button) {
+		destroy_inactive_texture(load_screen->inactive_load_button);
 	}
 	free(load_screen);
 }

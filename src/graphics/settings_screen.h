@@ -5,6 +5,7 @@
 #include <SDL_video.h>
 #include "button.h"
 #include "multiple_choice.h"
+#include "texture.h"
 
 
 typedef enum {
@@ -34,6 +35,8 @@ typedef struct {
 	Button *next_button;
 	Button *back_button;
 	Button *start_button;
+	Texture *inactive_next_button;
+	Texture *inactive_start_button;
 } SettingsScreen;
 
 EngineMessage create_settings_screen(SettingsScreen **settings_screen, SDL_Renderer *renderer);

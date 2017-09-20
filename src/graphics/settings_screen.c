@@ -47,10 +47,20 @@ EngineMessage create_settings_screen(SettingsScreen **settings_screen, SDL_Rende
 		destroy_settings_screen(new_settings_screen);
 		return ret;
 	}
+	ret = create_inactive_texture(&new_settings_screen->inactive_next_button, &next_area, renderer, "./images/inactive_next.bmp");
+		if (ret != SUCCESS) {
+		destroy_settings_screen(new_settings_screen);
+		return ret;
+	}
 
 	SDL_Rect start_area = {.x = 600, .y = 100, .w = 200, .h = 100};
 	ret = create_button(&new_settings_screen->start_button, &start_area, renderer, "./images/start.bmp", "./images/start_pushed.bmp");
 	if (ret != SUCCESS) {
+		destroy_settings_screen(new_settings_screen);
+		return ret;
+	}
+	ret = create_inactive_texture(&new_settings_screen->inactive_start_button, &start_area, renderer, "./images/inactive_start.bmp");
+		if (ret != SUCCESS) {
 		destroy_settings_screen(new_settings_screen);
 		return ret;
 	}
@@ -79,11 +89,17 @@ void destroy_settings_screen(SettingsScreen *settings_screen) {
 	if (settings_screen->next_button) {
 		destroy_button(settings_screen->next_button);
 	}
+	if (settings_screen->inactive_next_button) {
+		destroy_inactive_texture(settings_screen->inactive_next_button);
+	}
 	if (settings_screen->back_button) {
 		destroy_button(settings_screen->back_button);
 	}
 	if (settings_screen->start_button) {
 		destroy_button(settings_screen->start_button);
+	}
+	if (settings_screen->inactive_start_button) {
+		destroy_inactive_texture(settings_screen->inactive_start_button);
 	}
 
 	free(settings_screen);
@@ -138,8 +154,23 @@ EngineMessage draw_settings_screen(SDL_Renderer *renderer, SettingsScreen *setti
 			return err;
 		}
 	}
+
 	if (is_start_button_visible(settings_screen)) {
 		err = draw_button(renderer, settings_screen->start_button);
+		if (err != SUCCESS) {
+			return err;
+		}
+	}
+
+	if (settings_screen->stage == COLOR_STAGE && settings_screen->color->choice == -1) {
+		err = draw_inactive_texture(renderer, settings_screen->inactive_start_button);
+		if (err != SUCCESS) {
+			return err;
+		}
+	}
+
+	if ((settings_screen->stage == DIFFICULTY_STAGE && settings_screen->difficulty->choice == -1) || (settings_screen->stage == MODE_STAGE && settings_screen->mode->choice == -1)) {
+		err = draw_inactive_texture(renderer, settings_screen->inactive_next_button);
 		if (err != SUCCESS) {
 			return err;
 		}

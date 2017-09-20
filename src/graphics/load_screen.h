@@ -5,6 +5,7 @@
 #include <SDL_video.h>
 #include "button.h"
 #include "multiple_choice.h"
+#include "texture.h"
 
 typedef enum {
 	LOAD_SCREEN_NO_EVENT = 0,
@@ -21,6 +22,8 @@ typedef struct {
 	MultipleChoice *saved_games;
 	Button *load_button;
 	Button *back_button;
+	Texture *inactive_load_button;
+
 } LoadScreen;
 
 EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *renderer);

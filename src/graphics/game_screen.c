@@ -43,6 +43,11 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
+	msg = create_inactive_texture(&new_game_screen->inactive_undo_button, &undo_area, renderer, "./images/inactive_undo.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
 
 	SDL_Rect new_game_area = {.x = 25, .y = 462, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->new_game_button, &new_game_area, renderer, "./images/new_game.bmp", "./images/new_game_pushed.bmp");
@@ -93,6 +98,9 @@ void destroy_game_screen(GameScreen *game_screen) {
 	}
 	if (game_screen->quit_button) {
 		destroy_button(game_screen->quit_button);
+	}
+	if (game_screen->inactive_undo_button) {
+		destroy_inactive_texture(game_screen->inactive_undo_button);
 	}
 	free(game_screen);
 }
@@ -161,6 +169,11 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 
 	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {
 		err = draw_button(renderer, game_screen->undo_button);
+		if (err != SUCCESS) {
+			return err;
+		}
+	} else {
+		err = draw_inactive_texture(renderer, game_screen->inactive_undo_button);
 		if (err != SUCCESS) {
 			return err;
 		}

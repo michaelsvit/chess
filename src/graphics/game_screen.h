@@ -8,6 +8,7 @@
 #include "chess_board.h"
 #include "button.h"
 #include "game_slots.h"
+#include "texture.h"
 
 
 typedef enum {
@@ -29,6 +30,7 @@ typedef struct {
 	Button *save_button;
 	Button *load_button;
 	Button *undo_button;
+	Texture *inactive_undo_button;
 	Button *new_game_button;
 	Button *main_menu_button;
 	Button *quit_button;

@@ -67,11 +67,15 @@ int fetch_and_exe_ai(ProgramState *state){
 		return 0;
 	}
 	msg = move_game_piece(state->game, computer_move.src_x, computer_move.src_y, computer_move.dst_x, computer_move.dst_y);
-	if (msg != SUCCESS) {
+	if (msg == MALLOC_FAILURE) {
 		handle_message(state, msg);
 		return 0;
 	}
 	print_computer_move(state->game->board[computer_move.dst_y][computer_move.dst_x]->type, &computer_move);
+	if (msg == GAME_OVER) {
+		handle_message(state, msg);
+		return 1;
+	}
 	if (state->game->check) {
 		print_check(state->game->player_color[state->game->current_player], state->game->mode, state->game->current_player);
 	}

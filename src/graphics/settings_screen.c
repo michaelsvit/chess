@@ -151,6 +151,8 @@ EngineMessage draw_settings_screen(SDL_Renderer *renderer, SettingsScreen *setti
 EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *settings_screen, SettingsScreenEvent *settings_screen_event) {
 	EngineMessage msg = SUCCESS;
 	ButtonEvent button_event;
+	int is_next_visible = is_next_button_visible(settings_screen);
+	int is_start_visible = is_start_button_visible(settings_screen);
 
 	settings_screen_event->type = SETTINGS_SCREEN_NO_EVENT;
 
@@ -170,32 +172,36 @@ EngineMessage settings_screen_event_handler(SDL_Event *event, SettingsScreen *se
 		return msg;
 	}
 
-	msg = button_event_handler(event, settings_screen->next_button, &button_event);
-	if (msg != SUCCESS) {
-		return msg;
-	}
-	if (is_next_button_visible(settings_screen) && button_event.type == BUTTON_PUSHED) {
-		if (settings_screen->stage == MODE_STAGE) {
-			settings_screen->stage = DIFFICULTY_STAGE;
-		} else if (settings_screen->stage == DIFFICULTY_STAGE) {
-			settings_screen->stage = COLOR_STAGE;
+	if (is_next_visible) {
+		msg = button_event_handler(event, settings_screen->next_button, &button_event);
+		if (msg != SUCCESS) {
+			return msg;
+		}
+		if (button_event.type == BUTTON_PUSHED) {
+			if (settings_screen->stage == MODE_STAGE) {
+				settings_screen->stage = DIFFICULTY_STAGE;
+			} else if (settings_screen->stage == DIFFICULTY_STAGE) {
+				settings_screen->stage = COLOR_STAGE;
+			}
 		}
 	}
 
-	msg = button_event_handler(event, settings_screen->start_button, &button_event);
-	if (msg != SUCCESS) {
-		return msg;
-	}
-	if (is_start_button_visible(settings_screen) && button_event.type == BUTTON_PUSHED) {
-		settings_screen_event->type = SETTINGS_SCREEN_NEW_GAME;
-		if (settings_screen->mode->choice == 0) {
-			settings_screen_event->data.settings.mode = ONE_PLAYER;
-			settings_screen_event->data.settings.difficulty = 1 + settings_screen->difficulty->choice;
-			settings_screen_event->data.settings.player1_color = (settings_screen->color->choice == 0) ? WHITE : BLACK;
-		} else {
-			settings_screen_event->data.settings.mode = TWO_PLAYER;
-			settings_screen_event->data.settings.difficulty = 1;
-			settings_screen_event->data.settings.player1_color = WHITE;
+	if (is_start_visible) {
+		msg = button_event_handler(event, settings_screen->start_button, &button_event);
+		if (msg != SUCCESS) {
+			return msg;
+		}
+		if (button_event.type == BUTTON_PUSHED) {
+			settings_screen_event->type = SETTINGS_SCREEN_NEW_GAME;
+			if (settings_screen->mode->choice == 0) {
+				settings_screen_event->data.settings.mode = ONE_PLAYER;
+				settings_screen_event->data.settings.difficulty = 1 + settings_screen->difficulty->choice;
+				settings_screen_event->data.settings.player1_color = (settings_screen->color->choice == 0) ? WHITE : BLACK;
+			} else {
+				settings_screen_event->data.settings.mode = TWO_PLAYER;
+				settings_screen_event->data.settings.difficulty = 1;
+				settings_screen_event->data.settings.player1_color = WHITE;
+			}
 		}
 	}
 

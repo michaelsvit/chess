@@ -147,6 +147,10 @@ EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , Ch
 				&& event->button.y >= board->board_area.y && event->button.y <= board->board_area.y + board->board_area.h) {
 				int row = BOARD_SIZE - 1 - ((event->button.y - board->board_area.y) * BOARD_SIZE / board->board_area.h);
 				int col = (event->button.x - board->board_area.x) * BOARD_SIZE / board->board_area.w;
+				if (game->board[row][col] == NULL || game->board[row][col]->color != game->player_color[game->current_player]) {
+					break;
+				}
+
 				if (event->button.button == SDL_BUTTON_LEFT) {
 					board->is_dragging = 1;
 					board->dragging_piece_row = row;
@@ -158,7 +162,7 @@ EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , Ch
 				} else if (event->button.button == SDL_BUTTON_RIGHT) {
 					board->right_click = 1;
 					EngineMessage msg = get_possible_moves(&board->current_possible_moves, game, game->board[row][col]);
-					if (msg != SUCCESS && msg != ILLEGAL_MOVE) {
+					if (msg != SUCCESS) {
 						return msg;
 					}
 				}

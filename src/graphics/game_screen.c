@@ -178,7 +178,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 
 	game_screen_event->type = GAME_SCREEN_NO_EVENT;
 
-	msg = chess_board_event_handler(event, game_screen->chess_board, &chess_board_event);
+	msg = chess_board_event_handler(event, game_screen->chess_board, &chess_board_event, game_screen->game);
 	if (msg != SUCCESS) {
 		return msg;
 	}

@@ -36,6 +36,11 @@ typedef struct {
     int start_mouse_y_pos;
     int current_mouse_x_pos;
     int current_mouse_y_pos;
+    SDL_Texture* posibble_moves;
+    int right_click;
+    SDL_Texture* threat_move;
+    SDL_Texture* eat_opponent_piece;
+    SPArrayList *current_possible_moves;
 } ChessBoard;
 
 typedef struct {
@@ -48,6 +53,6 @@ typedef struct {
 EngineMessage create_chess_board(ChessBoard **board, SDL_Rect *board_area, SDL_Renderer *renderer);
 EngineMessage draw_chess_board(SDL_Renderer *renderer, ChessBoard *board, Game *game);
 void destroy_chess_board(ChessBoard *board);
-EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , ChessBoardEvent *chess_board_event);
+EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , ChessBoardEvent *chess_board_event, Game *game);
 
 #endif

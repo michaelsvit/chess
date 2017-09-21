@@ -259,6 +259,12 @@ void handle_settings_message(ProgramState *state, EngineMessage msg, SettingComm
 	} else if (msg == GAME_LOAD) {
 		FILE *in = (FILE *)cmd->arg;
 		state->game = load_game(in);
+		if(state->game){
+			/* Update settings struct with loaded game settings */
+			state->settings->difficulty = state->game->difficulty;
+			state->settings->player1_color = state->game->player_color[PLAYER1];
+			state->settings->mode = state->game->mode;
+		}
 		fclose(in);
 		state->indicators->game_loaded = 1;
 	} else {
@@ -281,8 +287,17 @@ void handle_message(ProgramState *state, EngineMessage msg){
 			return;
 		case START_GAME:
 			state->indicators->run_state = GAME;
-			if(!state->indicators->game_loaded)
+			if(!state->indicators->game_loaded){
 				state->game = create_game(state->settings);
+			} else {
+				if(state->game){
+					/* Update loaded game with new settings */
+					state->game->difficulty = state->settings->difficulty;
+					state->game->player_color[PLAYER1] = state->settings->player1_color;
+					state->game->player_color[PLAYER2] = !state->settings->player1_color;
+					state->game->mode = state->settings->mode;
+				}
+			}
 			free(state->settings);
 			if(!state->game){
 				print_generic_message(MALLOC_FAILURE);

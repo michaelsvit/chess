@@ -1,4 +1,4 @@
-load save1.xml
+load tests/saved_games/save1.xml
 start
 move <7,H> to <5,H>
 move <7,G> to <5,G>

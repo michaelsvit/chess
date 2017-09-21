@@ -153,6 +153,8 @@ Game *load_game(FILE *in){
 	}
 	free(buf);
 	game->check = is_in_check_state(game);
+	spArrayListShuffle(game->white_pieces);
+	spArrayListShuffle(game->black_pieces);
 	return game;
 }
 
@@ -483,8 +485,10 @@ EngineMessage init_game(Game *game){
 	EngineMessage msg;
 	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
 	msg = add_game_pieces_set(game, WHITE);
+	spArrayListShuffle(game->white_pieces);
 	if(msg != SUCCESS) return msg;
 	msg = add_game_pieces_set(game, BLACK);
+	spArrayListShuffle(game->black_pieces);
 	return msg;
 }
 

@@ -1,0 +1,12 @@
+game_mode 2
+print_setting
+start
+move <2,E> to <4,E>
+move <2,E> to <4,E>
+move <7,F> to <4,E>
+move <8,B> to <6,C>
+move <10,A> to <20,B>
+move <2,C> to <4,C>
+move <6,C> to <5,E>
+move <1,G> to <2,E>
+move <5,E> to <3,D>

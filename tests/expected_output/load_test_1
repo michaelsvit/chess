@@ -1,52 +1,58 @@
 Specify game setting or type 'start' to begin a game with the current setting:
-Error: File doesn’t exist or cannot be opened
-8| R N B Q K B N R |
-7| M M M M M M M M |
-6| _ _ _ _ _ _ _ _ |
+8| R N _ _ K B N R |
+7| M M M _ _ M M M |
+6| _ _ _ Q _ _ _ _ |
 5| _ _ _ _ _ _ _ _ |
-4| _ _ _ _ _ _ _ _ |
-3| _ _ _ _ _ _ _ _ |
-2| m m m m m m m m |
-1| r n b q k b n r |
+4| q _ m _ _ _ _ _ |
+3| _ _ _ _ _ _ _ B |
+2| m m _ _ m m m m |
+1| r n b _ k b n r |
   -----------------
    A B C D E F G H
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-The specified position does not contain your piece
-white player - enter your move:
-Computer: move pawn at <7,A> to <6,A>
-8| R N B Q K B N R |
-7| _ M M M M M M M |
-6| M _ _ _ _ _ _ _ |
+black player - enter your move:
+Illegal move
+black player - enter your move:
+Illegal move
+black player - enter your move:
+8| R N _ _ K B N R |
+7| M M _ _ _ M M M |
+6| _ _ M Q _ _ _ _ |
 5| _ _ _ _ _ _ _ _ |
-4| _ _ _ m _ _ _ _ |
-3| _ _ _ _ _ _ _ _ |
-2| m m m _ m m m m |
-1| r n b q k b n r |
-  -----------------
-   A B C D E F G H
-white player - enter your move:
-Computer: move pawn at <6,A> to <5,A>
-8| R N B Q K B N R |
-7| _ M M M M M M M |
-6| _ _ _ _ _ _ _ _ |
-5| M _ _ _ _ _ _ _ |
-4| _ _ _ m _ b _ _ |
-3| _ _ _ _ _ _ _ _ |
-2| m m m _ m m m m |
-1| r n _ q k b n r |
+4| q _ m _ _ _ _ _ |
+3| _ _ _ _ _ _ _ B |
+2| m m _ _ m m m m |
+1| r n b _ k b n r |
   -----------------
    A B C D E F G H
 white player - enter your move:
 The specified position does not contain your piece
 white player - enter your move:
 The specified position does not contain your piece
+white player - enter your move:
+The specified position does not contain your piece
+white player - enter your move:
+8| R N _ _ K B N R |
+7| M M _ _ _ M M M |
+6| _ _ M Q _ _ _ _ |
+5| _ _ _ _ _ _ _ _ |
+4| q _ m _ _ b _ _ |
+3| _ _ _ _ _ _ _ B |
+2| m m _ _ m m m m |
+1| r n _ _ k b n r |
+  -----------------
+   A B C D E F G H
+black player - enter your move:
+The specified position does not contain your piece
+black player - enter your move:
+8| R _ _ _ K B N R |
+7| M M _ _ _ M M M |
+6| N _ M Q _ _ _ _ |
+5| _ _ _ _ _ _ _ _ |
+4| q _ m _ _ b _ _ |
+3| _ _ _ _ _ _ _ B |
+2| m m _ _ m m m m |
+1| r n _ _ k b n r |
+  -----------------
+   A B C D E F G H
 white player - enter your move:
 Exiting...

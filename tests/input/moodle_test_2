@@ -1,0 +1,6 @@
+load tests/ai_tests/moodle_save.xml
+print_setting
+start
+move <5,H> to <6,H>
+undo
+quit

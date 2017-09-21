@@ -122,14 +122,14 @@ void print_undo_two_moves(Game *game, GameMove *moves[]){
 	Color color = !game->player_color[game->current_player];
 	printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
 			(color == WHITE) ? "white" : "black",
-			move->src_y+1, move->src_x+'A',
-			move->dst_y+1, move->dst_x+'A');
+			move->dst_y+1, move->dst_x+'A',
+			move->src_y+1, move->src_x+'A');
 	move = moves[1];
 	color = !color;
 	printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
 			(color == WHITE) ? "white" : "black",
-			move->src_y+1, move->src_x+'A',
-			move->dst_y+1, move->dst_x+'A');
+			move->dst_y+1, move->dst_x+'A',
+			move->src_y+1, move->src_x+'A');
 	free(moves[0]);
 	free(moves[1]);
 }
@@ -232,9 +232,8 @@ int print_possible_moves(Game *game, SPArrayList *moves){
 			j++;
 			temp = (GameMove *)spArrayListGetAt(list, j);
 		}
-		spArrayListAddAt(list, move, j);
+		spArrayListAddAt(list, copy_move(move), j);
 	}
-	spArrayListClear(moves);
 
 	/* Create list of string representations of move destinations */
 	SPArrayList *strings = spArrayListCreate(POS_REPR_MAX_LENGTH + 1, count);

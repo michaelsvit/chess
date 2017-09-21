@@ -58,6 +58,9 @@ SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src) {
 	if (src == NULL) {
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;
 	}
+	for(int i = 0; i < spArrayListSize(src); i++){
+		free(src->elements[i]);
+	}
 	src->actualSize = 0;
 	return SP_ARRAY_LIST_SUCCESS;
 }

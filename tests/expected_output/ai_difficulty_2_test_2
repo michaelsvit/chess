@@ -1,0 +1,14 @@
+Specify game setting or type 'start' to begin a game with the current setting:
+Computer: move pawn at <7,C> to <6,C>
+8| _ _ M K M _ _ _ |
+7| _ _ _ M M _ _ _ |
+6| _ _ M _ _ _ _ _ |
+5| _ _ m _ _ n q _ |
+4| M _ _ _ _ _ _ _ |
+3| _ r _ m _ b _ _ |
+2| _ _ _ _ _ _ _ _ |
+1| _ _ _ k _ _ _ _ |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+Exiting...

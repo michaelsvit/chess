@@ -1,0 +1,15 @@
+Specify game setting or type 'start' to begin a game with the current setting:
+Computer: move queen at <5,D> to <3,F>
+Check!
+8| _ _ _ K _ _ _ _ |
+7| _ _ _ _ _ _ _ _ |
+6| _ _ _ _ _ _ _ _ |
+5| _ q _ _ _ n _ _ |
+4| m _ _ _ _ _ _ _ |
+3| _ r _ m _ Q _ _ |
+2| _ _ _ _ _ _ _ _ |
+1| _ _ _ k _ _ _ _ |
+  -----------------
+   A B C D E F G H
+white player - enter your move:
+Exiting...

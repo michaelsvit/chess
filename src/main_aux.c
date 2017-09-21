@@ -59,26 +59,25 @@ int fetch_and_exe_game(ProgramState *state){
 }
 
 int fetch_and_exe_ai(ProgramState *state){
-	/* Computer's turn */
-	GameMove *move = minimax_suggest_move(state->game);
-	if(!move){
+	/* Initialize move to these values so we can know if it wasn't assigned a real value yet */
+	GameMove computer_move = {-1, -1, -1 ,-1};
+	EngineMessage msg = minimax_suggest_move(state->game, state->game->difficulty, &computer_move);
+	if (msg != SUCCESS) {
+		handle_message(state, msg);
 		return 0;
 	}
-	EngineMessage msg = move_game_piece(
-			state->game,
-			move->src_x,
-			move->src_y,
-			move->dst_x,
-			move->dst_y);
-	print_computer_move(state->game->board[move->dst_y][move->dst_x]->type, move);
-	free(move);
-	if (msg == SUCCESS && state->game->check) {
-		print_check(
-				state->game->player_color[state->game->current_player],
-				state->game->mode,
-				state->game->current_player);
-	} else {
+	msg = move_game_piece(state->game, computer_move.src_x, computer_move.src_y, computer_move.dst_x, computer_move.dst_y);
+	if (msg == MALLOC_FAILURE) {
 		handle_message(state, msg);
+		return 0;
+	}
+	print_computer_move(state->game->board[computer_move.dst_y][computer_move.dst_x]->type, &computer_move);
+	if (msg == GAME_OVER) {
+		handle_message(state, msg);
+		return 1;
+	}
+	if (state->game->check) {
+		print_check(state->game->player_color[state->game->current_player], state->game->mode, state->game->current_player);
 	}
 	return 1;
 }

@@ -33,7 +33,7 @@ Game *create_game(GameSettings *settings){
 	game->check = 0;
 	game->player_color[PLAYER1] = settings->player1_color;
 	game->player_color[PLAYER2] = !settings->player1_color;
-	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
+
 	if(init_game(game) != SUCCESS){
 		destroy_game(game);
 		return NULL;
@@ -97,7 +97,7 @@ void destroy_game(Game *game){
 	free(game);
 }
 
-EngineMessage save_game(Game *game, char *file){
+EngineMessage save_game(Game *game, const char *file){
 	FILE *out = fopen(file, "w");
 	if(!out) return INVALID_ARGUMENT;
 	if(!serialize_game(game, out)){
@@ -308,6 +308,19 @@ int is_game_over(Game *game){
 	return 1;
 }
 
+EngineMessage restart_game(Game *game) {
+	for(int i = 0; i < BOARD_SIZE; i++){
+		for(int j = 0; j < BOARD_SIZE; j++){
+			game->board[i][j] = NULL;
+		}
+	}
+	spArrayListClear(game->black_pieces);
+	spArrayListClear(game->white_pieces);
+	spArrayListClear(game->move_history);
+	spArrayListClear(game->removed_pieces);
+
+	return init_game(game);
+}
 /******************************** Auxiliary functions ******************************/
 
 int serialize_game(Game *game, FILE *out){
@@ -468,6 +481,7 @@ GamePiece *create_game_piece(PieceType type, Color color, int pos_x, int pos_y){
 EngineMessage init_game(Game *game){
 	/* Create all pieces and place them on the board */
 	EngineMessage msg;
+	game->current_player = (game->player_color[PLAYER1] == WHITE) ? PLAYER1 : PLAYER2;
 	msg = add_game_pieces_set(game, WHITE);
 	if(msg != SUCCESS) return msg;
 	msg = add_game_pieces_set(game, BLACK);
@@ -475,11 +489,11 @@ EngineMessage init_game(Game *game){
 }
 
 EngineMessage add_game_piece(Game *game, PieceType type, Color color, int pos_x, int pos_y){
-	GamePiece *pawn = create_game_piece(type, color, pos_x, pos_y);
-	if(!pawn) return MALLOC_FAILURE;
+	GamePiece *piece = create_game_piece(type, color, pos_x, pos_y);
+	if(!piece) return MALLOC_FAILURE;
 	SPArrayList *piece_set = (color == WHITE) ? game->white_pieces : game->black_pieces;
-	spArrayListAddLast(piece_set, pawn); /* cannot fail on a new board */
-	game->board[pos_y][pos_x] = pawn;
+	spArrayListAddLast(piece_set, piece); /* cannot fail on a new board */
+	game->board[pos_y][pos_x] = piece;
 	return SUCCESS;
 }
 
@@ -608,6 +622,7 @@ int is_legal_pawn_move(Game *game, GamePiece *piece, int pos_x, int pos_y){
 		/* Pawn cannot jump above another piece */
 		if(is_occupied_position(game, piece->pos_x, piece->pos_y + direction)) return 0;
 		/* Pawn stays in same column, target position must be unoccupied */
+		if (piece->pos_x != pos_x) return 0;
 		if (is_occupied_position(game, pos_x, pos_y)) return 0;
 	}
 	return 1;
@@ -937,14 +952,12 @@ SPArrayList *get_queen_moves(Game *game, GamePiece *piece){
 	}
 
 	for(int i = 0; i < spArrayListSize(rook_moves); i++){
-		spArrayListAddLast(moves, spArrayListGetAt(rook_moves, i));
+		spArrayListAddLast(moves, copy_move(spArrayListGetAt(rook_moves, i)));
 	}
 	for(int i = 0; i < spArrayListSize(bishop_moves); i++){
-		spArrayListAddLast(moves, spArrayListGetAt(bishop_moves, i));
+		spArrayListAddLast(moves, copy_move(spArrayListGetAt(bishop_moves, i)));
 	}
-	spArrayListClear(rook_moves);
 	spArrayListDestroy(rook_moves);
-	spArrayListClear(bishop_moves);
 	spArrayListDestroy(bishop_moves);
 	return moves;
 }

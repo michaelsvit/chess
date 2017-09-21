@@ -41,8 +41,12 @@ typedef enum {
 	RESTART,
 	QUIT,
 	SUCCESS,
-	SUCCESS_NO_PRINT
+	SUCCESS_NO_PRINT,
+	SDL_ERROR,
+	SAVE_ERROR,
+	LOAD_ERROR
 } EngineMessage;
+
 typedef enum {PLAYER1=0, PLAYER2} Player;
 typedef enum {PAWN, BISHOP, ROOK, KNIGHT, QUEEN, KING} PieceType;
 typedef enum {BLACK, WHITE} Color;
@@ -105,7 +109,7 @@ Game *copy_game(Game *game);
  * INVALID_ARGUMENT 	 file can't be opened for writing
  * SUCCESS          	 otherwise
  */
-EngineMessage save_game(Game *game, char *file);
+EngineMessage save_game(Game *game, const char *file);
 
 /*
  * Load a saved game instance from given XML file.
@@ -181,6 +185,8 @@ int is_piece_threatened_after_move(Game *game, GamePiece *piece, GameMove *move)
  * @return     	 true iff game is over, -1 on memory failure
  */
 int is_game_over(Game *game);
+
+EngineMessage restart_game(Game *game);
 
 /*******************************************************************************************/
 /**************** Auxiliary functions - should not be called outside this module ***********/

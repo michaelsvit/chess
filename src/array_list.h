@@ -100,6 +100,15 @@ void spArrayListDestroy(SPArrayList* src);
  */
 SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src);
 
+/*
+ * Shuffles list contents.
+ * @param src	list to be shuffled
+ * @return
+ * SP_ARRAY_LIST_INVALID_ARGUMENT	if src == NULL
+ * SP_ARRAY_LIST_SUCCESS	otherwise
+ */
+SP_ARRAY_LIST_MESSAGE spArrayListShuffle(SPArrayList *src);
+
 /**
  * Inserts element at a specified index. The elements residing at and after the
  * specified index will be shifted to make place for the new element. If the

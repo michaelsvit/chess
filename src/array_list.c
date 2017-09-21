@@ -65,6 +65,21 @@ SP_ARRAY_LIST_MESSAGE spArrayListClear(SPArrayList* src) {
 	return SP_ARRAY_LIST_SUCCESS;
 }
 
+SP_ARRAY_LIST_MESSAGE spArrayListShuffle(SPArrayList *src){
+	if(!src) return SP_ARRAY_LIST_INVALID_ARGUMENT;
+
+	if(src->actualSize > 1){
+		for (int i = 0; i < src->actualSize-1; ++i) {
+			int j = i + rand() / (RAND_MAX / (src->actualSize-i) + 1);
+			void *elem = src->elements[j];
+			src->elements[j] = src->elements[i];
+			src->elements[i] = elem;
+		}
+	}
+
+	return SP_ARRAY_LIST_SUCCESS;
+}
+
 SP_ARRAY_LIST_MESSAGE spArrayListAddAt(SPArrayList* src, void *elem, int index) {
 	if (src == NULL || index < 0 || index > src->actualSize) {
 		return SP_ARRAY_LIST_INVALID_ARGUMENT;

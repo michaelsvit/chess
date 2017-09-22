@@ -185,7 +185,6 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_screen, GameScreenEvent *game_screen_event) {
 	EngineMessage msg = SUCCESS;
 	GameMove *move;
-	GameMove comp_move;
 	ChessBoardEvent chess_board_event;
 	ButtonEvent button_event;
 
@@ -196,7 +195,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		return msg;
 	}
 	if (chess_board_event.type == PIECE_MOVED) {
-		msg = move_game_piece(game_screen->game, chess_board_event.data.move.prev_piece_col, chess_board_event.data.move.prev_piece_row, 
+		msg = move_game_piece(game_screen->game, chess_board_event.data.move.prev_piece_col, chess_board_event.data.move.prev_piece_row,
 		                                         chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
 		if (msg != SUCCESS && msg != ILLEGAL_MOVE) {
 			return msg;
@@ -278,6 +277,8 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	}
 
 	if (game_screen->game && game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
+		/* Initialize comp_move so we can know if it was assigned a value yet */
+		GameMove comp_move = {-1, -1, -1, -1};
 		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
 		if (msg != SUCCESS) {
 			return msg;

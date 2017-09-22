@@ -3,21 +3,13 @@ CC = gcc
 EXEC = chessprog
 SOURCES = $(wildcard src/*.c) $(wildcard src/graphics/*.c)
 OBJS = $(SOURCES:src/%.c=obj/%.o)
-ARRAY_LIST_TEST_OBJS = obj/array_list_unit_test.o obj/array_list.o
 # TODO: Remove debug flag
 COMP_FLAG = -g -std=c99 -Wall -Wextra -Werror -pedantic-errors `sdl2-config --cflags`
-UNIT_TESTS = array_list_unit_test
 
 .PHONY: all
 all: $(EXEC)
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ `sdl2-config --libs`
-
-# Tests
-array_list_unit_test: $(ARRAY_LIST_TEST_OBJS)
-	$(CC) $(ARRAY_LIST_TEST_OBJS) -o $@
-obj/array_list_unit_test.o: tests/array_list_unit_test.c src/array_list.h
-	$(CC) -Isrc $(COMP_FLAG) -c $< -o $@
 
 # Source files
 obj/game_engine.o: src/game_engine.c src/game_engine.h src/array_list.h src/xml_serializer.h src/xml_parser.h
@@ -33,8 +25,6 @@ obj/xml_parser.o: src/xml_parser.c src/xml_parser.h src/game_engine.h
 obj/minimax.o: src/minimax.c src/minimax.h src/game_engine.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 obj/main.o: src/main.c src/main_aux.h
-	$(CC) $(COMP_FLAG) -c $< -o $@
-obj/original_main.o: src/original_main.c src/main_aux.h
 	$(CC) $(COMP_FLAG) -c $< -o $@
 
 # Generic rule to create object files

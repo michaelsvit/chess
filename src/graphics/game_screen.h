@@ -37,6 +37,7 @@ typedef struct {
 	Button *quit_button;
 
 	int moves_since_save;
+	int is_game_over;
 } GameScreen;
 
 EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *renderer);

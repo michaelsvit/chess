@@ -76,6 +76,7 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 	}
 
 	new_game_screen->moves_since_save = 0;
+	new_game_screen->is_game_over = 0;
 
 	*game_screen = new_game_screen;
 	return SUCCESS;
@@ -129,6 +130,7 @@ EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
 	}
 
 	game_screen->moves_since_save = 0;
+	game_screen->is_game_over = 0;
 
 	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
 		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
@@ -152,7 +154,27 @@ EngineMessage start_load_game(int slot_num, GameScreen *game_screen) {
 		return LOAD_ERROR;
 	}
 	game_screen->moves_since_save = 0;
+	game_screen->is_game_over = is_game_over(game_screen->game);
 	return SUCCESS;
+}
+
+int should_draw_undo_button(GameScreen* game_screen) {
+	if (!game_screen->game) {
+		return 0;
+	}
+	if (game_screen->game->mode != ONE_PLAYER) {
+		return 0;
+	}
+
+	int undo_history_size = spArrayListSize(game_screen->game->move_history);
+	if (undo_history_size == 0) {
+		return 0;
+	}
+	if (undo_history_size == 1 && game_screen->game->current_player == PLAYER1) {
+		return 0;
+	}
+
+	return 1;
 }
 
 EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) {
@@ -192,7 +214,7 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 		return err;
 	}
 
-	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {
+	if (should_draw_undo_button(game_screen)) {
 		err = draw_button(renderer, game_screen->undo_button);
 	} else {
 		err = draw_inactive_texture(renderer, game_screen->inactive_undo_button);
@@ -260,6 +282,9 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 												 chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
 		if (msg == SUCCESS) {
 			game_screen->moves_since_save++;
+		} else if (msg == GAME_OVER) {
+			game_screen->is_game_over = 1;
+			game_screen->moves_since_save++;
 		} else if (msg != ILLEGAL_MOVE) {
 			return msg;
 		}
@@ -269,12 +294,13 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	if (msg != SUCCESS) {
 		return msg;
 	}
-	if (button_event.type ==  BUTTON_PUSHED && game_screen->game) {
+	if (button_event.type == BUTTON_PUSHED && game_screen->game) {
 		msg = restart_game(game_screen->game);
 		if (msg != SUCCESS) {
 			return msg;
 		}
 		game_screen->moves_since_save = 0;
+		game_screen->is_game_over = 0;
 	}
 
 	if (game_screen->moves_since_save) {
@@ -329,7 +355,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		}
 	}
 
-	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {
+	if (should_draw_undo_button(game_screen)) {
 		msg = button_event_handler(event, game_screen->undo_button, &button_event);
 		if (msg != SUCCESS) {
 			return msg;
@@ -341,13 +367,16 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 			}
 			free(move);
 			game_screen->moves_since_save--;
+			game_screen->is_game_over = 0;
 
-			msg = undo_move(game_screen->game, &move);
-			if (msg != SUCCESS) {
-				return msg;
+			if (game_screen->game->current_player == PLAYER2) {
+				msg = undo_move(game_screen->game, &move);
+				if (msg != SUCCESS) {
+					return msg;
+				}
+				free(move);
+				game_screen->moves_since_save--;
 			}
-			free(move);
-			game_screen->moves_since_save--;
 
 			if (game_screen->moves_since_save < 0) {
 				// Saving should be possible now if we continue undoing, and if we do new moves.
@@ -356,7 +385,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		}
 	}
 
-	if (game_screen->game && game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
+	if (game_screen->game && !game_screen->is_game_over && game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
 		/* Initialize comp_move so we can know if it was assigned a value yet */
 		GameMove comp_move = {-1, -1, -1, -1};
 		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
@@ -364,11 +393,13 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 			return msg;
 		}
 		msg = move_game_piece(game_screen->game, comp_move.src_x, comp_move.src_y, comp_move.dst_x, comp_move.dst_y);
-		if (msg != SUCCESS) {
+		if (msg == GAME_OVER) {
+			game_screen->is_game_over = 1;
+		} else if (msg != SUCCESS) {
 			return msg;
 		}
 		game_screen->moves_since_save++;
 	}
 
-	return msg;
+	return SUCCESS;
 }

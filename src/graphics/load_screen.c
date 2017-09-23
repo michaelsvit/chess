@@ -12,11 +12,11 @@ EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *rendere
 	}
 
 	ChoiceButtonArguments saved_games[] = {
-		{.regular_path = "./images/slot_1.bmp", .pushed_path = "./images/slot_1_pushed.bmp", .area={.x = 100, .y = 50, .w = 200, .h = 100}},
-		{.regular_path = "./images/slot_2.bmp", .pushed_path = "./images/slot_2_pushed.bmp", .area={.x = 100, .y = 200, .w = 200, .h = 100}},
-		{.regular_path = "./images/slot_3.bmp", .pushed_path = "./images/slot_3_pushed.bmp", .area={.x = 100, .y = 350, .w = 200, .h = 100}},
-		{.regular_path = "./images/slot_4.bmp", .pushed_path = "./images/slot_4_pushed.bmp", .area={.x = 100, .y = 500, .w = 200, .h = 100}},
-		{.regular_path = "./images/slot_5.bmp", .pushed_path = "./images/slot_5_pushed.bmp", .area={.x = 100, .y = 650, .w = 200, .h = 100}}
+		{.regular_path = "./images/slot_1.bmp", .pushed_path = "./images/slot_1_pushed.bmp", .area={.x = 400, .y = 50, .w = 200, .h = 100}},
+		{.regular_path = "./images/slot_2.bmp", .pushed_path = "./images/slot_2_pushed.bmp", .area={.x = 400, .y = 200, .w = 200, .h = 100}},
+		{.regular_path = "./images/slot_3.bmp", .pushed_path = "./images/slot_3_pushed.bmp", .area={.x = 400, .y = 350, .w = 200, .h = 100}},
+		{.regular_path = "./images/slot_4.bmp", .pushed_path = "./images/slot_4_pushed.bmp", .area={.x = 400, .y = 500, .w = 200, .h = 100}},
+		{.regular_path = "./images/slot_5.bmp", .pushed_path = "./images/slot_5_pushed.bmp", .area={.x = 400, .y = 650, .w = 200, .h = 100}}
 	};
 	ret = create_multiple_choice(&new_load_screen->saved_games, renderer, saved_games, MAX_SAVED_GAME);
 	if (ret != SUCCESS) {
@@ -24,13 +24,13 @@ EngineMessage create_load_screen(LoadScreen **load_screen, SDL_Renderer *rendere
 		return ret;
 	}
 
-	SDL_Rect back_area = {.x = 0, .y = 700, .w = 200, .h = 100};
+	SDL_Rect back_area = {.x = 100, .y = 700, .w = 200, .h = 100};
 	ret = create_button(&new_load_screen->back_button, &back_area, renderer, "./images/back.bmp", "./images/back_pushed.bmp");
 	if (ret != SUCCESS) {
 		destroy_load_screen(new_load_screen);
 		return ret;
 	}
-	SDL_Rect load_area = {.x = 600, .y = 700, .w = 200, .h = 100};
+	SDL_Rect load_area = {.x = 700, .y = 700, .w = 200, .h = 100};
 	ret = create_button(&new_load_screen->load_button, &load_area, renderer, "./images/load.bmp", "./images/load_pushed.bmp");
 	if (ret != SUCCESS) {
 		destroy_load_screen(new_load_screen);

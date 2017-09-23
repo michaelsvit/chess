@@ -92,7 +92,7 @@ void print_settings_error(SettingCommand *cmd){
 			}
 			break;
 		case LOAD:
-			printf("Error: File doesn’t exist or cannot be opened\n");
+			printf("Error: File doesn't exist or cannot be opened\n");
 			break;
 		default:
 			break;

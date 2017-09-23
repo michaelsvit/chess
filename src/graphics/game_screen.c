@@ -204,6 +204,45 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 	return SUCCESS;
 }
 
+EngineMessage save_game_message_box(GameScreen *game_screen, GameScreenEvent *game_screen_event, GameScreenEventType event_type) {
+	const SDL_MessageBoxButtonData buttons[] = {
+		{ 0, 0, "no" },
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "yes" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "cancel" },
+	};
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_INFORMATION,
+		NULL,
+		"Save Game",
+		"Do you want to save game before exiting?",
+		SDL_arraysize(buttons),
+		buttons,
+		NULL
+	};
+	int buttonid = 0;
+
+	if (game_screen->moves_since_save) {
+		if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+			return SDL_ERROR;
+		}
+	}
+
+	if (buttonid == 1) {
+		EngineMessage msg = new_saved_game(game_screen->game);
+		if (msg != SUCCESS && msg != SUCCESS_NO_PRINT) {
+			return msg;
+		}
+		game_screen->moves_since_save = 0;
+	}
+
+	if (buttonid != -1 && buttonid != 2 && game_screen_event) {
+		game_screen_event->type = event_type;
+	}
+
+	return SUCCESS;
+}
+
+
 EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_screen, GameScreenEvent *game_screen_event) {
 	EngineMessage msg = SUCCESS;
 	GameMove *move;
@@ -218,7 +257,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	}
 	if (chess_board_event.type == PIECE_MOVED) {
 		msg = move_game_piece(game_screen->game, chess_board_event.data.move.prev_piece_col, chess_board_event.data.move.prev_piece_row,
-		                                         chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
+												 chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
 		if (msg == SUCCESS) {
 			game_screen->moves_since_save++;
 		} else if (msg != ILLEGAL_MOVE) {
@@ -273,7 +312,10 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		return msg;
 	}
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = GAME_SCREEN_MOVE_TO_MAIN_MENU;
+		msg = save_game_message_box(game_screen, game_screen_event, GAME_SCREEN_MOVE_TO_MAIN_MENU);
+		if (msg != SUCCESS) {
+			return msg;
+		}
 	}
 
 	msg = button_event_handler(event, game_screen->quit_button, &button_event);
@@ -281,7 +323,10 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		return msg;
 	}
 	if (button_event.type == BUTTON_PUSHED) {
-		game_screen_event->type = GAME_SCREEN_QUIT;
+		save_game_message_box(game_screen, game_screen_event, GAME_SCREEN_QUIT);
+		if (msg != SUCCESS) {
+			return msg;
+		}
 	}
 
 	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {

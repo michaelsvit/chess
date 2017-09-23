@@ -29,6 +29,11 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
+	msg = create_inactive_texture(&new_game_screen->inactive_save_button, &save_area, renderer, "./images/inactive_save.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
 
 	SDL_Rect load_area = {.x = 25, .y = 238, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->load_button, &load_area, renderer, "./images/load.bmp", "./images/load_pushed.bmp");
@@ -70,6 +75,8 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		return msg;
 	}
 
+	new_game_screen->moves_since_save = 0;
+
 	*game_screen = new_game_screen;
 	return SUCCESS;
 }
@@ -102,6 +109,9 @@ void destroy_game_screen(GameScreen *game_screen) {
 	if (game_screen->inactive_undo_button) {
 		destroy_inactive_texture(game_screen->inactive_undo_button);
 	}
+	if (game_screen->inactive_save_button) {
+		destroy_inactive_texture(game_screen->inactive_save_button);
+	}
 	free(game_screen);
 }
 
@@ -117,12 +127,20 @@ EngineMessage start_new_game(GameSettings *settings, GameScreen *game_screen) {
 	if (!game_screen->game) {
 		return MALLOC_FAILURE;
 	}
+
+	game_screen->moves_since_save = 0;
+
 	if (game_screen->game->mode == ONE_PLAYER && game_screen->game->current_player == PLAYER2) {
 		msg = minimax_suggest_move(game_screen->game, game_screen->game->difficulty, &comp_move);
 		if (msg != SUCCESS) {
 			return msg;
 		}
 		msg = move_game_piece(game_screen->game, comp_move.src_x, comp_move.src_y, comp_move.dst_x, comp_move.dst_y);
+		if (msg != SUCCESS) {
+			return msg;
+		}
+
+		game_screen->moves_since_save++;
 	}
 
 	return msg;
@@ -133,6 +151,7 @@ EngineMessage start_load_game(int slot_num, GameScreen *game_screen) {
 	if (game_screen->game == NULL) {
 		return LOAD_ERROR;
 	}
+	game_screen->moves_since_save = 0;
 	return SUCCESS;
 }
 
@@ -146,10 +165,16 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 	if (err != SUCCESS) {
 		return err;
 	}
-	err = draw_button(renderer, game_screen->save_button);
+
+	if (game_screen->moves_since_save) {
+		err = draw_button(renderer, game_screen->save_button);
+	} else {
+		err = draw_inactive_texture(renderer, game_screen->inactive_save_button);
+	}
 	if (err != SUCCESS) {
 		return err;
 	}
+
 	err = draw_button(renderer, game_screen->load_button);
 	if (err != SUCCESS) {
 		return err;
@@ -169,14 +194,11 @@ EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) 
 
 	if (game_screen->game->mode == ONE_PLAYER && spArrayListSize(game_screen->game->move_history) >= 2) {
 		err = draw_button(renderer, game_screen->undo_button);
-		if (err != SUCCESS) {
-			return err;
-		}
 	} else {
 		err = draw_inactive_texture(renderer, game_screen->inactive_undo_button);
-		if (err != SUCCESS) {
-			return err;
-		}
+	}
+	if (err != SUCCESS) {
+		return err;
 	}
 
 	return SUCCESS;
@@ -197,7 +219,9 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 	if (chess_board_event.type == PIECE_MOVED) {
 		msg = move_game_piece(game_screen->game, chess_board_event.data.move.prev_piece_col, chess_board_event.data.move.prev_piece_row,
 		                                         chess_board_event.data.move.new_piece_col, chess_board_event.data.move.new_piece_row);
-		if (msg != SUCCESS && msg != ILLEGAL_MOVE) {
+		if (msg == SUCCESS) {
+			game_screen->moves_since_save++;
+		} else if (msg != ILLEGAL_MOVE) {
 			return msg;
 		}
 	}
@@ -211,16 +235,20 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		if (msg != SUCCESS) {
 			return msg;
 		}
+		game_screen->moves_since_save = 0;
 	}
 
-	msg = button_event_handler(event, game_screen->save_button, &button_event);
-	if (msg != SUCCESS) {
-		return msg;
-	}
-	if (button_event.type == BUTTON_PUSHED) {
-		msg = new_saved_game(game_screen->game);
-		if (msg != SUCCESS && msg != SUCCESS_NO_PRINT) {
+	if (game_screen->moves_since_save) {
+		msg = button_event_handler(event, game_screen->save_button, &button_event);
+		if (msg != SUCCESS) {
 			return msg;
+		}
+		if (button_event.type == BUTTON_PUSHED) {
+			msg = new_saved_game(game_screen->game);
+			if (msg != SUCCESS && msg != SUCCESS_NO_PRINT) {
+				return msg;
+			}
+			game_screen->moves_since_save = 0;
 		}
 	}
 
@@ -267,12 +295,14 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 				return msg;
 			}
 			free(move);
+			game_screen->moves_since_save--;
 
 			msg = undo_move(game_screen->game, &move);
 			if (msg != SUCCESS) {
 				return msg;
 			}
 			free(move);
+			game_screen->moves_since_save--;
 		}
 	}
 
@@ -287,6 +317,7 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 		if (msg != SUCCESS) {
 			return msg;
 		}
+		game_screen->moves_since_save++;
 	}
 
 	return msg;

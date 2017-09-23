@@ -28,12 +28,15 @@ typedef struct {
 	ChessBoard *chess_board;
 	Button *restart_button;
 	Button *save_button;
+	Texture *inactive_save_button;
 	Button *load_button;
 	Button *undo_button;
 	Texture *inactive_undo_button;
 	Button *new_game_button;
 	Button *main_menu_button;
 	Button *quit_button;
+
+	int moves_since_save;
 } GameScreen;
 
 EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *renderer);

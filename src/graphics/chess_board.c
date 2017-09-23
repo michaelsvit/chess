@@ -159,7 +159,7 @@ EngineMessage chess_board_event_handler(SDL_Event *event, ChessBoard *board , Ch
 					board->current_mouse_x_pos = event->button.x;
 					board->start_mouse_y_pos = event->button.y;
 					board->current_mouse_y_pos = event->button.y;
-				} else if (event->button.button == SDL_BUTTON_RIGHT) {
+				} else if (event->button.button == SDL_BUTTON_RIGHT && !(game->mode == ONE_PLAYER && game->difficulty > 2)) {
 					board->right_click = 1;
 					EngineMessage msg = get_possible_moves(&board->current_possible_moves, game, game->board[row][col]);
 					if (msg != SUCCESS) {

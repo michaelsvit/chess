@@ -9,21 +9,21 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		return MALLOC_FAILURE;
 	}
 
-	SDL_Rect board_area = {.x = 200, .y = 0, .w = 800, .h = 800};
+	SDL_Rect board_area = {.x = 200, .y = 64, .w = 768, .h = 768};
 	msg = create_chess_board(&new_game_screen->chess_board, &board_area, renderer);
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
 
-	SDL_Rect new_game_area = {.x = 25, .y = 14, .w = 150, .h = 100};
+	SDL_Rect new_game_area = {.x = 25, .y = 64, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->new_game_button, &new_game_area, renderer, "./images/new_game.bmp", "./images/new_game_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
 
-	SDL_Rect save_area = {.x = 25, .y = 126, .w = 150, .h = 100};
+	SDL_Rect save_area = {.x = 25, .y = 176, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->save_button, &save_area, renderer, "./images/save.bmp", "./images/save_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
@@ -35,14 +35,14 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		return msg;
 	}
 
-	SDL_Rect load_area = {.x = 25, .y = 238, .w = 150, .h = 100};
+	SDL_Rect load_area = {.x = 25, .y = 288, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->load_button, &load_area, renderer, "./images/load.bmp", "./images/load_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
 
-	SDL_Rect undo_area = {.x = 25, .y = 350, .w = 150, .h = 100};
+	SDL_Rect undo_area = {.x = 25, .y = 400, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->undo_button, &undo_area, renderer, "./images/undo.bmp", "./images/undo_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
@@ -54,22 +54,51 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		return msg;
 	}
 
-	SDL_Rect restart_area = {.x = 25, .y = 462, .w = 150, .h = 100};
+	SDL_Rect restart_area = {.x = 25, .y = 512, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->restart_button, &restart_area, renderer, "./images/restart.bmp", "./images/restart_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
 
-	SDL_Rect main_menu_area = {.x = 25, .y = 574, .w = 150, .h = 100};
+	SDL_Rect main_menu_area = {.x = 25, .y = 624, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->main_menu_button, &main_menu_area, renderer, "./images/main_menu.bmp", "./images/main_menu_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
 
-	SDL_Rect quit_area = {.x = 25, .y = 686, .w = 150, .h = 100};
+	SDL_Rect quit_area = {.x = 25, .y = 736, .w = 150, .h = 100};
 	msg = create_button(&new_game_screen->quit_button, &quit_area, renderer, "./images/quit.bmp", "./images/quit_pushed.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
+
+	SDL_Rect message_area = {.x = 392, .y = 0, .w = 384, .h = 64};
+	msg = create_inactive_texture(&new_game_screen->white_check, &message_area, renderer, "./images/check_white.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
+	msg = create_inactive_texture(&new_game_screen->white_checkmate, &message_area, renderer, "./images/checkmate_white.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
+	msg = create_inactive_texture(&new_game_screen->black_check, &message_area, renderer, "./images/check_black.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
+	msg = create_inactive_texture(&new_game_screen->black_checkmate, &message_area, renderer, "./images/checkmate_black.bmp");
+	if (msg != SUCCESS) {
+		destroy_game_screen(new_game_screen);
+		return msg;
+	}
+
+	SDL_Rect small_message_area = {.x = 545, .y = 0, .w = 75, .h = 64};
+	msg = create_inactive_texture(&new_game_screen->tie, &small_message_area, renderer, "./images/tie.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
@@ -112,6 +141,21 @@ void destroy_game_screen(GameScreen *game_screen) {
 	}
 	if (game_screen->inactive_save_button) {
 		destroy_inactive_texture(game_screen->inactive_save_button);
+	}
+	if (game_screen->white_check) {
+		destroy_inactive_texture(game_screen->white_check);
+	}
+	if (game_screen->white_checkmate) {
+		destroy_inactive_texture(game_screen->white_checkmate);
+	}
+	if (game_screen->black_check) {
+		destroy_inactive_texture(game_screen->black_check);
+	}
+	if (game_screen->black_checkmate) {
+		destroy_inactive_texture(game_screen->black_checkmate);
+	}
+	if (game_screen->tie) {
+		destroy_inactive_texture(game_screen->tie);
 	}
 	free(game_screen);
 }
@@ -177,12 +221,39 @@ int should_draw_undo_button(GameScreen* game_screen) {
 	return 1;
 }
 
+EngineMessage draw_message(SDL_Renderer *renderer, GameScreen *game_screen) {
+	EngineMessage err = SUCCESS;
+	Color current_color = game_screen->game->player_color[game_screen->game->current_player];
+	Texture *texture = NULL;
+
+	if (game_screen->is_game_over && game_screen->game->check) {
+		texture = (current_color == WHITE) ? game_screen->black_checkmate : game_screen->white_checkmate;
+	} else if (game_screen->game->check) {
+		texture = (current_color == WHITE) ? game_screen->black_check : game_screen->white_check;
+	} else if (game_screen->is_game_over) {
+		texture = game_screen->tie;
+	}
+
+	if (texture) {
+		err = draw_inactive_texture(renderer, texture);
+	}
+
+	return err;
+}
+
 EngineMessage draw_game_screen(SDL_Renderer *renderer, GameScreen *game_screen) {
 	EngineMessage err;
+
 	err = draw_chess_board(renderer, game_screen->chess_board, game_screen->game);
 	if (err != SUCCESS) {
 		return err;
 	}
+
+	err = draw_message(renderer, game_screen);
+	if (err != SUCCESS) {
+		return err;
+	}
+
 	err = draw_button(renderer, game_screen->restart_button);
 	if (err != SUCCESS) {
 		return err;

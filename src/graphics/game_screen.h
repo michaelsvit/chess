@@ -36,6 +36,12 @@ typedef struct {
 	Button *main_menu_button;
 	Button *quit_button;
 
+	Texture *white_check;
+	Texture *white_checkmate;
+	Texture *black_check;
+	Texture *black_checkmate;
+	Texture *tie;
+
 	int moves_since_save;
 	int is_game_over;
 } GameScreen;

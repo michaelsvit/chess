@@ -13,7 +13,7 @@ EngineMessage create_window(Window **window) {
 			SDL_WINDOWPOS_CENTERED,			// initial x position
 			SDL_WINDOWPOS_CENTERED,			// initial y position
 			1000,							// width, in pixels
-			800,							// height, in pixels
+			864,							// height, in pixels
 			SDL_WINDOW_OPENGL				// flags - see below
 	);
 	if (!new_window->sdl_window) {

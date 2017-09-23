@@ -303,6 +303,11 @@ EngineMessage game_screen_event_handler(SDL_Event *event, GameScreen *game_scree
 			}
 			free(move);
 			game_screen->moves_since_save--;
+
+			if (game_screen->moves_since_save < 0) {
+				// Saving should be possible now if we continue undoing, and if we do new moves.
+				game_screen->moves_since_save = spArrayListSize(game_screen->game->move_history) + 1;
+			}
 		}
 	}
 

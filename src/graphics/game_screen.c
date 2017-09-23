@@ -10,14 +10,14 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 	}
 
 	SDL_Rect board_area = {.x = 200, .y = 0, .w = 800, .h = 800};
-	msg = create_chess_board(&new_game_screen->chess_board, &board_area,renderer);
+	msg = create_chess_board(&new_game_screen->chess_board, &board_area, renderer);
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
 	}
 
-	SDL_Rect restart_area = {.x = 25, .y = 14, .w = 150, .h = 100};
-	msg = create_button(&new_game_screen->restart_button, &restart_area, renderer, "./images/restart.bmp", "./images/restart_pushed.bmp");
+	SDL_Rect new_game_area = {.x = 25, .y = 14, .w = 150, .h = 100};
+	msg = create_button(&new_game_screen->new_game_button, &new_game_area, renderer, "./images/new_game.bmp", "./images/new_game_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;
@@ -54,8 +54,8 @@ EngineMessage create_game_screen(GameScreen **game_screen, SDL_Renderer *rendere
 		return msg;
 	}
 
-	SDL_Rect new_game_area = {.x = 25, .y = 462, .w = 150, .h = 100};
-	msg = create_button(&new_game_screen->new_game_button, &new_game_area, renderer, "./images/new_game.bmp", "./images/new_game_pushed.bmp");
+	SDL_Rect restart_area = {.x = 25, .y = 462, .w = 150, .h = 100};
+	msg = create_button(&new_game_screen->restart_button, &restart_area, renderer, "./images/restart.bmp", "./images/restart_pushed.bmp");
 	if (msg != SUCCESS) {
 		destroy_game_screen(new_game_screen);
 		return msg;

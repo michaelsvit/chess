@@ -157,6 +157,9 @@ void destroy_game_screen(GameScreen *game_screen) {
 	if (game_screen->tie) {
 		destroy_inactive_texture(game_screen->tie);
 	}
+	if (game_screen->game) {
+		destroy_game(game_screen->game);
+	}
 	free(game_screen);
 }
 
